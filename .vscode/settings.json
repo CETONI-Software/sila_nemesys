@@ -1,0 +1,12 @@
+{
+    "python.pythonPath": "/home/user1/python3/virtualenv/sila2_dev-test/bin/python3",
+    "python.linting.pylintPath": "/home/user1/python3/virtualenv/sila2_dev/bin/pylint",
+    "python.linting.pylintArgs": [
+        "--init-hook",
+        "import sys; sys.path.append('/home/user1/Documents/SiLA/sila_python/sila_library/').append('/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/')"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/home/user1/Documents/SiLA/sila_python/sila_library/",
+        "/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/"
+    ],
+}

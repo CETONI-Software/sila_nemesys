@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Feature SiLA2Version="0.1" FeatureVersion="1.0" Originator="de.cetoni" Category="pumps.syringepumps" xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_features/raw/master/schema/FeatureDefinition.xsd">
+    <Identifier>PumpInitialisationService</Identifier>
+    <DisplayName>Pump Initialisation Service</DisplayName>
+    <Description>
+            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
+            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
+    </Description>
+
+    <!-- Commands -->
+    <Command>
+        <Identifier>InitialisePumpDrive</Identifier>
+        <DisplayName>Initialise Pump Drive</DisplayName>
+        <Description>Initialize the pump drive (e.g. by executing a reference move).</Description>
+        <Observable>No</Observable>
+        <Response>
+            <Identifier>Success</Identifier>
+            <DisplayName>Success</DisplayName>
+            <Description>A boolean value where false represents a failed initialisation and true represents a successful initialisation.</Description>
+            <DataType>
+                <Basic>Boolean</Basic>
+            </DataType>
+        </Response>
+        <StandardExecutionErrors>
+            <StandardExecutionErrorIdentifier>InitialisationFailed</StandardExecutionErrorIdentifier>
+        </StandardExecutionErrors>
+    </Command>
+    <Command>
+        <Identifier>RestoreDrivePositionCounter</Identifier>
+        <DisplayName>Restore Drive Positino Counter</DisplayName>
+        <Description>Restore the internal hardware position counter value of the pump drive.
+                In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
+        </Description>
+        <Observable>No</Observable>
+        <Parameter>
+            <Identifier>DrivePositionCounter</Identifier>
+            <DisplayName>Drive Position Counter</DisplayName>
+            <Description>The drive position counter to restore.</Description>
+            <DataType>
+                <Basic>Real</Basic>
+            </DataType>
+        </Parameter>
+        <Response>
+                <Identifier>Success</Identifier>
+                <DisplayName>Success</DisplayName>
+                <Description>A boolean value where false represents a failed initialisation and true represents a successful initialisation.</Description>
+                <DataType>
+                    <Basic>Boolean</Basic>
+                </DataType>
+        </Response>
+    </Command>
+
+    <!-- Properties -->
+    <Property>
+        <Identifier>DrivePositionCounter</Identifier>
+        <DisplayName>Drive Position Counter</DisplayName>
+        <Description>The value of the internal drive position counter.</Description>
+        <DataType>
+            <Basic>Real</Basic>
+        </DataType>
+        <Observable>Yes</Observable>
+    </Property>
+
+    <!-- Errors -->
+    <StandardExecutionError>
+        <Identifier>InitialisationFailed</Identifier>
+        <DisplayName>Initialisation Failed</DisplayName>
+        <Description>The initialisation did not end properly.</Description>
+    </StandardExecutionError>
+</Feature>

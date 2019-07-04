@@ -1,0 +1,13 @@
+{
+  "service_name" : "neMESYS",
+  "service_description": "This is a test service for neMESYS syringe pumps via SiLA2",
+  "authors"      : "Florian Meinicke",
+  "creation_date" : "20190627",
+  "version" : "0.0.1",
+  "vendor_url" : "cetoni.de",
+  "SiLA_standard_feature_list" : ["SiLAService", "SimulationController"],
+  "SiLA_feature_list" : ["PumpFluidDosingService", "PumpInitialisationService", "ValvePositionController"],
+  "communication_port" : "50053",
+  "IP_address" : "127.0.0.1",
+  "hostname" : "localhost"
+}

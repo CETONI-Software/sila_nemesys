@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Feature SiLA2Version="0.1" FeatureVersion="1.0" Originator="de.cetoni" Category="pumps.syringepumps" xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_features/raw/master/schema/FeatureDefinition.xsd">
+    <Identifier>ValvePositionController</Identifier>
+    <DisplayName>Valve Position Controller</DisplayName>
+    <Description>Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position.</Description>
+
+    <!-- Commands -->
+    <Command>
+        <Identifier>SwitchToPosition</Identifier>
+        <DisplayName>Switch To Position</DisplayName>
+        <Description>Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a PositionOutOfRange error is thrown.</Description>
+        <Observable>No</Observable>
+        <Parameter>
+            <Identifier>Position</Identifier>
+            <DisplayName>Position</DisplayName>
+            <Description>The target position that the valve should be switched to.</Description>
+            <DataType>
+                <Basic>Integer</Basic>
+            </DataType>
+        </Parameter>
+        <Response>
+            <Identifier>Success</Identifier>
+            <DisplayName>Success</DisplayName>
+            <Description>This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.</Description>
+            <DataType>
+                <Basic>Boolean</Basic>
+            </DataType>
+        </Response>
+        <StandardExecutionErrors>
+            <StandardExecutionErrorIdentifier>PositionOutOfRange</StandardExecutionErrorIdentifier>
+        </StandardExecutionErrors>
+    </Command>
+    <Command>
+        <Identifier>TogglePosition</Identifier>
+        <DisplayName>Toogle Position</DisplayName>
+        <Description>A boolean value where false represents a failed command execution and true represents a successful command execution.</Description>
+        <Observable>No</Observable>
+        <Response>
+            <Identifier>Success</Identifier>
+            <DisplayName>Success</DisplayName>
+            <Description>A boolean value where false represents a failed command execution and true represents a successful command execution.</Description>
+            <DataType>
+                <Basic>Boolean</Basic>
+            </DataType>
+        </Response>
+        <StandardExecutionErrors>
+            <StandardExecutionErrorIdentifier>ValveNotToggleable</StandardExecutionErrorIdentifier>
+        </StandardExecutionErrors>
+    </Command>
+
+    <!-- Properties -->
+    <Property>
+        <Identifier>NumberOfPositions</Identifier>
+        <DisplayName>Number Of Positions</DisplayName>
+        <Description>The number of the valve positions available.</Description>
+        <DataType>
+            <Basic>Integer</Basic>
+        </DataType>
+        <Observable>No</Observable>
+    </Property>
+    <Property>
+        <Identifier>Position</Identifier>
+        <DisplayName>Position</DisplayName>
+        <Description>The current logic valve position. This is a value between 0 and NumberOfPositions - 1.</Description>
+        <DataType>
+            <Basic>Integer</Basic>
+        </DataType>
+        <Observable>Yes</Observable>
+    </Property>
+
+    <!-- Errors -->
+    <StandardExecutionError>
+        <Identifier>PositionOutOfRange</Identifier>
+        <DisplayName>Position Out Of Range</DisplayName>
+        <Description>The given valve position is not in the range between 0 and NumberOfPosition - 1.</Description>
+    </StandardExecutionError>
+    <StandardExecutionError>
+        <Identifier>ValveNotToggleable</Identifier>
+        <DisplayName>Valve Not Toggleable</DisplayName>
+        <Description>The current vale does not suppprt toggling because it has more than only two possible positions.</Description>
+    </StandardExecutionError>
+
+</Feature>
