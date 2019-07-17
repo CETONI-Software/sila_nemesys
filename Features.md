@@ -119,14 +119,12 @@ observable: no
 ### UndefinedExecutionErrors
 - none
 
-# PumpInitialisationService
-Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. 
-`InitialisePumpDrive` is mandatory if the last value of the drive position counter cannot be provided.
-Clients can query the [`DrivePositionCounter`](#Properties-1) property to provide this at the next initialisation and then use [`RestoreDrivePositionCounter`](#RestoreDrivePositionCounter).  
-The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the DefinedExecutionError [`InitialisationFailed`](#DefinedExecutionErrors-1) is thrown.
+# PumpDriveControlService
+Functionality to control and maintain the drive that drives the pump.  
+Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump drive's current state (i.e. enabled/disabled).
 
 ## Commands
-### `InitialisePumpDrive`
+### `InitializePumpDrive`
 Initialize the pump drive (e.g. by executing a reference move).
 
 Parameters:
@@ -137,32 +135,40 @@ Response:
 
 observable: no
 
-### `RestoreDrivePositionCounter`
-Restore the internal hardware position counter value of the pump drive.  
-In many drives the actual position value is counted by a quadrature decoder.
-This internal position counter value will get lost, as soon as the device is switched off.
-In order to restore this position counter value after power on, a client can query the internal position counter value ([`DrivePositionCounter`](#Properties-1)), store it persistently into a configuration file and restore it later by calling this function.
+### `EnablePumpDrive`
+Set the pump into enabled state.
 
 Parameters:
-- `DrivePositionCounter`: The drive position counter to restore.
+- none
 
 Response:
-- `Success`: A boolean value where `false` represents a failed initialisation and `true` represents a successful initialisation.
+- none
+
+observable: no
+
+### `DisablePumpDrive`
+Set the pump into disabled state.
+
+Parameters:
+- none
+
+Response:
+- none
 
 observable: no
 
 ## Properties
-- `DrivePositionCounter`: The value of the internal drive position counter.
+- `PumpDriveState`: The current state of the pump. This is either enabled or disabled. Only if the sate is enabled, the pump can dose fluids.
+    * observable: yes
+- `FaultState`: Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling [`EnablePumpDrive`](#EnablePumpDrive).
     * observable: yes
 
 ## Errors
 ### DefinedExecutionErrors
-- `InitialisationFailed`: The initialisation did not end properly.
+- `InitializationFailed`: The initialization did not end properly.
 
 ### UndefinedExecutionErrors
 - none
-
-
 
 # SyringeConfigurationController
 Syringe pump specific functions for configuration.

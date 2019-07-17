@@ -113,7 +113,7 @@ class PumpFluidDosingServiceReal():
         and target volume
         """
 
-        flow_in_sec = self.pump.get_flow_is() / self.pump.get_flow_unit().time_unitid.value
+        flow_in_sec = self.pump.get_flow_is() / self.pump.get_flow_unit().time_unitid.value + 0.01 # prevent ZeroDivisionError by adding 0.01
         max_wait_time = self.pump.get_target_volume() / flow_in_sec + 2 # +2 sec buffer
 
         timer = qmixbus.PollingTimer(max_wait_time * 1000) # msec
@@ -211,9 +211,10 @@ class PumpFluidDosingServiceReal():
         logging.info("Finished dosing! (UUID: %s)", self.dosage_uuid)
         self.dosage_uuid = ""
         time.sleep(0.6)
-        logging.debug("Pump is in fault state: %s", self.pump.is_in_fault_state())
-        logging.debug("Pump is enabled: %s", self.pump.is_enabled())
-        logging.debug("Last error: %s", self.pump.read_last_error())
+
+        last_error = self.pump.read_last_error_code()
+        if last_error < 0:
+            raiseQmixError(context, qmixbus.DeviceError(last_error))
         return pb2.SetFillLevel_Responses(
             Success=fwpb2.Boolean(value=not self.pump.is_in_fault_state())
         )

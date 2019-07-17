@@ -3,14 +3,15 @@ ________________________________________________________________________
 
 :PROJECT: SiLA2_python
 
-*pumpinitialisationservice_server_real *
+*pumpdrivecontrolservice_server_real *
 
-:details: pumpinitialisationservice_server_real: 
-            Allows to initialise a pump (e.g. by executiong a reference move).
-            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
+:details: pumpdrivecontrolservice_server_real: 
+        Functionality to control and maintain the drive that drives the pump.
+        Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump drive's current state (i.e. enabled/disabled).
+        The initialization has to be successful in order for the pump to work correctly and dose fluids. If the initialization fails, the StandardExecutionError InitializationFailed is thrown.
     . 
            
-:file:    pumpinitialisationservice_server_real.py
+:file:    pumpdrivecontrolservice_server_real.py
 :authors: Florian Meinicke
 
 :date: (creation)          20190627

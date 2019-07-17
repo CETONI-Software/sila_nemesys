@@ -42,8 +42,8 @@ from sila2lib.std_features import SiLAService_pb2_grpc as spb2g
 from sila2lib.std_features import SimulationController_pb2 as scpb2
 from sila2lib.std_features import SimulationController_pb2_grpc as scpb2g
 
-import PumpInitialisationService_pb2
-import PumpInitialisationService_pb2_grpc
+import PumpDriveControlService_pb2
+import PumpDriveControlService_pb2_grpc
 import PumpUnitController_pb2
 import PumpUnitController_pb2_grpc
 import PumpFluidDosingService_pb2
@@ -73,7 +73,7 @@ class neMESYSClient(s2client.SiLA2Client):
         """ Class initialiser 
             param cert=None: server certificate filename, e.g. 'sila_server.crt'  """
                 
-        self.PumpInitialisationService_serv_stub = PumpInitialisationService_pb2_grpc.PumpInitialisationServiceStub(self.channel)
+        self.PumpDriveControlService_serv_stub = PumpDriveControlService_pb2_grpc.PumpDriveControlServiceStub(self.channel)
         self.PumpUnitController_serv_stub = PumpUnitController_pb2_grpc.PumpUnitControllerStub(self.channel)
         self.PumpFluidDosingService_serv_stub = PumpFluidDosingService_pb2_grpc.PumpFluidDosingServiceStub(self.channel)
         self.SyringeConfigurationController_serv_stub = SyringeConfigurationController_pb2_grpc.SyringeConfigurationControllerStub(self.channel)
@@ -118,10 +118,20 @@ class neMESYSClient(s2client.SiLA2Client):
             
             # testing commands --------------
             
-            # --> calling PumpInitialisationService
+            # --> calling PumpDriveControlService
             try :
-                pass #~ response = self.PumpInitialisationService_serv_stub.InitializePumpDrive(PumpInitialisationService_pb2.InitializePumpDrive_Parameters())
+                pass #~ response = self.PumpDriveControlService_serv_stub.InitializePumpDrive(PumpDriveControlService_pb2.InitializePumpDrive_Parameters())
                 #~ logging.debug("InitializePumpDrive response:{}".format(response.Success) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
+                pass #~ response = self.PumpDriveControlService_serv_stub.EnablePumpDrive(PumpDriveControlService_pb2.EnablePumpDrive_Parameters())
+                #~ logging.debug("EnablePumpDrive response:{}".format(response.Void) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
+                pass #~ response = self.PumpDriveControlService_serv_stub.DisablePumpDrive(PumpDriveControlService_pb2.DisablePumpDrive_Parameters())
+                #~ logging.debug("DisablePumpDrive response:{}".format(response.Void) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             # --> calling PumpUnitController
@@ -177,6 +187,16 @@ class neMESYSClient(s2client.SiLA2Client):
 
             # testing properties ------------
             
+            try :
+                response = next(self.PumpDriveControlService_serv_stub.Subscribe_PumpDriveState(PumpDriveControlService_pb2.Subscribe_PumpDriveState_Parameters()))
+                #~ logging.debug("Subscribe_PumpDriveState response:{}".format(response.PumpDriveState) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
+                response = next(self.PumpDriveControlService_serv_stub.Subscribe_FaultState(PumpDriveControlService_pb2.Subscribe_FaultState_Parameters()))
+                #~ logging.debug("Subscribe_FaultState response:{}".format(response.FaultState) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
             try :
                 response = next(self.PumpUnitController_serv_stub.Subscribe_FlowUnit(PumpUnitController_pb2.Subscribe_FlowUnit_Parameters()))
                 #~ logging.debug("Subscribe_FlowUnit response:{}".format(response.FlowUnit) )
