@@ -6,9 +6,9 @@ ________________________________________________________________________
 *pumpfluiddosingservice_server_real *
 
 :details: pumpfluiddosingservice_server_real: 
-        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (StartDoseVolume and StartGenerateFlow) available.
+        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (DoseVolume and GenerateFlow) available.
 
-        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) the ValidationError FlowRateOutOfRange is thrown.
+        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) a ValidationError will be thrown.
         At any time the property CurrentSyringeFillLevel can be queried to see how much fluid is left in the syringe. Similarly the property CurrentFlowRate can be queried to get the current flow rate at which the pump is dosing.
     . 
            

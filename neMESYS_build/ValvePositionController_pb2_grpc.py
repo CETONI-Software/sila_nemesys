@@ -41,14 +41,14 @@ class ValvePositionControllerServicer(object):
   pass
 
   def SwitchToPosition(self, request, context):
-    """Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a PositionOutOfRange error is thrown.
+    """Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a ValidationError is thrown.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
   def TogglePosition(self, request, context):
-    """A boolean value where false represents a failed command execution and true represents a successful command execution.
+    """This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')

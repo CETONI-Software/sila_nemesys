@@ -1,16 +1,16 @@
 # PumpFluidDosingService
 Allows to dose a fluid by a given amount of volume or a given flow rate. There are commands for absolute dosing ([`SetFillLevel`](#SetFillLevel)) and relative dosing ([`DoseVolume`](#DoseVolume) and [`GenerateFlow`](#GenerateFlow)) available.
 
-The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between [`MaxFlowRate`](#Properties) and [`MinFlowRate`](#Properties). If the value is not within this range (hence is invalid) the ValidationError [`FlowRateOutOfRange`](#ValidationErrors) is thrown.  
-At any time the property [`CurrentSyringeFillLevel`](#Properties) can be queried to see how much fluid is left in the syringe.
-Similarly the property [`CurrentFlowRate`](#Properties) can be queried to get the current flow rate at which the pump is dosing.
+The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between [`MaxFlowRate`](#Properties) and [`MinFlowRate`](#Properties). If the value is not within this range (hence is invalid) a ValidationError will be thrown.  
+At any time the property [`SyringeFillLevel`](#Properties) can be queried to see how much fluid is left in the syringe.
+Similarly the property [`FlowRate`](#Properties) can be queried to get the current flow rate at which the pump is dosing.
 
 ## Commands
 ### `SetFillLevel`
 Pumps fluid with the given flow rate until the requested fill level is reached. Depending on the requested fill level given in the `FillLevel` parameter this function may cause aspiration or dispension of fluid.
 
 Parameters:
-- `FillLevel`: The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and [`MaxSyringeFillLevel`](#Properties) or else the ValidationError [`RequestedFillLevelOutOfRange`](#ValidationErrors) is thrown.
+- `FillLevel`: The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and [`MaxSyringeFillLevel`](#Properties) or else a ValidationError will be thrown.
 - `FlowRate`: The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
 
 Response:
@@ -55,35 +55,75 @@ observable: no
 ## Properties
 - `MaxSyringeFillLevel`: The maximum amount of fluid that the syringe can hold.
     * observable: no
-- `CurrentSyringeFillLevel`: The current amount of fluid left in the syringe.
+- `SyringeFillLevel`: The current amount of fluid left in the syringe.
     * observable: yes
 - `MaxFlowRate`: The maximum value of the flow rate at which this pump can dose a fluid.
     * observable: no
 - `MinFlowRate`: The minimum value of the flow rate at which this pump can dose a fluid.
     * observable: no
-- `CurrentFlowRate`: The current value of the flow rate. It is 0 if the pump does not dose any fluid.
+- `FlowRate`: The current value of the flow rate. It is 0 if the pump does not dose any fluid.
     * observable: yes
 
 ## Errors
-### ValidationErrors
-- `FlowRateOutOfRange`: The specified flow rate is not in the range bewteen [`MaxFlowRate`](#Properties) and [`MinFlowRate`](#Properties) for this pump.
-- `RequestedFillLevelOutOfRange`: The fill level requested in [`SetFillLevel`](#SetFillLevel) is greater than [`MaxSyringeFillLevel`](#Properties) or less than 0.
-
-### StandardExecutionErrors
+### DefinedExecutionErrors
 - `DosageFinishedUnexpectedly`: The dosage could not be finished properly due to an error.
 
-### UnknownExecutionErrors
+### UndefinedExecutionErrors
 - none
 
-### StandardReadErrors
+
+
+
+
+# PumpUnitController
+Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump.
+
+## Commands
+### `SetFlowUnit`
+Sets the flow unit for the pump.
+The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.
+
+Parameters:
+- `Prefix`: The prefix for the velocity unit.
+- `VolumeUnit`: The volume unit (numerator) of the velocity unit.
+- `TimeUnit`: The time unit (denominator) of the velocity unit.
+
+Response:
 - none
 
+observable: no
+
+### `SetVolumeUnit`
+Sets the default volume unit.
+The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.
+
+Parameters:
+- `Prefix`: The prefix of the SI unit.
+- `VolumeUnit`: The volume unit identifier.
+
+Response:
+- none
+
+observable: no
+
+## Properties
+- `FlowUnit`: The currently used flow unit.
+    * observable: yes
+- `VolumeUnit`: The currently used volume unit.
+    * observable: yes
+
+## Errors
+### DefinedExecutionErrors
+- none
+
+### UndefinedExecutionErrors
+- none
 
 # PumpInitialisationService
 Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. 
 `InitialisePumpDrive` is mandatory if the last value of the drive position counter cannot be provided.
 Clients can query the [`DrivePositionCounter`](#Properties-1) property to provide this at the next initialisation and then use [`RestoreDrivePositionCounter`](#RestoreDrivePositionCounter).  
-The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError [`InitialisationFailed`](#StandardExecutionErrors-1) is thrown.
+The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the DefinedExecutionError [`InitialisationFailed`](#DefinedExecutionErrors-1) is thrown.
 
 ## Commands
 ### `InitialisePumpDrive`
@@ -116,16 +156,10 @@ observable: no
     * observable: yes
 
 ## Errors
-### ValidationErrors
-- none
-
-### StandardExecutionErrors
+### DefinedExecutionErrors
 - `InitialisationFailed`: The initialisation did not end properly.
 
-### UnknownExecutionErrors
-- none
-
-### StandardReadErrors
+### UndefinedExecutionErrors
 - none
 
 
@@ -134,7 +168,7 @@ Allows to specify a certain logical position for a valve. The [`CurrentPosition`
 
 ## Commands
 ### `SwitchToPosition`
-Switches the valve to the specified position. The given position has to be less than the [`NumberOfPositions`](#NumberOfPositions) or else a [`PositionOutOfRange`](#ValidationErrors-2) error is thrown.
+Switches the valve to the specified position. The given position has to be less than the [`NumberOfPositions`](#NumberOfPositions) or else a ValidationError will be thrown.
 
 Parameters:
 - `Position`: The target position that the valve should be switched to.
@@ -162,15 +196,9 @@ observable: no
     * observable: yes
 
 ## Errors
-### ValidationErrors
-- `PositionOutOfRange`: The given valve position is not in the range between 0 and [`NumberOfPositions`](#Properties-2) - 1.
-
-### StandardExecutionErrors
+### DefinedExecutionErrors
 - `ValveNotToggleable`: The current valve does not support toggling because it has more than only two possible positions.
 
-### UnknownExecutionErrors
-- none
-
-### StandardReadErrors
+### UndefinedExecutionErrors
 - none
 

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Feature SiLA2Version="0.1" FeatureVersion="1.0" Originator="de.cetoni" Category="pumps.syringepumps" xmlns="http://www.sila-standard.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sila-standard.org https://gitlab.com/SiLA2/sila_base/raw/master/schema/FeatureDefinition.xsd">
+    <Identifier>PumpUnitController</Identifier>
+    <DisplayName>Pump Unit Controller</DisplayName>
+    <Description>Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump.</Description>
+
+    <!-- Commands -->
+    <Command>
+        <Identifier>SetFlowUnit</Identifier>
+        <DisplayName>Set Flow Unit</DisplayName>
+        <Description>Sets the flow unit for the pump. The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.</Description>
+        <Observable>No</Observable>
+        <Parameter>
+            <Identifier>Prefix</Identifier>
+            <DisplayName>Prefix</DisplayName>
+            <Description>The prefix for the velocity unit.</Description>
+            <DataType>
+                <DataTypeIdentifier>Prefix</DataTypeIdentifier>
+            </DataType>
+        </Parameter>
+        <Parameter>
+            <Identifier>VolumeUnit</Identifier>
+            <DisplayName>Volume Unit</DisplayName>
+            <Description>The volume unit (numerator) of the velocity unit.</Description>
+            <DataType>
+                <DataTypeIdentifier>Volume</DataTypeIdentifier>
+            </DataType>
+        </Parameter>
+        <Parameter>
+            <Identifier>TimeUnit</Identifier>
+            <DisplayName>Time Unit</DisplayName>
+            <Description>The time unit (denominator) of the velocity unit.</Description>
+            <DataType>
+                <DataTypeIdentifier>Time</DataTypeIdentifier>
+            </DataType>
+        </Parameter>
+    </Command>
+    <Command>
+            <Identifier>SetVolumeUnit</Identifier>
+            <DisplayName>Set Volume Unit</DisplayName>
+            <Description>Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.</Description>
+            <Observable>No</Observable>
+            <Parameter>
+                <Identifier>Prefix</Identifier>
+                <DisplayName>Prefix</DisplayName>
+                <Description>The prefix for the velocity unit.</Description>
+                <DataType>
+                    <DataTypeIdentifier>Prefix</DataTypeIdentifier>
+                </DataType>
+            </Parameter>
+            <Parameter>
+                <Identifier>VolumeUnit</Identifier>
+                <DisplayName>Volume Unit</DisplayName>
+                <Description>The volume unit (numerator) of the velocity unit.</Description>
+                <DataType>
+                    <DataTypeIdentifier>Volume</DataTypeIdentifier>
+                </DataType>
+            </Parameter>
+        </Command>
+
+        <!-- Properties -->
+        <!-- <Property>
+            <Identifier>FlowUnit</Identifier>
+            <DisplayName>Flow Unit</DisplayName>
+            <Description>The currently used flow unit.</Description>
+            <DataType>
+                <DataTypeIdentifier>Flow</DataTypeIdentifier>
+            </DataType>
+            <Observable>Yes</Observable>
+        </Property> -->
+
+    <!-- Custom Data Types -->
+    <DataTypeDefinition>
+        <Identifier>Prefix</Identifier>
+        <DisplayName>Prefix</DisplayName>
+        <Description/>
+        <DataType>
+            <Constrained>
+                <DataType>
+                    <Basic>Integer</Basic>
+                </DataType>
+                <Constraints>
+                    <Enumeration>
+                        <Value>UNIT</Value>
+                        <Value>DECI</Value>
+                        <Value>CENTI</Value>
+                        <Value>MILLI</Value>
+                        <Value>MICRO</Value>
+                    </Enumeration>
+                </Constraints>
+            </Constrained>
+        </DataType>
+    </DataTypeDefinition>
+    <DataTypeDefinition>
+        <Identifier>Volume</Identifier>
+        <DisplayName>Volume</DisplayName>
+        <Description/>
+        <DataType>
+            <Constrained>
+                <DataType>
+                    <Basic>Integer</Basic>
+                </DataType>
+                <Constraints>
+                    <Enumeration>
+                        <Value>LITRES</Value>
+                    </Enumeration>
+                </Constraints>
+            </Constrained>
+        </DataType>
+    </DataTypeDefinition>
+    <DataTypeDefinition>
+        <Identifier>Time</Identifier>
+        <DisplayName>Time</DisplayName>
+        <Description/>
+        <DataType>
+            <Constrained>
+                <DataType>
+                    <Basic>Integer</Basic>
+                </DataType>
+                <Constraints>
+                    <Enumeration>
+                        <Value>PER_SECOND</Value>
+                        <Value>PER_MINUTE</Value>
+                        <Value>PER_HOUR</Value>
+                    </Enumeration>
+                </Constraints>
+            </Constrained>
+        </DataType>
+    </DataTypeDefinition>
+</Feature>

@@ -47,7 +47,7 @@ class ValvePositionControllerReal():
 
 
     def SwitchToPosition(self, request, context):
-        """Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a PositionOutOfRange error is thrown.
+        """Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a ValidationError is thrown.
             :param request: gRPC request
             :param context: gRPC context
             :param request.Position: The target position that the valve should be switched to.
@@ -59,7 +59,7 @@ class ValvePositionControllerReal():
         #~ return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=False))
 
     def TogglePosition(self, request, context):
-        """A boolean value where false represents a failed command execution and true represents a successful command execution.
+        """This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.
         empty parameter
         """
         logging.debug("TogglePosition - Mode: real ")

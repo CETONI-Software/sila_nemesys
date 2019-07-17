@@ -14,10 +14,10 @@ class PumpInitialisationServiceStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.InitialisePumpDrive = channel.unary_unary(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService/InitialisePumpDrive',
-        request_serializer=PumpInitialisationService__pb2.InitialisePumpDrive_Parameters.SerializeToString,
-        response_deserializer=PumpInitialisationService__pb2.InitialisePumpDrive_Responses.FromString,
+    self.InitializePumpDrive = channel.unary_unary(
+        '/sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService/InitializePumpDrive',
+        request_serializer=PumpInitialisationService__pb2.InitializePumpDrive_Parameters.SerializeToString,
+        response_deserializer=PumpInitialisationService__pb2.InitializePumpDrive_Responses.FromString,
         )
     self.RestoreDrivePositionCounter = channel.unary_unary(
         '/sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService/RestoreDrivePositionCounter',
@@ -35,7 +35,7 @@ class PumpInitialisationServiceServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def InitialisePumpDrive(self, request, context):
+  def InitializePumpDrive(self, request, context):
     """Initialize the pump drive (e.g. by executing a reference move).
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -59,10 +59,10 @@ class PumpInitialisationServiceServicer(object):
 
 def add_PumpInitialisationServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'InitialisePumpDrive': grpc.unary_unary_rpc_method_handler(
-          servicer.InitialisePumpDrive,
-          request_deserializer=PumpInitialisationService__pb2.InitialisePumpDrive_Parameters.FromString,
-          response_serializer=PumpInitialisationService__pb2.InitialisePumpDrive_Responses.SerializeToString,
+      'InitializePumpDrive': grpc.unary_unary_rpc_method_handler(
+          servicer.InitializePumpDrive,
+          request_deserializer=PumpInitialisationService__pb2.InitializePumpDrive_Parameters.FromString,
+          response_serializer=PumpInitialisationService__pb2.InitializePumpDrive_Responses.SerializeToString,
       ),
       'RestoreDrivePositionCounter': grpc.unary_unary_rpc_method_handler(
           servicer.RestoreDrivePositionCounter,

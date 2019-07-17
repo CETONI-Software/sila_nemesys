@@ -114,17 +114,17 @@ class neMESYSClient(s2client.SiLA2Client):
             
             # --> calling PumpFluidDosingService
             try :
-                pass #~ response = self.PumpFluidDosingService_serv_stub.SetFillLevel(PumpFluidDosingService_pb2.SetFillLevel_Parameters(FillLevel=PumpFluidDosingService_pb2.ValueWithUnit(FillLevel=fwpb2.Real(value=0.0))))
+                pass #~ response = self.PumpFluidDosingService_serv_stub.SetFillLevel(PumpFluidDosingService_pb2.SetFillLevel_Parameters(FillLevel=fwpb2.Real(value=0.0)))
                 #~ logging.debug("SetFillLevel response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
-                pass #~ response = self.PumpFluidDosingService_serv_stub.DoseVolume(PumpFluidDosingService_pb2.DoseVolume_Parameters(Volume=PumpFluidDosingService_pb2.ValueWithUnit(Volume=fwpb2.Real(value=0.0))))
+                pass #~ response = self.PumpFluidDosingService_serv_stub.DoseVolume(PumpFluidDosingService_pb2.DoseVolume_Parameters(Volume=fwpb2.Real(value=0.0)))
                 #~ logging.debug("DoseVolume response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
-                pass #~ response = self.PumpFluidDosingService_serv_stub.GenerateFlow(PumpFluidDosingService_pb2.GenerateFlow_Parameters(FlowRate=PumpFluidDosingService_pb2.ValueWithUnit(FlowRate=fwpb2.Real(value=0.0))))
+                pass #~ response = self.PumpFluidDosingService_serv_stub.GenerateFlow(PumpFluidDosingService_pb2.GenerateFlow_Parameters(FlowRate=fwpb2.Real(value=0.0)))
                 #~ logging.debug("GenerateFlow response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
@@ -135,8 +135,8 @@ class neMESYSClient(s2client.SiLA2Client):
                 logging.error("grpc/SiLA error: {}".format(err) )
             # --> calling PumpInitialisationService
             try :
-                pass #~ response = self.PumpInitialisationService_serv_stub.InitialisePumpDrive(PumpInitialisationService_pb2.InitialisePumpDrive_Parameters())
-                #~ logging.debug("InitialisePumpDrive response:{}".format(response.Success) )
+                pass #~ response = self.PumpInitialisationService_serv_stub.InitializePumpDrive(PumpInitialisationService_pb2.InitializePumpDrive_Parameters())
+                #~ logging.debug("InitializePumpDrive response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :

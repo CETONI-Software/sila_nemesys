@@ -52,14 +52,14 @@ class PumpInitialisationServiceReal():
 
 
 
-    def InitialisePumpDrive(self, request, context):
+    def InitializePumpDrive(self, request, context):
         """Initialize the pump drive (e.g. by executing a reference move).
         empty parameter
         """
-        logging.debug("InitialisePumpDrive - Mode: real ")
+        logging.debug("InitializePumpDrive - Mode: real ")
 
         #~ return_val = request.Void.value
-        #~ return pb2.InitialisePumpDrive_Responses(Success=fwpb2.Boolean(value=False))
+        #~ return pb2.InitializePumpDrive_Responses(Success=fwpb2.Boolean(value=False))
 
     def RestoreDrivePositionCounter(self, request, context):
         """Restore the internal hardware position counter value of the pump drive.

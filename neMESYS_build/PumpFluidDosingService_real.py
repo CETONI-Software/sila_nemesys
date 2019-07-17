@@ -6,9 +6,9 @@ ________________________________________________________________________
 *pumpfluiddosingservice_server_real *
 
 :details: pumpfluiddosingservice_server_real: 
-        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (StartDoseVolume and StartGenerateFlow) available.
+        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (DoseVolume and GenerateFlow) available.
 
-        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) the ValidationError FlowRateOutOfRange is thrown.
+        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) a ValidationError will be thrown.
         At any time the property CurrentSyringeFillLevel can be queried to see how much fluid is left in the syringe. Similarly the property CurrentFlowRate can be queried to get the current flow rate at which the pump is dosing.
     . 
            
@@ -45,9 +45,9 @@ import PumpFluidDosingService_pb2_grpc as pb2_grpc
 
 class PumpFluidDosingServiceReal():
     """ PumpFluidDosingServiceReal - 
-#        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (StartDoseVolume and StartGenerateFlow) available.
+#        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (DoseVolume and GenerateFlow) available.
 #
-#        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) the ValidationError FlowRateOutOfRange is thrown.
+#        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) a ValidationError will be thrown.
 #        At any time the property CurrentSyringeFillLevel can be queried to see how much fluid is left in the syringe. Similarly the property CurrentFlowRate can be queried to get the current flow rate at which the pump is dosing.
 #     """
     def __init__ (self):
@@ -64,7 +64,7 @@ class PumpFluidDosingServiceReal():
             :param request: gRPC request
             :param context: gRPC context
             :param request.FillLevel: 
-                The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and MaxSyringeFillLevel or else the ValidationError RequestedFillLevelOutOfRange is thrown.
+                The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and MaxSyringeFillLevel or else a ValidationError will be thrown.
             
             :param request.FlowRate: 
                     The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
@@ -221,7 +221,7 @@ class PumpFluidDosingServiceReal():
         logging.debug("Get_MaxSyringeFillLevel - Mode: real ")
 
         #~ return_val = request.MaxSyringeFillLevel.value
-        #~ return pb2.Get_MaxSyringeFillLevel_Responses( MaxSyringeFillLevel=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
+        #~ return pb2.Get_MaxSyringeFillLevel_Responses( MaxSyringeFillLevel=fwpb2.Real(value=0.0) )
 
     def Subscribe_SyringeFillLevel(self, request, context):
         """The current amount of fluid left in the syringe.
@@ -233,7 +233,7 @@ class PumpFluidDosingServiceReal():
         logging.debug("Subscribe_SyringeFillLevel - Mode: real ")
 
         #~ yield_val = request.SyringeFillLevel.value
-        #~ pb2.Subscribe_SyringeFillLevel_Responses( SyringeFillLevel=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
+        #~ pb2.Subscribe_SyringeFillLevel_Responses( SyringeFillLevel=fwpb2.Real(value=0.0) )
 
     def Get_MaxFlowRate(self, request, context):
         """The maximum value of the flow rate at which this pump can dose a fluid.
@@ -245,7 +245,7 @@ class PumpFluidDosingServiceReal():
         logging.debug("Get_MaxFlowRate - Mode: real ")
 
         #~ return_val = request.MaxFlowRate.value
-        #~ return pb2.Get_MaxFlowRate_Responses( MaxFlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
+        #~ return pb2.Get_MaxFlowRate_Responses( MaxFlowRate=fwpb2.Real(value=0.0) )
 
     def Get_MinFlowRate(self, request, context):
         """The minimum value of the flow rate at which this pump can dose a fluid.
@@ -257,7 +257,7 @@ class PumpFluidDosingServiceReal():
         logging.debug("Get_MinFlowRate - Mode: real ")
 
         #~ return_val = request.MinFlowRate.value
-        #~ return pb2.Get_MinFlowRate_Responses( MinFlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
+        #~ return pb2.Get_MinFlowRate_Responses( MinFlowRate=fwpb2.Real(value=0.0) )
 
     def Subscribe_FlowRate(self, request, context):
         """The current value of the flow rate. It is 0 if the pump does not dose any fluid.
@@ -269,7 +269,7 @@ class PumpFluidDosingServiceReal():
         logging.debug("Subscribe_FlowRate - Mode: real ")
 
         #~ yield_val = request.FlowRate.value
-        #~ pb2.Subscribe_FlowRate_Responses( FlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
+        #~ pb2.Subscribe_FlowRate_Responses( FlowRate=fwpb2.Real(value=0.0) )
 
 
 

@@ -81,8 +81,8 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("SetFillLevel - Mode: simulation ")
 
-        requested_fill_level = request.FillLevel.ValueWithUnit.value
-        requested_flow_rate = request.FlowRate.ValueWithUnit.value
+        requested_fill_level = request.FillLevel.value
+        requested_flow_rate = request.FlowRate.value
 
         # We only allow one dosage at a time.
         # -> Throw an error if another dosage should be started when there already is one.
@@ -116,7 +116,7 @@ class PumpFluidDosingServiceSimulation():
         else:
             self.Dosage_UUID = str(uuid.uuid4())
             logging.info("Started dosing with flow rate of {} ml/s until fill level of {} ml is reached (UUID: {})".format(
-                request.FlowRate.ValueWithUnit.value, request.FillLevel.ValueWithUnit.value, self.Dosage_UUID))
+                request.FlowRate.value, request.FillLevel.value, self.Dosage_UUID))
             command_uuid = fwpb2.CommandExecutionUUID(
                 commandId=self.Dosage_UUID)
 
@@ -147,10 +147,11 @@ class PumpFluidDosingServiceSimulation():
                 errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
         else:
             Volume = int(self.FillLevel - self.TargetFillLevel)
-            for _ in range(Volume):
+            for i in range(Volume):
                 yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
                 time.sleep(0.5)
                 self.FillLevel -= self.FlowRate
+                logging.info("Dosage progress: {0:03f}%% done".format(i/Volume*100))
                 if self.FillLevel <= self.TargetFillLevel:
                     break
 
@@ -196,7 +197,7 @@ class PumpFluidDosingServiceSimulation():
         else:
             self.Dosage_UUID = str(uuid.uuid4())
             logging.info("Started dosing a volume of {} with a flow rate of {} (UUID: {})".format(
-                request.Volume.ValueWithUnit.value, request.FlowRate.ValueWithUnit.value, self.Dosage_UUID))
+                request.Volume.value, request.FlowRate.value, self.Dosage_UUID))
             command_uuid = fwpb2.CommandExecutionUUID(
                 commandId=self.Dosage_UUID)
             return fwpb2.CommandConfirmation(commandId=command_uuid)
@@ -297,8 +298,7 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("Get_MaxSyringeFillLevel - Mode: simulation ")
 
-        return pb2.Get_MaxSyringeFillLevel_Responses(
-            MaxSyringeFillLevel=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=self.MaxFillLevel)))
+        return pb2.Get_MaxSyringeFillLevel_Responses(MaxSyringeFillLevel=fwpb2.Real(value=self.MaxFillLevel))
 
     def Subscribe_SyringeFillLevel(self, request, context):
         """The current amount of fluid left in the syringe.
@@ -308,8 +308,7 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("Subscribe_SyringeFillLevel - Mode: simulation ")
 
-        yield pb2.Subscribe_SyringeFillLevel_Responses(
-            SyringeFillLevel=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=self.FillLevel)))
+        yield pb2.Subscribe_SyringeFillLevel_Responses(SyringeFillLevel=fwpb2.Real(value=self.FillLevel))
 
     def Get_MaxFlowRate(self, request, context):
         """The maximum value of the flow rate at which this pump can dose a fluid.
@@ -319,8 +318,7 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("Get_MaxFlowRate - Mode: simulation ")
 
-        return pb2.Get_MaxFlowRate_Responses(
-            MaxFlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=self.MaxFlowRate)))
+        return pb2.Get_MaxFlowRate_Responses(MaxFlowRate=fwpb2.Real(value=self.MaxFlowRate))
 
     def Get_MinFlowRate(self, request, context):
         """The minimum value of the flow rate at which this pump can dose a fluid.
@@ -330,8 +328,7 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("Get_MinFlowRate - Mode: simulation ")
 
-        return pb2.Get_MinFlowRate_Responses(
-            MinFlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=self.MinFlowRate)))
+        return pb2.Get_MinFlowRate_Responses(MinFlowRate=fwpb2.Real(value=self.MinFlowRate))
 
     def Subscribe_FlowRate(self, request, context):
         """The current value of the flow rate. It is 0 if the pump does not dose any fluid.
@@ -341,5 +338,4 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("Subscribe_FlowRate - Mode: simulation ")
 
-        yield pb2.Subscribe_FlowRate_Responses(
-            FlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=self.FlowRate)))
+        yield pb2.Subscribe_FlowRate_Responses(FlowRate=fwpb2.Real(value=self.FlowRate))
