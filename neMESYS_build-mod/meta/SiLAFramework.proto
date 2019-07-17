@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package sila2.org.silastandard;
+
+option java_outer_classname = "SiLAFramework";
+
+// -------- SiLA Basic Types --------
+message String {
+    string value = 1;
+}
+
+message Integer {
+    int64 value = 1;
+}
+
+message Real {
+    double value = 1;
+}
+
+message Boolean {
+    bool value = 1;
+}
+
+message SmallBinary {
+    bytes value = 1;
+}
+
+message LargeBinary {
+    string binaryIdentifier = 1;
+}
+
+message Date {
+    uint32 day = 1;
+    uint32 month = 2;
+    uint32 year = 3;
+    Timezone timezone = 4;
+}
+
+message Time {
+    uint32 second = 1;
+    uint32 minute = 2;
+    uint32 hour = 3;
+    Timezone timezone = 4;
+}
+
+message Timestamp {
+    uint32 second = 1;
+    uint32 minute = 2;
+    uint32 hour = 3;
+    uint32 day = 4;
+    uint32 month = 5;
+    uint32 year = 6;
+    Timezone timezone = 7;
+}
+
+message Timezone {
+    int32 hours = 1;
+    uint32 minutes = 2;
+}
+
+message Any {
+    SiLAType type = 1;
+    bytes payload = 2;
+}
+
+// -------- Framework Types --------
+enum BasicType {
+    STRING = 0;
+    INTEGER = 1;
+    REAL = 2;
+    BOOLEAN = 3;
+    SMALL_BINARY = 4;
+    LARGE_BINARY = 5;
+    DATE = 6;
+    TIME = 7;
+    TIME_STAMP = 8;
+}
+
+message ListType {
+    SiLAType silaType = 1;
+}
+
+message StructureType {
+    message Element {
+        String identifier = 1;
+        SiLAType type = 2;
+    }
+    repeated Element elements = 1;
+}
+
+message SiLAType {
+    oneof dataType {
+        BasicType basicType = 1;
+        ListType listType = 2;
+        StructureType structureType = 3;
+    }
+}
+
+message Duration {
+    int64 seconds = 1;
+    int32 nanos = 2;
+}
+
+message CommandExecutionUUID {
+    string commandId = 1;
+}
+
+message CommandConfirmation {
+    CommandExecutionUUID commandId = 1;
+    Duration lifetimeOfExecution = 2;
+}
+
+message ExecutionInfo {
+    enum CommandStatus {
+        waiting = 0 ;
+        running = 1;
+        finishedSuccessfully = 2;
+        finishedWithError = 3;
+    }
+    CommandStatus commandStatus = 1;
+    Real progressInfo = 2;
+    Duration estimatedRemainingTime = 3;
+    Duration updatedLifetimeOfExecution = 4;
+}
+
+// -------- Error Handling --------
+message SiLAError {
+    oneof error {
+        ValidationError validationError = 1;
+        ExecutionError executionError = 2;
+        ReadError readError = 3;
+        FrameworkError frameworkError = 4;
+    }
+}
+
+message ValidationError {
+    string parameter = 1;
+    string cause = 2;
+    string action = 3;
+}
+
+message ExecutionError {
+    string errorIdentifier = 1;
+    string cause = 2;
+    string action = 3;
+    string featureIdentifier = 4;
+    Any parameters = 5;
+}
+
+message ReadError {
+    string errorIdentifier = 1;
+    string cause = 2;
+    string featureIdentifier = 3;
+}
+
+message FrameworkError {
+    enum ErrorType {
+        INVALID_COMMAND_EXECUTION_UUID = 0;
+        COMMAND_EXECUTION_NOT_FINISHED = 1;
+        MISSING_METADATA = 2;
+    }
+    ErrorType errorType = 1;
+}
+
+/* TODO: Add ConstrainedType with all Constraints
+message ConstrainedType {
+    message Constraints {
+        int64 length = 1;
+        int64 minimalLength = 2;
+        int64 maximalLength = 3;
+    }
+
+    Constraints constraints = 1;
+    SiLAType type = 2;
+}
+*/
+
+
+
