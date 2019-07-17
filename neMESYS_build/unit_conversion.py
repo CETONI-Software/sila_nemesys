@@ -1,37 +1,57 @@
 import logging
 
-import sila2lib.SiLAFramework_pb2 as fwpb2
-
 from qmixsdk import qmixpump
 
 class UnitConversionError(Exception):
     """Error-class for all unit-conversion errors.
     """
 
+    def __init__(self, param, message):
+        """
+            :param param: the parameter of the unit that failed the conversion
+            :param message: a description of what went wrong
+        """
+        super().__init__(message)
+        logging.error(message)
+        self.param = param
+        self.message = message
+
+    @property
+    def param(self):
+        """the parameter of the unit that failed the conversion
+        """
+        return self.__param
+
+    @param.setter
+    def param(self, param):
+        self.__param = param
+
+    @property
+    def message(self):
+        """a description of what went wrong
+        """
+        return self.__message
+
+    @message.setter
+    def message(self, message):
+        self.__message = message
+
 
 def evaluate_units(requested_volume_unit, requested_time_unit=None):
     """
     Converts the given volume and time unit from strings to qmixpump units
     and returns a 2-tuple or a 3-tuple (if a time unit is provided).
+    :param requested_volume_unit: the volume unit to convert to a string
+    :param requested_time_unit: the time unit to convert to a string
     """
     prefix_string = requested_volume_unit[0] if len(requested_volume_unit) > 1 else " "
     volume_unit_string = requested_volume_unit[-1]
 
     prefix = evaluate_prefix(prefix_string)
-    if isinstance(prefix, fwpb2.SiLAError):
-        logging.error("Wrong prefix: '%s' not supported", prefix_string)
-        raise UnitConversionError(prefix) # raise the error, if there was one
-
     volume_unit = evaluate_volume_unit(volume_unit_string)
-    if isinstance(volume_unit, fwpb2.SiLAError):
-        logging.error("Wrong volume unit: '%s' not supported", volume_unit_string)
-        raise UnitConversionError(volume_unit) # raise the error, if there was one
 
     if requested_time_unit:
         time_unit = evaluate_time_unit(requested_time_unit)
-        if isinstance(time_unit, fwpb2.SiLAError):
-            logging.error("Wrong time unit: '%s' not supported", requested_time_unit)
-            raise UnitConversionError(time_unit) # raise the error, if there was one
 
         return (prefix, volume_unit, time_unit)
 
@@ -48,11 +68,11 @@ def evaluate_prefix(prefix_string):
         "m": qmixpump.UnitPrefix.milli,
         "µ": qmixpump.UnitPrefix.micro
     }
-    error = fwpb2.SiLAError(validationError=fwpb2.ValidationError(
-        parameter="Prefix",
-        cause="The given prefix is not supported!"
-    ))
-    return switcher.get(prefix_string, error)
+    prefix = switcher.get(prefix_string)
+    if not prefix:
+        raise UnitConversionError("prefix", f"Wrong prefix: '{prefix_string}' not supported")
+
+    return prefix
 
 def evaluate_volume_unit(volume_unit_string):
     """ Converts a given volume_unit_string to a qmixpump.VolumeUnit
@@ -60,10 +80,7 @@ def evaluate_volume_unit(volume_unit_string):
     if volume_unit_string == "l":
         return qmixpump.VolumeUnit.litres
 
-    return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
-        parameter="VolumeUnit",
-        cause="The given volume unit is not supported!"
-    ))
+    raise UnitConversionError("volume_unit", f"Wrong volume unit: '{volume_unit_string}' not supported")
 
 def evaluate_time_unit(time_unit_string):
     """Converts a given time_unit_string into a qmixpump.TimeUnit
@@ -73,11 +90,12 @@ def evaluate_time_unit(time_unit_string):
         "min": qmixpump.TimeUnit.per_minute,
         "h"  : qmixpump.TimeUnit.per_hour
     }
-    error = fwpb2.SiLAError(validationError=fwpb2.ValidationError(
-        parameter="TimeUnit",
-        cause="The given time unit is not supported!"
-    ))
-    return switcher.get(time_unit_string, error)
+
+    time_unit = switcher.get(time_unit_string)
+    if not time_unit:
+        raise UnitConversionError("time_unit", f"Wrong time_unit: '{time_unit_string}' not supported")
+
+    return time_unit
 
 def prefix_to_string(prefix):
     """Converts a given prefix to a human readable string

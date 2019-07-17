@@ -141,8 +141,10 @@ class neMESYSServer(slss.SiLA2Server):
 
         if self.pump.is_in_fault_state():
             self.pump.clear_fault()
+            logging.debug("pump was in fault state")
         if not self.pump.is_enabled():
             self.pump.enable(True)
+            logging.debug("pump was in disabled state")
 
 
     def stop_and_close_bus(self):

@@ -38,6 +38,9 @@ __version__ = "0.0.1"
 import logging
 import uuid
 import time
+
+import sila2lib.sila_error_handling as sila_error
+
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpFluidDosingService_pb2 as pb2
@@ -47,6 +50,16 @@ import PumpFluidDosingService_pb2_grpc as pb2_grpc
 from qmixsdk import qmixbus
 from qmixsdk import qmixpump
 
+
+def raiseQmixError(context, error):
+    """Raises a SiLA error based on the given QmixSDK error abd also logs the error
+        :param context: gRPC context
+        :param error: QmixSDK error
+    """
+    logging.error("QmixSDK Error: %s", error)
+    sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
+        errorIdentifier="DosageFinishedUnexpectedly", cause=str(error)
+    ))
 
 class PumpFluidDosingServiceReal():
     """ PumpFluidDosingServiceReal -
@@ -65,7 +78,7 @@ class PumpFluidDosingServiceReal():
         self.max_fill_level = self.pump.get_volume_max()
         self.dosage_uuid = ""
 
-    def check_pre_dosage(self, flow_rate, fill_level=None, volume=None):
+    def check_pre_dosage(self, context, flow_rate, fill_level=None, volume=None):
         """Checks if the given flow rate and fill level or volume are in the correct ranges for this pump
         """
         # We only allow one dosage at a time.
@@ -74,21 +87,24 @@ class PumpFluidDosingServiceReal():
             self.StopDosage(0, 0)
         if flow_rate < 0 or flow_rate > self.pump.get_flow_rate_max():
             logging.error("Requested Flow Rate Out Of Range - FlowRate: %5.2f", flow_rate)
-            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="FlowRate",
-                cause="The specified flow rate is not in the range bewteen 0 and MaxFlowRate for this pump."))
+                cause="The specified flow rate is not in the range bewteen 0 and MaxFlowRate for this pump."
+            ))
         if fill_level is not None and (fill_level < 0 or fill_level > self.max_fill_level):
             logging.error("Requested Fill Level Out Of Range - FillLevel: %5.2f", fill_level)
-            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="FillLevel",
                 cause="The fill level requested in SetFillLevel is greater than MaxSyringeFillLevel or less than 0.",
-                action="Adjust the FillLevel parameter to fit in the specified range."))
+                action="Adjust the FillLevel parameter to fit in the specified range."
+            ))
         if volume is not None and (volume < 0 or volume > self.max_fill_level):
             logging.error("Requested Volume Out Of Range - Volume: %5.2f", volume)
-            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="Volume",
                 cause="The volume requested in DoseVolume is greater than MaxSyringeFillLevel or less than 0.",
-                action="Adjust the Volume parameter to fit in the specified range."))
+                action="Adjust the Volume parameter to fit in the specified range."
+            ))
 
 
     def wait_dosage_finished(self):
@@ -103,16 +119,16 @@ class PumpFluidDosingServiceReal():
 
         timer = qmixbus.PollingTimer(max_wait_time * 1000) # msec
         message_timer = qmixbus.PollingTimer(500) # msec
-        result = True
-        while result and not timer.is_expired():
+        is_pumping = True
+        while is_pumping and not timer.is_expired():
             time.sleep(0.1)
             if message_timer.is_expired():
                 logging.info("Fill level: %s", self.pump.get_fill_level())
                 yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
                 message_timer.restart()
-            result = self.pump.is_pumping()
+            is_pumping = self.pump.is_pumping()
 
-        if not result:
+        if not is_pumping and not self.pump.is_in_fault_state():
             yield fwpb2.ExecutionInfo(
                 commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
         else:
@@ -138,10 +154,7 @@ class PumpFluidDosingServiceReal():
         requested_fill_level = request.FillLevel.value
         requested_flow_rate = request.FlowRate.value
 
-        check_result = self.check_pre_dosage(requested_flow_rate,
-                                             fill_level=requested_fill_level)
-        if check_result:
-            return check_result
+        self.check_pre_dosage(context, requested_flow_rate, fill_level=requested_fill_level)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -152,9 +165,7 @@ class PumpFluidDosingServiceReal():
             logging.info("Started dosing with flow rate of %5.2f until fill level of %5.2f is reached (UUID: %s)",
                          requested_flow_rate, requested_fill_level, self.dosage_uuid)
         except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            return fwpb2.SiLAError(executionError=fwpb2.ExecutionError(
-                errorIdentifier="DosageFinishedUnexpectedly", cause=err))
+            raiseQmixError(context, err)
         return fwpb2.CommandConfirmation(commandId=command_uuid)
 
     def SetFillLevel_Info(self, request, context):
@@ -175,8 +186,9 @@ class PumpFluidDosingServiceReal():
 
         # catch invalid CommandExecutionUUID:
         if not request.commandId or self.dosage_uuid != request.commandId:
-            yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
         else:
             for info in self.wait_dosage_finished():
                 yield info
@@ -193,12 +205,19 @@ class PumpFluidDosingServiceReal():
         logging.debug("SetFillLevel_Result - Mode: real ")
 
         if not request.commandId and self.dosage_uuid != request.commandId:
-            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
 
         logging.info("Finished dosing! (UUID: %s)", self.dosage_uuid)
         self.dosage_uuid = ""
-        return pb2.SetFillLevel_Responses(Success=fwpb2.Boolean(value=True))
+        time.sleep(0.6)
+        logging.debug("Pump is in fault state: %s", self.pump.is_in_fault_state())
+        logging.debug("Pump is enabled: %s", self.pump.is_enabled())
+        logging.debug("Last error: %s", self.pump.read_last_error())
+        return pb2.SetFillLevel_Responses(
+            Success=fwpb2.Boolean(value=not self.pump.is_in_fault_state())
+        )
 
 
     def DoseVolume(self, request, context):
@@ -214,10 +233,7 @@ class PumpFluidDosingServiceReal():
         requested_volume = request.Volume.value
         requested_flow_rate = request.FlowRate.value
 
-        check_result = self.check_pre_dosage(requested_flow_rate,
-                                             volume=requested_volume)
-        if check_result:
-            return check_result
+        self.check_pre_dosage(context, requested_flow_rate, volume=requested_volume)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -228,9 +244,7 @@ class PumpFluidDosingServiceReal():
             logging.info("Started dosing a volume of %s with a flow rate of %5.2f (UUID: %s)",
                          requested_volume, requested_flow_rate, self.dosage_uuid)
         except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            return fwpb2.SiLAError(executionError=fwpb2.ExecutionError(
-                errorIdentifier="DosageFinishedUnexpectedly", cause=str(err)))
+            raiseQmixError(context, err)
         return fwpb2.CommandConfirmation(commandId=command_uuid)
 
     def DoseVolume_Info(self, request, context):
@@ -248,8 +262,9 @@ class PumpFluidDosingServiceReal():
 
         # catch invalid CommandExecutionUUID:
         if not request.commandId or self.dosage_uuid != request.commandId:
-            yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
         else:
             for info in self.wait_dosage_finished():
                 yield info
@@ -263,12 +278,15 @@ class PumpFluidDosingServiceReal():
         logging.debug("DoseVolume_Result - Mode: real ")
 
         if not request.commandId and self.dosage_uuid != request.commandId:
-            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
 
         logging.info("Finished dosing! (UUID: %s)", self.dosage_uuid)
         self.dosage_uuid = ""
-        return pb2.DoseVolume_Responses(Success=fwpb2.Boolean(value=True))
+        return pb2.DoseVolume_Responses(
+            Success=fwpb2.Boolean(value=not self.pump.is_in_fault_state())
+        )
 
     def GenerateFlow(self, request, context):
         """
@@ -283,9 +301,7 @@ class PumpFluidDosingServiceReal():
 
         requested_flow_rate = request.FlowRate.value
 
-        check_result = self.check_pre_dosage(requested_flow_rate)
-        if check_result:
-            return check_result
+        self.check_pre_dosage(context, requested_flow_rate)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -296,9 +312,7 @@ class PumpFluidDosingServiceReal():
             logging.info("Started dosing with a flow rate of %5.2f (UUID: %s)",
                          requested_flow_rate, self.dosage_uuid)
         except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            return fwpb2.SiLAError(executionError=fwpb2.ExecutionError(
-                errorIdentifier="DosageFinishedUnexpectedly", cause=err))
+            raiseQmixError(context, err)
         return fwpb2.CommandConfirmation(commandId=command_uuid)
 
     def GenerateFlow_Info(self, request, context):
@@ -315,8 +329,9 @@ class PumpFluidDosingServiceReal():
 
         # catch invalid CommandExecutionUUID:
         if not request.commandId or self.dosage_uuid != request.commandId:
-            yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
         else:
             for info in self.wait_dosage_finished():
                 yield info
@@ -332,12 +347,15 @@ class PumpFluidDosingServiceReal():
         logging.debug("GenerateFlow_Result - Mode: real ")
 
         if not request.commandId and self.dosage_uuid != request.commandId:
-            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
-                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
+                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            ))
 
         logging.info("Finished dosing! (UUID: %s)", self.dosage_uuid)
         self.dosage_uuid = ""
-        return pb2.GenerateFlow_Responses(Success=fwpb2.Boolean(value=True))
+        return pb2.GenerateFlow_Responses(
+            Success=fwpb2.Boolean(value=not self.pump.is_in_fault_state())
+        )
 
     def StopDosage(self, request, context):
         """Stops a currently running dosage immediately.
@@ -345,8 +363,11 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("StopDosage - Mode: real ")
 
-        self.pump.stop_pumping()
-        return pb2.StopDosage_Responses(Success=fwpb2.Boolean(value=True))
+        try:
+            self.pump.stop_pumping()
+        except qmixbus.DeviceError as err:
+            raiseQmixError(context, err)
+        return pb2.StopDosage_Responses(Success = fwpb2.Boolean(value = True))
 
     def Get_MaxSyringeFillLevel(self, request, context):
         """The maximum amount of fluid that the syringe can hold.
@@ -357,7 +378,8 @@ class PumpFluidDosingServiceReal():
         logging.debug("Get_MaxSyringeFillLevel - Mode: real ")
 
         return pb2.Get_MaxSyringeFillLevel_Responses(
-            MaxSyringeFillLevel=fwpb2.Real(value=self.max_fill_level))
+            MaxSyringeFillLevel=fwpb2.Real(value=self.max_fill_level)
+        )
 
     def Subscribe_SyringeFillLevel(self, request, context):
         """The current amount of fluid left in the syringe.
@@ -368,7 +390,8 @@ class PumpFluidDosingServiceReal():
         logging.debug("Subscribe_SyringeFillLevel - Mode: real ")
 
         yield pb2.Subscribe_SyringeFillLevel_Responses(
-            SyringeFillLevel=fwpb2.Real(value=self.pump.get_fill_level()))
+            SyringeFillLevel=fwpb2.Real(value=self.pump.get_fill_level())
+        )
 
     def Get_MaxFlowRate(self, request, context):
         """The maximum value of the flow rate at which this pump can dose a fluid.
@@ -379,7 +402,8 @@ class PumpFluidDosingServiceReal():
         logging.debug("Get_MaxFlowRate - Mode: real ")
 
         return pb2.Get_MaxFlowRate_Responses(
-            MaxFlowRate=fwpb2.Real(value=self.pump.get_flow_rate_max()))
+            MaxFlowRate=fwpb2.Real(value=self.pump.get_flow_rate_max())
+        )
 
     def Subscribe_FlowRate(self, request, context):
         """The current value of the flow rate. It is 0 if the pump does not dose any fluid.
@@ -390,4 +414,5 @@ class PumpFluidDosingServiceReal():
         logging.debug("Subscribe_FlowRate - Mode: real ")
 
         yield pb2.Subscribe_FlowRate_Responses(
-            FlowRate=fwpb2.Real(value=self.pump.get_flow_is()))
+            FlowRate=fwpb2.Real(value=self.pump.get_flow_is())
+        )

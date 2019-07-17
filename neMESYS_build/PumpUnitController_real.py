@@ -32,6 +32,9 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+
+import sila2lib.sila_error_handling as sila_error
+
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpUnitController_pb2 as pb2
@@ -62,16 +65,22 @@ class PumpUnitControllerReal():
         """
         logging.debug("SetFlowUnit - Mode: real ")
 
-        requested_volume_unit, requested_time_unit = request.FlowUnit.value.split("/")
         try:
+            requested_volume_unit, requested_time_unit = request.FlowUnit.value.split("/")
             prefix, volume_unit, time_unit = uc.evaluate_units(requested_volume_unit,
                                                                requested_time_unit)
+        except ValueError as err:
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter="FlowUnit",
+                cause="The given flow unit is malformed. It has to be something like 'ml/s' for instance."
+            ))
         except uc.UnitConversionError as err:
-            return err.args[0]
-
-        self.pump.set_flow_unit(prefix, volume_unit, time_unit)
-
-        return pb2.SetFlowUnit_Responses()
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter=err.param, cause=err.message
+            ))
+        else:
+            self.pump.set_flow_unit(prefix, volume_unit, time_unit)
+            return pb2.SetFlowUnit_Responses()
 
     def SetVolumeUnit(self, request, context):
         """Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.
@@ -84,11 +93,12 @@ class PumpUnitControllerReal():
         try:
             prefix, volume_unit = uc.evaluate_units(request.VolumeUnit.value)
         except uc.UnitConversionError as err:
-            return err.args[0]
-
-        self.pump.set_volume_unit(prefix, volume_unit)
-
-        return pb2.SetVolumeUnit_Responses()
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter=err.param, cause=err.message
+            ))
+        else:
+            self.pump.set_volume_unit(prefix, volume_unit)
+            return pb2.SetVolumeUnit_Responses()
 
     def Subscribe_FlowUnit(self, request, context):
         """The currently used flow unit.
@@ -103,8 +113,9 @@ class PumpUnitControllerReal():
         volume_unit_string = "l"
         time_unit_string = uc.time_unit_to_string(time_unit)
 
-        yield pb2.Subscribe_FlowUnit_Responses(
-            FlowUnit=fwpb2.String(value=prefix_string + volume_unit_string + "/" + time_unit_string))
+        yield pb2.Subscribe_FlowUnit_Responses(FlowUnit=fwpb2.String(
+                value=prefix_string + volume_unit_string + "/" + time_unit_string
+        ))
 
     def Subscribe_VolumeUnit(self, request, context):
         """The currently used volume unit.
@@ -119,4 +130,5 @@ class PumpUnitControllerReal():
         volume_unit_string = "l"
 
         yield pb2.Subscribe_VolumeUnit_Responses(
-            VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string))
+            VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string
+        ))
