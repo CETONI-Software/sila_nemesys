@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1cPumpFluidDosingService.proto\x12<sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1\x1a\x13SiLAFramework.proto\"z\n\x17SetFillLevel_Parameters\x12/\n\tFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12.\n\x08\x46lowRate\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"J\n\x16SetFillLevel_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"u\n\x15\x44oseVolume_Parameters\x12,\n\x06Volume\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12.\n\x08\x46lowRate\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"H\n\x14\x44oseVolume_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"I\n\x17GenerateFlow_Parameters\x12.\n\x08\x46lowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"R\n\"GenerateFlow_IntermediateResponses\x12,\n\x04Test\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"J\n\x16GenerateFlow_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"\x17\n\x15StopDosage_Parameters\"H\n\x14StopDosage_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"$\n\"Get_MaxSyringeFillLevel_Parameters\"^\n!Get_MaxSyringeFillLevel_Responses\x12\x39\n\x13MaxSyringeFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\'\n%Subscribe_SyringeFillLevel_Parameters\"^\n$Subscribe_SyringeFillLevel_Responses\x12\x36\n\x10SyringeFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\x1c\n\x1aGet_MaxFlowRate_Parameters\"N\n\x19Get_MaxFlowRate_Responses\x12\x31\n\x0bMaxFlowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\x1c\n\x1aGet_MinFlowRate_Parameters\"N\n\x19Get_MinFlowRate_Responses\x12\x31\n\x0bMinFlowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\x1f\n\x1dSubscribe_FlowRate_Parameters\"N\n\x1cSubscribe_FlowRate_Responses\x12.\n\x08\x46lowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real2\xf6\x14\n\x16PumpFluidDosingService\x12\x92\x01\n\x0cSetFillLevel\x12U.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.SetFillLevel_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12j\n\x11SetFillLevel_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x99\x01\n\x13SetFillLevel_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aT.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.SetFillLevel_Responses\x12\x8e\x01\n\nDoseVolume\x12S.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.DoseVolume_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12h\n\x0f\x44oseVolume_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x95\x01\n\x11\x44oseVolume_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aR.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.DoseVolume_Responses\x12\x92\x01\n\x0cGenerateFlow\x12U.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12\xad\x01\n\x19GenerateFlow_Intermediate\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a`.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_IntermediateResponses0\x01\x12j\n\x11GenerateFlow_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x99\x01\n\x13GenerateFlow_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aT.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_Responses\x12\xb5\x01\n\nStopDosage\x12S.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.StopDosage_Parameters\x1aR.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.StopDosage_Responses\x12\xdc\x01\n\x17Get_MaxSyringeFillLevel\x12`.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxSyringeFillLevel_Parameters\x1a_.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxSyringeFillLevel_Responses\x12\xe7\x01\n\x1aSubscribe_SyringeFillLevel\x12\x63.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_SyringeFillLevel_Parameters\x1a\x62.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_SyringeFillLevel_Responses0\x01\x12\xc4\x01\n\x0fGet_MaxFlowRate\x12X.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxFlowRate_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxFlowRate_Responses\x12\xc4\x01\n\x0fGet_MinFlowRate\x12X.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Responses\x12\xcf\x01\n\x12Subscribe_FlowRate\x12[.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_FlowRate_Parameters\x1aZ.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_FlowRate_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1cPumpFluidDosingService.proto\x12<sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1\x1a\x13SiLAFramework.proto\"z\n\x17SetFillLevel_Parameters\x12/\n\tFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12.\n\x08\x46lowRate\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"J\n\x16SetFillLevel_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"u\n\x15\x44oseVolume_Parameters\x12,\n\x06Volume\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12.\n\x08\x46lowRate\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"H\n\x14\x44oseVolume_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"I\n\x17GenerateFlow_Parameters\x12.\n\x08\x46lowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"R\n\"GenerateFlow_IntermediateResponses\x12,\n\x04Test\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"J\n\x16GenerateFlow_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"\x17\n\x15StopDosage_Parameters\"H\n\x14StopDosage_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"$\n\"Get_MaxSyringeFillLevel_Parameters\"^\n!Get_MaxSyringeFillLevel_Responses\x12\x39\n\x13MaxSyringeFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\'\n%Subscribe_SyringeFillLevel_Parameters\"^\n$Subscribe_SyringeFillLevel_Responses\x12\x36\n\x10SyringeFillLevel\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\x1c\n\x1aGet_MaxFlowRate_Parameters\"N\n\x19Get_MaxFlowRate_Responses\x12\x31\n\x0bMaxFlowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"\x1f\n\x1dSubscribe_FlowRate_Parameters\"N\n\x1cSubscribe_FlowRate_Responses\x12.\n\x08\x46lowRate\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real2\xaf\x13\n\x16PumpFluidDosingService\x12\x92\x01\n\x0cSetFillLevel\x12U.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.SetFillLevel_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12j\n\x11SetFillLevel_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x99\x01\n\x13SetFillLevel_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aT.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.SetFillLevel_Responses\x12\x8e\x01\n\nDoseVolume\x12S.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.DoseVolume_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12h\n\x0f\x44oseVolume_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x95\x01\n\x11\x44oseVolume_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aR.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.DoseVolume_Responses\x12\x92\x01\n\x0cGenerateFlow\x12U.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12\xad\x01\n\x19GenerateFlow_Intermediate\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a`.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_IntermediateResponses0\x01\x12j\n\x11GenerateFlow_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x99\x01\n\x13GenerateFlow_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aT.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.GenerateFlow_Responses\x12\xb5\x01\n\nStopDosage\x12S.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.StopDosage_Parameters\x1aR.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.StopDosage_Responses\x12\xdc\x01\n\x17Get_MaxSyringeFillLevel\x12`.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxSyringeFillLevel_Parameters\x1a_.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxSyringeFillLevel_Responses\x12\xe7\x01\n\x1aSubscribe_SyringeFillLevel\x12\x63.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_SyringeFillLevel_Parameters\x1a\x62.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_SyringeFillLevel_Responses0\x01\x12\xc4\x01\n\x0fGet_MaxFlowRate\x12X.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxFlowRate_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MaxFlowRate_Responses\x12\xcf\x01\n\x12Subscribe_FlowRate\x12[.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_FlowRate_Parameters\x1aZ.sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_FlowRate_Responses0\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -479,61 +479,6 @@ _GET_MAXFLOWRATE_RESPONSES = _descriptor.Descriptor(
 )
 
 
-_GET_MINFLOWRATE_PARAMETERS = _descriptor.Descriptor(
-  name='Get_MinFlowRate_Parameters',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Parameters',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1223,
-  serialized_end=1251,
-)
-
-
-_GET_MINFLOWRATE_RESPONSES = _descriptor.Descriptor(
-  name='Get_MinFlowRate_Responses',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Responses',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='MinFlowRate', full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Responses.MinFlowRate', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1253,
-  serialized_end=1331,
-)
-
-
 _SUBSCRIBE_FLOWRATE_PARAMETERS = _descriptor.Descriptor(
   name='Subscribe_FlowRate_Parameters',
   full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Subscribe_FlowRate_Parameters',
@@ -553,8 +498,8 @@ _SUBSCRIBE_FLOWRATE_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1333,
-  serialized_end=1364,
+  serialized_start=1223,
+  serialized_end=1254,
 )
 
 
@@ -584,8 +529,8 @@ _SUBSCRIBE_FLOWRATE_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1366,
-  serialized_end=1444,
+  serialized_start=1256,
+  serialized_end=1334,
 )
 
 _SETFILLLEVEL_PARAMETERS.fields_by_name['FillLevel'].message_type = SiLAFramework__pb2._REAL
@@ -601,7 +546,6 @@ _STOPDOSAGE_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb
 _GET_MAXSYRINGEFILLLEVEL_RESPONSES.fields_by_name['MaxSyringeFillLevel'].message_type = SiLAFramework__pb2._REAL
 _SUBSCRIBE_SYRINGEFILLLEVEL_RESPONSES.fields_by_name['SyringeFillLevel'].message_type = SiLAFramework__pb2._REAL
 _GET_MAXFLOWRATE_RESPONSES.fields_by_name['MaxFlowRate'].message_type = SiLAFramework__pb2._REAL
-_GET_MINFLOWRATE_RESPONSES.fields_by_name['MinFlowRate'].message_type = SiLAFramework__pb2._REAL
 _SUBSCRIBE_FLOWRATE_RESPONSES.fields_by_name['FlowRate'].message_type = SiLAFramework__pb2._REAL
 DESCRIPTOR.message_types_by_name['SetFillLevel_Parameters'] = _SETFILLLEVEL_PARAMETERS
 DESCRIPTOR.message_types_by_name['SetFillLevel_Responses'] = _SETFILLLEVEL_RESPONSES
@@ -618,8 +562,6 @@ DESCRIPTOR.message_types_by_name['Subscribe_SyringeFillLevel_Parameters'] = _SUB
 DESCRIPTOR.message_types_by_name['Subscribe_SyringeFillLevel_Responses'] = _SUBSCRIBE_SYRINGEFILLLEVEL_RESPONSES
 DESCRIPTOR.message_types_by_name['Get_MaxFlowRate_Parameters'] = _GET_MAXFLOWRATE_PARAMETERS
 DESCRIPTOR.message_types_by_name['Get_MaxFlowRate_Responses'] = _GET_MAXFLOWRATE_RESPONSES
-DESCRIPTOR.message_types_by_name['Get_MinFlowRate_Parameters'] = _GET_MINFLOWRATE_PARAMETERS
-DESCRIPTOR.message_types_by_name['Get_MinFlowRate_Responses'] = _GET_MINFLOWRATE_RESPONSES
 DESCRIPTOR.message_types_by_name['Subscribe_FlowRate_Parameters'] = _SUBSCRIBE_FLOWRATE_PARAMETERS
 DESCRIPTOR.message_types_by_name['Subscribe_FlowRate_Responses'] = _SUBSCRIBE_FLOWRATE_RESPONSES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -729,20 +671,6 @@ Get_MaxFlowRate_Responses = _reflection.GeneratedProtocolMessageType('Get_MaxFlo
   })
 _sym_db.RegisterMessage(Get_MaxFlowRate_Responses)
 
-Get_MinFlowRate_Parameters = _reflection.GeneratedProtocolMessageType('Get_MinFlowRate_Parameters', (_message.Message,), {
-  'DESCRIPTOR' : _GET_MINFLOWRATE_PARAMETERS,
-  '__module__' : 'PumpFluidDosingService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Parameters)
-  })
-_sym_db.RegisterMessage(Get_MinFlowRate_Parameters)
-
-Get_MinFlowRate_Responses = _reflection.GeneratedProtocolMessageType('Get_MinFlowRate_Responses', (_message.Message,), {
-  'DESCRIPTOR' : _GET_MINFLOWRATE_RESPONSES,
-  '__module__' : 'PumpFluidDosingService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.Get_MinFlowRate_Responses)
-  })
-_sym_db.RegisterMessage(Get_MinFlowRate_Responses)
-
 Subscribe_FlowRate_Parameters = _reflection.GeneratedProtocolMessageType('Subscribe_FlowRate_Parameters', (_message.Message,), {
   'DESCRIPTOR' : _SUBSCRIBE_FLOWRATE_PARAMETERS,
   '__module__' : 'PumpFluidDosingService_pb2'
@@ -765,8 +693,8 @@ _PUMPFLUIDDOSINGSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1447,
-  serialized_end=4125,
+  serialized_start=1337,
+  serialized_end=3816,
   methods=[
   _descriptor.MethodDescriptor(
     name='SetFillLevel',
@@ -895,18 +823,9 @@ _PUMPFLUIDDOSINGSERVICE = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='Get_MinFlowRate',
-    full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService.Get_MinFlowRate',
-    index=14,
-    containing_service=None,
-    input_type=_GET_MINFLOWRATE_PARAMETERS,
-    output_type=_GET_MINFLOWRATE_RESPONSES,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
     name='Subscribe_FlowRate',
     full_name='sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService.Subscribe_FlowRate',
-    index=15,
+    index=14,
     containing_service=None,
     input_type=_SUBSCRIBE_FLOWRATE_PARAMETERS,
     output_type=_SUBSCRIBE_FLOWRATE_RESPONSES,

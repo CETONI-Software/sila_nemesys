@@ -166,15 +166,6 @@
         <Observable>No</Observable>
     </Property>
     <Property>
-        <Identifier>MinFlowRate</Identifier>
-        <DisplayName>Minimum Flow Rate</DisplayName>
-        <Description>The minimum value of the flow rate at which this pump can dose a fluid.</Description>
-        <DataType>
-            <Basic>Real</Basic>
-        </DataType>
-        <Observable>No</Observable>
-    </Property>
-    <Property>
         <Identifier>FlowRate</Identifier>
         <DisplayName>Flow Rate</DisplayName>
         <Description>The current value of the flow rate. It is 0 if the pump does not dose any fluid.</Description>

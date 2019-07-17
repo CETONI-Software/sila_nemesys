@@ -392,16 +392,6 @@ class PumpFluidDosingServiceSimulation():
 
         return pb2.Get_MaxFlowRate_Responses(MaxFlowRate=fwpb2.Real(value=self.max_flow_rate))
 
-    def Get_MinFlowRate(self, request, context):
-        """The minimum value of the flow rate at which this pump can dose a fluid.
-            :param request: gRPC request
-            :param context: gRPC context
-            :param response.MinFlowRate: The minimum value of the flow rate at which this pump can dose a fluid.
-        """
-        logging.debug("Get_MinFlowRate - Mode: simulation ")
-
-        return pb2.Get_MinFlowRate_Responses(MinFlowRate=fwpb2.Real(value=self.min_flow_rate))
-
     def Subscribe_FlowRate(self, request, context):
         """The current value of the flow rate. It is 0 if the pump does not dose any fluid.
             :param request: gRPC request

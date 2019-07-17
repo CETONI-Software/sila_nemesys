@@ -189,11 +189,6 @@ class neMESYSClient(s2client.SiLA2Client):
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
-                response = self.PumpFluidDosingService_serv_stub.Get_MinFlowRate(PumpFluidDosingService_pb2.Get_MinFlowRate_Parameters())
-                #~ logging.debug("Get_MinFlowRate response:{}".format(response.MinFlowRate) )
-            except grpc.RpcError as err:
-                logging.error("grpc/SiLA error: {}".format(err) )
-            try :
                 response = next(self.PumpFluidDosingService_serv_stub.Subscribe_FlowRate(PumpFluidDosingService_pb2.Subscribe_FlowRate_Parameters()))
                 #~ logging.debug("Subscribe_FlowRate response:{}".format(response.FlowRate) )
             except grpc.RpcError as err:

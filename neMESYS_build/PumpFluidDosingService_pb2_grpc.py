@@ -85,11 +85,6 @@ class PumpFluidDosingServiceStub(object):
         request_serializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Parameters.SerializeToString,
         response_deserializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Responses.FromString,
         )
-    self.Get_MinFlowRate = channel.unary_unary(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Get_MinFlowRate',
-        request_serializer=PumpFluidDosingService__pb2.Get_MinFlowRate_Parameters.SerializeToString,
-        response_deserializer=PumpFluidDosingService__pb2.Get_MinFlowRate_Responses.FromString,
-        )
     self.Subscribe_FlowRate = channel.unary_stream(
         '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Subscribe_FlowRate',
         request_serializer=PumpFluidDosingService__pb2.Subscribe_FlowRate_Parameters.SerializeToString,
@@ -199,13 +194,6 @@ class PumpFluidDosingServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def Get_MinFlowRate(self, request, context):
-    """remark: Property Parameters are always Empty
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def Subscribe_FlowRate(self, request, context):
     """remark: Property Parameters are always Empty
     """
@@ -285,11 +273,6 @@ def add_PumpFluidDosingServiceServicer_to_server(servicer, server):
           servicer.Get_MaxFlowRate,
           request_deserializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Parameters.FromString,
           response_serializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Responses.SerializeToString,
-      ),
-      'Get_MinFlowRate': grpc.unary_unary_rpc_method_handler(
-          servicer.Get_MinFlowRate,
-          request_deserializer=PumpFluidDosingService__pb2.Get_MinFlowRate_Parameters.FromString,
-          response_serializer=PumpFluidDosingService__pb2.Get_MinFlowRate_Responses.SerializeToString,
       ),
       'Subscribe_FlowRate': grpc.unary_stream_rpc_method_handler(
           servicer.Subscribe_FlowRate,
