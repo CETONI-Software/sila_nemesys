@@ -71,6 +71,11 @@ class PumpFluidDosingServiceSimulation():
             :param context: gRPC context
             :param request.FillLevel:
                 The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and MaxSyringeFillLevel or else the ValidationError RequestedFillLevelOutOfRange is thrown.
+            
+            :param request.FlowRate: 
+                    The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
+            
+
         """
         logging.debug("SetFillLevel - Mode: simulation ")
 
@@ -92,7 +97,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: simulation ")
 
@@ -113,7 +118,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("SetFillLevel_Result - Mode: simulation ")
 
@@ -129,6 +134,8 @@ class PumpFluidDosingServiceSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param request.Volume: The amount of volume to dose.
+            :param request.FlowRate: 
+                The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
 
         """
         logging.debug("DoseVolume - Mode: simulation ")
@@ -140,7 +147,7 @@ class PumpFluidDosingServiceSimulation():
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("DoseVolume_Info - Mode: simulation ")
 
@@ -153,7 +160,7 @@ class PumpFluidDosingServiceSimulation():
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("DoseVolume_Result - Mode: simulation ")
 
@@ -166,7 +173,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.FlowRate:
+            :param request.FlowRate: 
                 The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
 
 
@@ -182,7 +189,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Intermediate - Mode: simulation ")
 
@@ -195,7 +202,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: simulation ")
 
@@ -210,7 +217,7 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Result - Mode: simulation ")
 

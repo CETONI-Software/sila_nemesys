@@ -75,6 +75,9 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             :param request.FillLevel: 
                 The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and MaxSyringeFillLevel or else the ValidationError RequestedFillLevelOutOfRange is thrown.
             
+            :param request.FlowRate: 
+                    The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
+            
 
         """
         logging.debug("SetFillLevel - Mode: simulation ")
@@ -92,7 +95,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: simulation ")
 
@@ -112,14 +115,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("SetFillLevel_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.SetFillLevel_Result(request, context)
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ return pb2.SetFillLevel_Responses( Success=fwpb2.Boolean(value=False) )
 
     def DoseVolume(self, request, context):
@@ -127,6 +130,9 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param request.Volume: The amount of volume to dose.
+            :param request.FlowRate: 
+                The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
+            
 
         """
         logging.debug("DoseVolume - Mode: simulation ")
@@ -141,7 +147,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("DoseVolume_Info - Mode: simulation ")
 
@@ -158,14 +164,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("DoseVolume_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.DoseVolume_Result(request, context)
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ return pb2.DoseVolume_Responses( Success=fwpb2.Boolean(value=False) )
 
     def GenerateFlow(self, request, context):
@@ -193,7 +199,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Intermediate - Mode: simulation ")
 
@@ -210,7 +216,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: simulation ")
 
@@ -229,14 +235,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         
             :param request: gRPC request
             :param context: gRPC context
-            :param request.CommandExecutionUUID: identifies the command execution
+            :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.GenerateFlow_Result(request, context)
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ return pb2.GenerateFlow_Responses( Success=fwpb2.Boolean(value=False) )
 
     def StopDosage(self, request, context):
