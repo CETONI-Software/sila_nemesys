@@ -66,6 +66,8 @@ class PumpFluidDosingServiceSimulation():
         self.MaxFlowRate = 100.0  # ml
         self.MinFlowRate = -100.0  # ml
         self.FlowRate = 0.0  # ml/s
+        # indicates whether we are currently dosing or if we have been stopped by a call to StopDosage
+        self.Dosing = False
 
     def SetFillLevel(self, request, context):
         """
@@ -91,37 +93,38 @@ class PumpFluidDosingServiceSimulation():
             return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
                 errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
         elif requested_fill_level < 0 or requested_fill_level > self.MaxFillLevel:
-            logging.error(f"Requested Fill Level Out Of Range - FillLevel: {requested_fill_level}")
+            logging.error(f"Requested Fill Level Out Of Range - FillLevel: {requested_fill_level}ml")
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
                 parameter="FlowRate",
                 cause="The fill level requested in SetFillLevel is greater than MaxSyringeFillLevel or less than 0.",
                 action="Adjust the FillLevel parameter to fit in the specified range."))
         elif requested_flow_rate < self.MinFlowRate or requested_flow_rate > self.MaxFlowRate:
-            logging.error(f"Requested Flow Rate Out Of Range - FlowRate: {requested_flow_rate}")
+            logging.error(f"Requested Flow Rate Out Of Range - FlowRate: {requested_flow_rate}ml/s")
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
                 parameter="FlowRate",
                 cause="The specified flow rate is not in the range bewteen MaxFlowRate and MinFlowRate for this pump."))
         elif (requested_flow_rate > 0 and self.FillLevel <= 0):
-            logging.error("Cannot dispense from an empty syringe (self.FillLevel: {}, FlowRate: {})".format(
+            logging.error("Cannot dispense from an empty syringe (self.FillLevel: {}ml, FlowRate: {}ml/s)".format(
                 self.FillLevel, requested_flow_rate))
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
                 parameter="FlowRate",
                 cause="Cannot dispense any more fluid due to already empty syringe."))
         elif (requested_flow_rate < 0 and self.FillLevel >= self.MaxFillLevel):
-            logging.error("Cannot aspirate to a filled syringe (self.FillLevel: {}, FlowRate: {})".format(
+            logging.error("Cannot aspirate to a filled syringe (self.FillLevel: {}ml, FlowRate: {}ml/s)".format(
                 self.FillLevel, requested_flow_rate))
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
                 parameter="FlowRate",
                 cause="Cannot aspirate any more fluid due to already filled syringe."))
         else:
             self.Dosage_UUID = str(uuid.uuid4())
-            logging.info("Started dosing with flow rate of {} ml/s until fill level of {} ml is reached (UUID: {})".format(
+            logging.info("Started dosing with flow rate of {}ml/s until fill level of {}ml is reached (UUID: {})".format(
                 request.FlowRate.value, request.FillLevel.value, self.Dosage_UUID))
             command_uuid = fwpb2.CommandExecutionUUID(
                 commandId=self.Dosage_UUID)
 
             self.TargetFillLevel = requested_fill_level # ml
             self.FlowRate = requested_flow_rate # ml/s
+            self.Dosing = True
 
             return fwpb2.CommandConfirmation(commandId=command_uuid)
 
@@ -146,14 +149,19 @@ class PumpFluidDosingServiceSimulation():
             yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
                 errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
         else:
-            Volume = int(self.FillLevel - self.TargetFillLevel)
+            Volume = abs(int(self.FillLevel - self.TargetFillLevel))
             for i in range(Volume):
-                yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
                 time.sleep(0.5)
-                self.FillLevel -= self.FlowRate
-                logging.info("Dosage progress: {0:03f}%% done".format(i/Volume*100))
-                if self.FillLevel <= self.TargetFillLevel:
+                progress = i / Volume * 100 * abs(self.FlowRate)
+                logging.info("Dosage progress: {0:5.2f}% done - {1:5.2f}ml".format(progress, self.FillLevel))
+
+                if not self.Dosing or (self.FlowRate > 0 and self.FillLevel <= self.TargetFillLevel) or (self.FlowRate < 0 and self.FillLevel >= self.TargetFillLevel):
                     break
+
+                self.FillLevel -= self.FlowRate
+
+                yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running,
+                                          progressInfo=fwpb2.Real(value=progress))
 
             yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
 
@@ -173,6 +181,7 @@ class PumpFluidDosingServiceSimulation():
             logging.info(f"Finished dosing! (UUID: {self.Dosage_UUID})")
             self.Dosage_UUID = ""
             self.FlowRate = 0.0
+            self.Dosing = False
             return pb2.SetFillLevel_Responses(Success=fwpb2.Boolean(value=True))
         else:
             return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
@@ -288,7 +297,10 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("StopDosage - Mode: simulation ")
 
-        return pb2.StopDosage_Responses(Success=fwpb2.Boolean(value=False))
+        self.Dosage_UUID = ""
+        self.FlowRate = 0.0
+        self.Dosing = False
+        return pb2.StopDosage_Responses(Success=fwpb2.Boolean(value=True))
 
     def Get_MaxSyringeFillLevel(self, request, context):
         """The maximum amount of fluid that the syringe can hold.
