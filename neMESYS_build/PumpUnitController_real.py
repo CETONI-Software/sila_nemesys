@@ -74,7 +74,6 @@ def evaluate_time_unit(time_unit_string):
     } # default = "per_second"
     return switcher.get(time_unit_string, qmixpump.TimeUnit.per_second)
 
-
 def prefix_to_string(prefix):
     """Converts a given prefix to a human readable string
         :param prefix: qmixpump.UnitPrefix

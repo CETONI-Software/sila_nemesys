@@ -37,6 +37,7 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+import time
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpFluidDosingService_pb2 as pb2
@@ -45,6 +46,24 @@ import PumpFluidDosingService_pb2_grpc as pb2_grpc
 # import qmixsdk
 from qmixsdk import qmixbus
 from qmixsdk import qmixpump
+
+
+def wait_dosage_finished(pump, timeout_seconds):
+    """
+    The function waits until the last dosage command has finished
+    until the timeout occurs.
+    """
+    timer = qmixbus.PollingTimer(timeout_seconds * 1000)
+    message_timer = qmixbus.PollingTimer(500)
+    result = True
+    while result and not timer.is_expired():
+        time.sleep(0.1)
+        if message_timer.is_expired():
+            print("Fill level: ", pump.get_fill_level())
+            message_timer.restart()
+        result = pump.is_pumping()
+    return not result
+
 
 class PumpFluidDosingServiceReal():
     """ PumpFluidDosingServiceReal -
@@ -60,7 +79,8 @@ class PumpFluidDosingServiceReal():
         self.bus = bus
         self.pump = pump
 
-
+        self.max_fill_level = self.pump.get_volume_max()
+        self.dosage_uuid = ""
 
     def SetFillLevel(self, request, context):
         """
@@ -74,13 +94,43 @@ class PumpFluidDosingServiceReal():
 
             :param request.FlowRate:
                     The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-
-
         """
         logging.debug("SetFillLevel - Mode: real ")
 
-        #~ command_uuid = fwpb2.CommandExecutionUUID( commandId = str(uuid.uuid4()) )
-        #~ return fwpb2.CommandConfirmation( commandId = command_uuid )
+        requested_fill_level = request.FillLevel.value
+        requested_flow_rate = request.FlowRate.value
+
+        # We only allow one dosage at a time.
+        # -> Throw an error if another dosage should be started when there already is one.
+        if self.dosage_uuid:
+            # return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(errorType=fwpb2.FrameworkError.ErrorType.COMMAND_EXECUTION_NOT_ACCEPTED))
+            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+        if requested_fill_level < 0 or requested_fill_level > self.max_fill_level:
+            logging.error("Requested Fill Level Out Of Range - FillLevel: %5.2f", requested_fill_level)
+            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+                parameter="FillLevel",
+                cause="The fill level requested in SetFillLevel is greater than MaxSyringeFillLevel or less than 0.",
+                action="Adjust the FillLevel parameter to fit in the specified range."))
+        if requested_flow_rate < 0 or requested_flow_rate > self.pump.get_flow_rate_max():
+            logging.error("Requested Flow Rate Out Of Range - FlowRate: %5.2f", requested_flow_rate)
+            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+                parameter="FlowRate",
+                cause="The specified flow rate is not in the range bewteen 0 and MaxFlowRate for this pump."))
+
+        self.dosage_uuid = str(uuid.uuid4())
+        logging.info("Started dosing with flow rate of %5.2f until fill level of %5.2f is reached (UUID: %s)",
+                     requested_flow_rate, requested_fill_level, self.dosage_uuid)
+        command_uuid = fwpb2.CommandExecutionUUID(
+            commandId=self.dosage_uuid)
+
+        try:
+            self.pump.set_fill_level(requested_fill_level, requested_flow_rate)
+        except qmixbus.DeviceError as err:
+            logging.error("QmixSDK Error: %s", err)
+            return fwpb2.SiLAError(executionError=fwpb2.ExecutionError(
+                errorIdentifier="DosageFinishedUnexpectedly", cause="self.pump.set_fill_level()"))
+        return fwpb2.CommandConfirmation(commandId=command_uuid)
 
     def SetFillLevel_Info(self, request, context):
         """
@@ -92,11 +142,33 @@ class PumpFluidDosingServiceReal():
             :param request.commandId: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: real ")
+        logging.info(
+            f"Requested SetFillLevel_Info for dosage (UUID: {request.commandId})")
+        logging.info(f"Current dosage is UUID: {self.dosage_uuid}")
 
-        #~ uuid = request.commandId
-        #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
-        #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
-        #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
+        yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
+
+        # catch invalid CommandExecutionUUID:
+        if not request.commandId or self.dosage_uuid != request.commandId:
+            yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+        else:
+            timer = qmixbus.PollingTimer(30000) # msec
+            message_timer = qmixbus.PollingTimer(500) # msec
+            result = True
+            while result and not timer.is_expired():
+                time.sleep(0.1)
+                if message_timer.is_expired():
+                    logging.info("Fill level: %s", self.pump.get_fill_level())
+                    yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
+                    message_timer.restart()
+                result = self.pump.is_pumping()
+
+            if not result:
+                yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
+            else:
+                yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedWithError)
+
 
     def SetFillLevel_Result(self, request, context):
         """
@@ -109,8 +181,14 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("SetFillLevel_Result - Mode: real ")
 
-        #~ uuid = request.commandId
-        #~ return pb2.SetFillLevel_Responses(Success=fwpb2.Boolean(value=False))
+        if request.commandId and self.dosage_uuid == request.commandId:
+            logging.info(f"Finished dosing! (UUID: {self.dosage_uuid})")
+            self.dosage_uuid = ""
+            return pb2.SetFillLevel_Responses(Success=fwpb2.Boolean(value=True))
+
+        return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+            errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+
 
     def DoseVolume(self, request, context):
         """Dose a certain amount of volume with the given flow rate.
@@ -119,8 +197,6 @@ class PumpFluidDosingServiceReal():
             :param request.Volume: The amount of volume to dose.
             :param request.FlowRate:
                 The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-
-
         """
         logging.debug("DoseVolume - Mode: real ")
 
@@ -159,8 +235,6 @@ class PumpFluidDosingServiceReal():
             :param context: gRPC context
             :param request.FlowRate:
                 The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-
-
         """
         logging.debug("GenerateFlow - Mode: real ")
 
@@ -214,69 +288,60 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("StopDosage - Mode: real ")
 
-        #~ return_val = request.Void.value
-        #~ return pb2.StopDosage_Responses(Success=fwpb2.Boolean(value=False))
+        self.pump.stop_pumping()
+        return pb2.StopDosage_Responses(Success=fwpb2.Boolean(value=True))
 
     def Get_MaxSyringeFillLevel(self, request, context):
         """The maximum amount of fluid that the syringe can hold.
             :param request: gRPC request
             :param context: gRPC context
             :param response.MaxSyringeFillLevel: The maximum amount of fluid that the syringe can hold.
-
         """
         logging.debug("Get_MaxSyringeFillLevel - Mode: real ")
 
-        #~ return_val = request.MaxSyringeFillLevel.value
-        #~ return pb2.Get_MaxSyringeFillLevel_Responses( MaxSyringeFillLevel=fwpb2.Real(value=0.0) )
+        return pb2.Get_MaxSyringeFillLevel_Responses(
+            MaxSyringeFillLevel=fwpb2.Real(value=self.max_fill_level))
 
     def Subscribe_SyringeFillLevel(self, request, context):
         """The current amount of fluid left in the syringe.
             :param request: gRPC request
             :param context: gRPC context
             :param response.SyringeFillLevel: The current amount of fluid left in the syringe.
-
         """
         logging.debug("Subscribe_SyringeFillLevel - Mode: real ")
 
-        #~ yield_val = request.SyringeFillLevel.value
-        #~ pb2.Subscribe_SyringeFillLevel_Responses( SyringeFillLevel=fwpb2.Real(value=0.0) )
+        yield pb2.Subscribe_SyringeFillLevel_Responses(
+            SyringeFillLevel=fwpb2.Real(value=self.pump.get_fill_level()))
 
     def Get_MaxFlowRate(self, request, context):
         """The maximum value of the flow rate at which this pump can dose a fluid.
             :param request: gRPC request
             :param context: gRPC context
             :param response.MaxFlowRate: The maximum value of the flow rate at which this pump can dose a fluid.
-
         """
         logging.debug("Get_MaxFlowRate - Mode: real ")
 
-        #~ return_val = request.MaxFlowRate.value
-        #~ return pb2.Get_MaxFlowRate_Responses( MaxFlowRate=fwpb2.Real(value=0.0) )
+        return pb2.Get_MaxFlowRate_Responses(
+            MaxFlowRate=fwpb2.Real(value=self.pump.get_flow_rate_max()))
 
     def Get_MinFlowRate(self, request, context):
         """The minimum value of the flow rate at which this pump can dose a fluid.
             :param request: gRPC request
             :param context: gRPC context
             :param response.MinFlowRate: The minimum value of the flow rate at which this pump can dose a fluid.
-
         """
         logging.debug("Get_MinFlowRate - Mode: real ")
 
-        #~ return_val = request.MinFlowRate.value
-        #~ return pb2.Get_MinFlowRate_Responses( MinFlowRate=fwpb2.Real(value=0.0) )
+        return pb2.Get_MinFlowRate_Responses(
+            MinFlowRate=fwpb2.Real(value=0))
 
     def Subscribe_FlowRate(self, request, context):
         """The current value of the flow rate. It is 0 if the pump does not dose any fluid.
             :param request: gRPC request
             :param context: gRPC context
             :param response.FlowRate: The current value of the flow rate. It is 0 if the pump does not dose any fluid.
-
         """
         logging.debug("Subscribe_FlowRate - Mode: real ")
 
-        #~ yield_val = request.FlowRate.value
-        #~ pb2.Subscribe_FlowRate_Responses( FlowRate=fwpb2.Real(value=0.0) )
-
-
-
-
+        yield pb2.Subscribe_FlowRate_Responses(
+            FlowRate=fwpb2.Real(value=self.pump.get_flow_is()))
