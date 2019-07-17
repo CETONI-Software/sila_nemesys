@@ -75,20 +75,20 @@ class PumpFluidDosingServiceStub(object):
         request_serializer=PumpFluidDosingService__pb2.StopDosage_Parameters.SerializeToString,
         response_deserializer=PumpFluidDosingService__pb2.StopDosage_Responses.FromString,
         )
-    self.Get_MaxSyringeFillLevel = channel.unary_unary(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Get_MaxSyringeFillLevel',
-        request_serializer=PumpFluidDosingService__pb2.Get_MaxSyringeFillLevel_Parameters.SerializeToString,
-        response_deserializer=PumpFluidDosingService__pb2.Get_MaxSyringeFillLevel_Responses.FromString,
+    self.Subscribe_MaxSyringeFillLevel = channel.unary_stream(
+        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Subscribe_MaxSyringeFillLevel',
+        request_serializer=PumpFluidDosingService__pb2.Subscribe_MaxSyringeFillLevel_Parameters.SerializeToString,
+        response_deserializer=PumpFluidDosingService__pb2.Subscribe_MaxSyringeFillLevel_Responses.FromString,
         )
     self.Subscribe_SyringeFillLevel = channel.unary_stream(
         '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Subscribe_SyringeFillLevel',
         request_serializer=PumpFluidDosingService__pb2.Subscribe_SyringeFillLevel_Parameters.SerializeToString,
         response_deserializer=PumpFluidDosingService__pb2.Subscribe_SyringeFillLevel_Responses.FromString,
         )
-    self.Get_MaxFlowRate = channel.unary_unary(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Get_MaxFlowRate',
-        request_serializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Parameters.SerializeToString,
-        response_deserializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Responses.FromString,
+    self.Subscribe_MaxFlowRate = channel.unary_stream(
+        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Subscribe_MaxFlowRate',
+        request_serializer=PumpFluidDosingService__pb2.Subscribe_MaxFlowRate_Parameters.SerializeToString,
+        response_deserializer=PumpFluidDosingService__pb2.Subscribe_MaxFlowRate_Responses.FromString,
         )
     self.Subscribe_FlowRate = channel.unary_stream(
         '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/Subscribe_FlowRate',
@@ -192,7 +192,7 @@ class PumpFluidDosingServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def Get_MaxSyringeFillLevel(self, request, context):
+  def Subscribe_MaxSyringeFillLevel(self, request, context):
     """Maximum Syringe Fill Level
     The maximum amount of fluid that the syringe can hold.
     """
@@ -208,7 +208,7 @@ class PumpFluidDosingServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def Get_MaxFlowRate(self, request, context):
+  def Subscribe_MaxFlowRate(self, request, context):
     """Maximum Flow Rate
     The maximum value of the flow rate at which this pump can dose a fluid.
     """
@@ -277,20 +277,20 @@ def add_PumpFluidDosingServiceServicer_to_server(servicer, server):
           request_deserializer=PumpFluidDosingService__pb2.StopDosage_Parameters.FromString,
           response_serializer=PumpFluidDosingService__pb2.StopDosage_Responses.SerializeToString,
       ),
-      'Get_MaxSyringeFillLevel': grpc.unary_unary_rpc_method_handler(
-          servicer.Get_MaxSyringeFillLevel,
-          request_deserializer=PumpFluidDosingService__pb2.Get_MaxSyringeFillLevel_Parameters.FromString,
-          response_serializer=PumpFluidDosingService__pb2.Get_MaxSyringeFillLevel_Responses.SerializeToString,
+      'Subscribe_MaxSyringeFillLevel': grpc.unary_stream_rpc_method_handler(
+          servicer.Subscribe_MaxSyringeFillLevel,
+          request_deserializer=PumpFluidDosingService__pb2.Subscribe_MaxSyringeFillLevel_Parameters.FromString,
+          response_serializer=PumpFluidDosingService__pb2.Subscribe_MaxSyringeFillLevel_Responses.SerializeToString,
       ),
       'Subscribe_SyringeFillLevel': grpc.unary_stream_rpc_method_handler(
           servicer.Subscribe_SyringeFillLevel,
           request_deserializer=PumpFluidDosingService__pb2.Subscribe_SyringeFillLevel_Parameters.FromString,
           response_serializer=PumpFluidDosingService__pb2.Subscribe_SyringeFillLevel_Responses.SerializeToString,
       ),
-      'Get_MaxFlowRate': grpc.unary_unary_rpc_method_handler(
-          servicer.Get_MaxFlowRate,
-          request_deserializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Parameters.FromString,
-          response_serializer=PumpFluidDosingService__pb2.Get_MaxFlowRate_Responses.SerializeToString,
+      'Subscribe_MaxFlowRate': grpc.unary_stream_rpc_method_handler(
+          servicer.Subscribe_MaxFlowRate,
+          request_deserializer=PumpFluidDosingService__pb2.Subscribe_MaxFlowRate_Parameters.FromString,
+          response_serializer=PumpFluidDosingService__pb2.Subscribe_MaxFlowRate_Responses.SerializeToString,
       ),
       'Subscribe_FlowRate': grpc.unary_stream_rpc_method_handler(
           servicer.Subscribe_FlowRate,

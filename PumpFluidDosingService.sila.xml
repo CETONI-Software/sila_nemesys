@@ -137,7 +137,7 @@
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>No</Observable>
+        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>SyringeFillLevel</Identifier>
@@ -155,7 +155,7 @@
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>No</Observable>
+        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>FlowRate</Identifier>

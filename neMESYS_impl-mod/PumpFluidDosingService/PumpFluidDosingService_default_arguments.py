@@ -48,7 +48,7 @@ default_dict['StopDosage_Responses'] = {
     'Success': fwpb2.Boolean(value=False)
 }
 
-default_dict['Get_MaxSyringeFillLevel_Responses'] = {
+default_dict['Subscribe_MaxSyringeFillLevel_Responses'] = {
     'MaxSyringeFillLevel': fwpb2.Real(value=0.0)
 }
 
@@ -56,7 +56,7 @@ default_dict['Subscribe_SyringeFillLevel_Responses'] = {
     'SyringeFillLevel': fwpb2.Real(value=0.0)
 }
 
-default_dict['Get_MaxFlowRate_Responses'] = {
+default_dict['Subscribe_MaxFlowRate_Responses'] = {
     'MaxFlowRate': fwpb2.Real(value=0.0)
 }
 
