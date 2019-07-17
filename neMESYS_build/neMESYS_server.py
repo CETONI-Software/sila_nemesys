@@ -122,7 +122,7 @@ def parseCommandLine():
 if __name__ == '__main__':
     """Main: """
     logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
-    #~ logging.basicConfig(format='%(levelname)s|%(module)s.%(funcName)s: %(message)s', level=logging.ERROR)
+    #~ logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.ERROR)
 
     parsed_args = parseCommandLine()
 

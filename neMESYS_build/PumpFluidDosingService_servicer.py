@@ -5,13 +5,13 @@ ________________________________________________________________________
 
 *pumpfluiddosingservice_server_simulation *
 
-:details: pumpfluiddosingservice_server_simulation: 
+:details: pumpfluiddosingservice_server_simulation:
         Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (StartDoseVolume and StartGenerateFlow) available.
 
         The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) the ValidationError FlowRateOutOfRange is thrown.
         At any time the property CurrentSyringeFillLevel can be queried to see how much fluid is left in the syringe. Similarly the property CurrentFlowRate can be queried to get the current flow rate at which the pump is dosing.
-    . 
-           
+    .
+
 :file:    pumpfluiddosingservice_server_simulation.py
 :authors: Florian Meinicke
 
@@ -22,7 +22,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: - 
+.. todo:: -
 ________________________________________________________________________
 
 **Copyright**:
@@ -44,7 +44,7 @@ import PumpFluidDosingService_pb2_grpc as pb2_grpc
 
 
 class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
-    """ PumpFluidDosingService - 
+    """ PumpFluidDosingService -
 #        Allows to dose a specified fluid. There are commands for absolute dosing (SetFillLevel) and relative dosing (StartDoseVolume and StartGenerateFlow) available.
 #
 #        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) the ValidationError FlowRateOutOfRange is thrown.
@@ -69,15 +69,15 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """
                 Pumps fluid with the given flow rate until the requested fill level is reached.
                 Depending on the requested fill level given in the FillLevel parameter this function may cause aspiration or dispension of fluid.
-        
+
             :param request: gRPC request
             :param context: gRPC context
-            :param request.FillLevel: 
+            :param request.FillLevel:
                 The requested fill level. A level of 0 indicates a completely empty syringe. The value has to be between 0 and MaxSyringeFillLevel or else the ValidationError RequestedFillLevelOutOfRange is thrown.
-            
-            :param request.FlowRate: 
+
+            :param request.FlowRate:
                     The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-            
+
 
         """
         logging.debug("SetFillLevel - Mode: simulation ")
@@ -92,7 +92,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """
                 Pumps fluid with the given flow rate until the requested fill level is reached.
                 Depending on the requested fill level given in the FillLevel parameter this function may cause aspiration or dispension of fluid.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.commandId: identifies the command execution
@@ -101,7 +101,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
         if self.implementation is not None:
             for info_resp in self.implementation.SetFillLevel_Info(request, context):
-                yield info_resp 
+                yield info_resp
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -112,7 +112,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """
                 Pumps fluid with the given flow rate until the requested fill level is reached.
                 Depending on the requested fill level given in the FillLevel parameter this function may cause aspiration or dispension of fluid.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.commandId: identifies the command execution
@@ -130,9 +130,9 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param request.Volume: The amount of volume to dose.
-            :param request.FlowRate: 
+            :param request.FlowRate:
                 The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-            
+
 
         """
         logging.debug("DoseVolume - Mode: simulation ")
@@ -153,7 +153,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
         if self.implementation is not None:
             for info_resp in self.implementation.DoseVolume_Info(request, context):
-                yield info_resp 
+                yield info_resp
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -177,12 +177,12 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
     def GenerateFlow(self, request, context):
         """
             Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
-        
+
             :param request: gRPC request
             :param context: gRPC context
-            :param request.FlowRate: 
+            :param request.FlowRate:
                 The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-            
+
 
         """
         logging.debug("GenerateFlow - Mode: simulation ")
@@ -196,7 +196,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
     def GenerateFlow_Intermediate(self, request, context):
         """
             Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.commandId: identifies the command execution
@@ -205,7 +205,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
         if self.implementation is not None:
             for intermed_resp in self.implementation.GenerateFlow_Intermediate(request, context):
-                yield intermed_resp 
+                yield intermed_resp
         else:
             pass #~ uuid = request.commandId
             #~ yield pb2.GenerateFlow_Intermediate_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
@@ -213,7 +213,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
     def GenerateFlow_Info(self, request, context):
         """
             Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.commandId: identifies the command execution
@@ -222,7 +222,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
         if self.implementation is not None:
             for info_resp in self.implementation.GenerateFlow_Info(request, context):
-                yield info_resp 
+                yield info_resp
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -232,7 +232,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
     def GenerateFlow_Result(self, request, context):
         """
             Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.commandId: identifies the command execution
@@ -282,7 +282,8 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("Subscribe_SyringeFillLevel - Mode: simulation ")
 
         if self.implementation is not None:
-            self.implementation.Subscribe_SyringeFillLevel(request, context)
+            for val in self.implementation.Subscribe_SyringeFillLevel(request, context):
+                yield val
         else:
             #~ yield_val = request.SyringeFillLevel.value
             pass #~ yield pb2.Subscribe_SyringeFillLevel_Responses( SyringeFillLevel=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
@@ -327,7 +328,8 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("Subscribe_FlowRate - Mode: simulation ")
 
         if self.implementation is not None:
-            self.implementation.Subscribe_FlowRate(request, context)
+            for val in self.implementation.Subscribe_FlowRate(request, context):
+                yield val
         else:
             #~ yield_val = request.FlowRate.value
             pass #~ yield pb2.Subscribe_FlowRate_Responses( FlowRate=pb2.DataType_ValueWithUnit(ValueWithUnit=fwpb2.Real(value=0.0)) )
