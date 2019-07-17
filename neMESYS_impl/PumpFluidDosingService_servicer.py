@@ -100,8 +100,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("SetFillLevel_Info - Mode: simulation ")
 
         if self.implementation is not None:
-            for info_resp in self.implementation.SetFillLevel_Info(request, context):
-                yield info_resp
+            return self.implementation.SetFillLevel_Info(request, context)
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -152,8 +151,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("DoseVolume_Info - Mode: simulation ")
 
         if self.implementation is not None:
-            for info_resp in self.implementation.DoseVolume_Info(request, context):
-                yield info_resp
+            return self.implementation.DoseVolume_Info(request, context)
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -204,8 +202,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("GenerateFlow_Info - Mode: simulation ")
 
         if self.implementation is not None:
-            for info_resp in self.implementation.GenerateFlow_Info(request, context):
-                yield info_resp
+            return self.implementation.GenerateFlow_Info(request, context)
         else:
             pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
@@ -265,8 +262,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("Subscribe_SyringeFillLevel - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_SyringeFillLevel(request, context):
-                yield val
+            return self.implementation.Subscribe_SyringeFillLevel(request, context):
         else:
             #~ yield_val = request.SyringeFillLevel.value
             pass #~ yield pb2.Subscribe_SyringeFillLevel_Responses( SyringeFillLevel=fwpb2.Real(value=0.0) )
@@ -296,8 +292,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         logging.debug("Subscribe_FlowRate - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_FlowRate(request, context):
-                yield val
+            return self.implementation.Subscribe_FlowRate(request, context)
         else:
             #~ yield_val = request.FlowRate.value
             pass #~ yield pb2.Subscribe_FlowRate_Responses( FlowRate=fwpb2.Real(value=0.0) )

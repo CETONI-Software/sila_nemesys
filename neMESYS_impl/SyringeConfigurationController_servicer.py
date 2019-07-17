@@ -86,8 +86,7 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
         logging.debug("Subscribe_InnerDiameter - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_InnerDiameter(request, context):
-                yield val
+            return self.implementation.Subscribe_InnerDiameter(request, context)
         else:
             #~ yield_val = request.InnerDiameter.value
             pass #~ yield pb2.Subscribe_InnerDiameter_Responses( InnerDiameter=fwpb2.Real(value=0.0) )
@@ -101,8 +100,7 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
         logging.debug("Subscribe_MaxPistonStroke - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_MaxPistonStroke(request, context):
-                yield val
+            return self.implementation.Subscribe_MaxPistonStroke(request, context)
         else:
             #~ yield_val = request.MaxPistonStroke.value
             pass #~ yield pb2.Subscribe_MaxPistonStroke_Responses( MaxPistonStroke=fwpb2.Real(value=0.0) )

@@ -113,8 +113,7 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
         logging.debug("Subscribe_PumpDriveState - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_PumpDriveState(request, context):
-                yield val
+            return self.implementation.Subscribe_PumpDriveState(request, context)
         else:
             #~ yield_val = request.PumpDriveState.value
             pass #~ yield pb2.Subscribe_PumpDriveState_Responses( PumpDriveState=fwpb2.Boolean(value=False) )
@@ -128,8 +127,7 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
         logging.debug("Subscribe_FaultState - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_FaultState(request, context):
-                yield val
+            return self.implementation.Subscribe_FaultState(request, context)
         else:
             #~ yield_val = request.FaultState.value
             pass #~ yield pb2.Subscribe_FaultState_Responses( FaultState=fwpb2.Boolean(value=False) )

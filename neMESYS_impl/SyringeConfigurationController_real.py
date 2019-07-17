@@ -34,6 +34,7 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+import time
 
 import sila2lib.sila_error_handling as sila_error
 
@@ -70,6 +71,14 @@ class SyringeConfigurationControllerReal():
         logging.debug("SetSyringeParameters - Mode: real ")
 
         def check_less_than_zero(param, param_str: str):
+            """
+            Checks if the given param is less than zero. If this is the case,
+            an appropriate validation error is raised indicating to the client
+            which parameter should be adjusted.
+
+            :param param: The parameter to check against zero
+            :param param_str: A string description of the given param
+            """
             if param < 0:
                 sila_error.raiseRPCError(context, sila_error.getValidationError(
                     param_str,
@@ -98,9 +107,13 @@ class SyringeConfigurationControllerReal():
         """
         logging.debug("Subscribe_InnerDiameter - Mode: real ")
 
-        yield pb2.Subscribe_InnerDiameter_Responses(InnerDiameter=fwpb2.Real(
-            value=self.pump.get_syringe_param().inner_diameter_mm
-        ))
+        while True:
+            yield pb2.Subscribe_InnerDiameter_Responses(InnerDiameter=fwpb2.Real(
+                value=self.pump.get_syringe_param().inner_diameter_mm
+            ))
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
     def Subscribe_MaxPistonStroke(self, request, context):
         """The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
@@ -110,9 +123,13 @@ class SyringeConfigurationControllerReal():
         """
         logging.debug("Subscribe_MaxPistonStroke - Mode: real ")
 
-        yield pb2.Subscribe_MaxPistonStroke_Responses(MaxPistonStroke=fwpb2.Real(
-            value=self.pump.get_syringe_param().max_piston_stroke_mm
-        ))
+        while True:
+            yield pb2.Subscribe_MaxPistonStroke_Responses(MaxPistonStroke=fwpb2.Real(
+                value=self.pump.get_syringe_param().max_piston_stroke_mm
+            ))
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
 
 

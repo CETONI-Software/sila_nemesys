@@ -92,8 +92,7 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
         logging.debug("Subscribe_FlowUnit - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_FlowUnit(request, context):
-                yield val
+            return self.implementation.Subscribe_FlowUnit(request, context)
         else:
             #~ yield_val = request.FlowUnit.value
             pass #~ yield pb2.Subscribe_FlowUnit_Responses( FlowUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )
@@ -107,8 +106,7 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
         logging.debug("Subscribe_VolumeUnit - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_VolumeUnit(request, context):
-                yield val
+            return self.implementation.Subscribe_VolumeUnit(request, context)
         else:
             #~ yield_val = request.VolumeUnit.value
             pass #~ yield pb2.Subscribe_VolumeUnit_Responses( VolumeUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )

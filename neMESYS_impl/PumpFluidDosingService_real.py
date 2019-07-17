@@ -52,7 +52,7 @@ from qmixsdk import qmixpump
 
 
 def raiseQmixError(context, error):
-    """Raises a SiLA error based on the given QmixSDK error abd also logs the error
+    """Raises a SiLA error based on the given QmixSDK error and also logs the error
         :param context: gRPC context
         :param error: QmixSDK error
     """
@@ -77,11 +77,11 @@ class PumpFluidDosingServiceReal():
         self.max_fill_level = self.pump.get_volume_max()
         self.dosage_uuid = ""
 
-    def check_pre_dosage(self, context, flow_rate, fill_level=None, volume=None):
+    def _check_pre_dosage(self, context, flow_rate, fill_level=None, volume=None):
         """Checks if the given flow rate and fill level or volume are in the correct ranges for this pump
         """
         # We only allow one dosage at a time.
-        # -> Stop the curretnly running dosage and after that start the new one.
+        # -> Stop the currently running dosage and after that start the new one.
         if self.dosage_uuid:
             self.StopDosage(0, 0)
         if flow_rate < 0 or flow_rate > self.pump.get_flow_rate_max():
@@ -106,7 +106,7 @@ class PumpFluidDosingServiceReal():
             ))
 
 
-    def wait_dosage_finished(self):
+    def _wait_dosage_finished(self):
         """
         The function waits until the last dosage command has finished or
         until a timeout occurs. The timeout is estimated from the dosage's flow
@@ -153,7 +153,7 @@ class PumpFluidDosingServiceReal():
         requested_fill_level = request.FillLevel.value
         requested_flow_rate = request.FlowRate.value
 
-        self.check_pre_dosage(context, requested_flow_rate, fill_level=requested_fill_level)
+        self._check_pre_dosage(context, requested_flow_rate, fill_level=requested_fill_level)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -189,8 +189,7 @@ class PumpFluidDosingServiceReal():
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
         else:
-            for info in self.wait_dosage_finished():
-                yield info
+            return self._wait_dosage_finished()
 
     def SetFillLevel_Result(self, request, context):
         """
@@ -233,7 +232,7 @@ class PumpFluidDosingServiceReal():
         requested_volume = request.Volume.value
         requested_flow_rate = request.FlowRate.value
 
-        self.check_pre_dosage(context, requested_flow_rate, volume=requested_volume)
+        self._check_pre_dosage(context, requested_flow_rate, volume=requested_volume)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -266,8 +265,7 @@ class PumpFluidDosingServiceReal():
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
         else:
-            for info in self.wait_dosage_finished():
-                yield info
+            return self._wait_dosage_finished()
 
     def DoseVolume_Result(self, request, context):
         """Dose a certain amount of volume with the given flow rate.
@@ -301,7 +299,7 @@ class PumpFluidDosingServiceReal():
 
         requested_flow_rate = request.FlowRate.value
 
-        self.check_pre_dosage(context, requested_flow_rate)
+        self._check_pre_dosage(context, requested_flow_rate)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = fwpb2.CommandExecutionUUID(
@@ -333,8 +331,7 @@ class PumpFluidDosingServiceReal():
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
         else:
-            for info in self.wait_dosage_finished():
-                yield info
+            return self._wait_dosage_finished()
 
     def GenerateFlow_Result(self, request, context):
         """
@@ -389,9 +386,13 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("Subscribe_SyringeFillLevel - Mode: real ")
 
-        yield pb2.Subscribe_SyringeFillLevel_Responses(
-            SyringeFillLevel=fwpb2.Real(value=self.pump.get_fill_level())
-        )
+        while True:
+            yield pb2.Subscribe_SyringeFillLevel_Responses(
+                SyringeFillLevel=fwpb2.Real(value=self.pump.get_fill_level())
+            )
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
     def Get_MaxFlowRate(self, request, context):
         """The maximum value of the flow rate at which this pump can dose a fluid.
@@ -413,6 +414,10 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("Subscribe_FlowRate - Mode: real ")
 
-        yield pb2.Subscribe_FlowRate_Responses(
-            FlowRate=fwpb2.Real(value=self.pump.get_flow_is())
-        )
+        while True:
+            yield pb2.Subscribe_FlowRate_Responses(
+                FlowRate=fwpb2.Real(value=self.pump.get_flow_is())
+            )
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)

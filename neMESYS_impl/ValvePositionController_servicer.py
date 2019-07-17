@@ -107,8 +107,7 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
         logging.debug("Subscribe_Position - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_Position(request, context):
-                yield val
+            return self.implementation.Subscribe_Position(request, context)
         else:
             #~ yield_val = request.Position.value
             pass #~ yield pb2.Subscribe_Position_Responses( Position=fwpb2.Integer(value=0) )

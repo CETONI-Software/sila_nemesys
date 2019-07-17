@@ -64,9 +64,9 @@ class PumpDriveControlServiceReal():
         self.pump = pump
         self.sila2_conf = sila2_conf
 
-        self.restore_last_drive_position_counter()
+        self._restore_last_drive_position_counter()
 
-    def restore_last_drive_position_counter(self):
+    def _restore_last_drive_position_counter(self):
         """Reads the last drive position counter from the server's config file.
         """
         pump_name = self.pump.get_pump_name()
@@ -81,7 +81,7 @@ class PumpDriveControlServiceReal():
             logging.error("No drive position counter found! Reference move needed!")
 
 
-    def wait_calibration_finished(self, timeout_sec):
+    def _wait_calibration_finished(self, timeout_sec):
         """
         The function waits until pump calibration has finished or
         until the timeout occurs.
@@ -102,7 +102,7 @@ class PumpDriveControlServiceReal():
 
         self.pump.calibrate()
         time.sleep(0.2)
-        calibration_finished = self.wait_calibration_finished(30)
+        calibration_finished = self._wait_calibration_finished(30)
         logging.info("Pump calibrated: %s", calibration_finished)
 
         return pb2.InitializePumpDrive_Responses(Success=fwpb2.Boolean(value=calibration_finished))
@@ -141,9 +141,13 @@ class PumpDriveControlServiceReal():
 
         logging.debug("Pump is enabled: %s", self.pump.is_enabled())
 
-        yield pb2.Subscribe_PumpDriveState_Responses(
-            PumpDriveState=fwpb2.Boolean(value=self.pump.is_enabled())
-        )
+        while True:
+            yield pb2.Subscribe_PumpDriveState_Responses(
+                PumpDriveState=fwpb2.Boolean(value=self.pump.is_enabled())
+            )
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
     def Subscribe_FaultState(self, request, context):
         """Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling ClearFaultState.
@@ -155,6 +159,10 @@ class PumpDriveControlServiceReal():
 
         logging.debug("Pump is in fault state: %s", self.pump.is_in_fault_state())
 
-        yield pb2.Subscribe_FaultState_Responses(
-            FaultState=fwpb2.Boolean(value=self.pump.is_in_fault_state())
-        )
+        while True:
+            yield pb2.Subscribe_FaultState_Responses(
+                FaultState=fwpb2.Boolean(value=self.pump.is_in_fault_state())
+            )
+
+            time.sleep(0.5)
+            # we add a small delay to give the client a chance to keep up.

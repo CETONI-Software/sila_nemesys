@@ -32,6 +32,10 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+import time
+
+import sila2lib.sila_error_handling as sila_error
+
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import ValvePositionController_pb2 as pb2
@@ -40,16 +44,16 @@ import ValvePositionController_pb2_grpc as pb2_grpc
 # import qmixsdk
 from qmixsdk import qmixbus
 from qmixsdk import qmixpump
+from qmixsdk import qmixvalve
 
 class ValvePositionControllerReal():
     """ ValvePositionControllerReal - Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position. """
-    def __init__ (self, bus, pump):
+    def __init__ (self, pump):
         """ ValvePositionControllerReal class initialiser """
         logging.debug("init class: ValvePositionControllerReal ")
 
-        self.bus = bus
-        self.pump = pump
-
+        self.valve = pump.get_valve()
+        self.num_of_valve_pos = self.valve.number_of_valve_positions()
 
 
     def SwitchToPosition(self, request, context):
@@ -61,8 +65,24 @@ class ValvePositionControllerReal():
         """
         logging.debug("SwitchToPosition - Mode: real ")
 
-        #~ return_val = request.Position.value
-        #~ return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=False))
+        requested_valve_pos = request.Position.value
+        if requested_valve_pos < 0 or requested_valve_pos >= self.num_of_valve_pos:
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter="Position",
+                cause="The given position is not in the range for this valve.",
+                action="Adjust the valve position to fit in the range between 0 and NumberOfPositions!"
+            ))
+
+        try:
+            self.valve.switch_valve_to_position(requested_valve_pos)
+        except qmixbus.DeviceError as err:
+            logging.error("QmixSDK Error: %s", err)
+            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
+                errorIdentifier="QmixSDKError", cause=str(err)
+            ))
+
+        return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=True))
+
 
     def TogglePosition(self, request, context):
         """This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.
@@ -70,8 +90,16 @@ class ValvePositionControllerReal():
         """
         logging.debug("TogglePosition - Mode: real ")
 
-        #~ return_val = request.Void.value
-        #~ return pb2.TogglePosition_Responses(Success=fwpb2.Boolean(value=False))
+        try:
+            curr_pos = self.valve.actual_valve_position()
+            self.valve.switch_valve_to_position((curr_pos + 1) % 2)
+        except qmixbus.DeviceError as err:
+            logging.error("QmixSDK Error: %s", err)
+            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
+                errorIdentifier="QmixSDKError", cause=str(err)
+            ))
+
+        return pb2.TogglePosition_Responses(Success=fwpb2.Boolean(value=True))
 
     def Get_NumberOfPositions(self, request, context):
         """The number of the valve positions available.
@@ -82,8 +110,9 @@ class ValvePositionControllerReal():
         """
         logging.debug("Get_NumberOfPositions - Mode: real ")
 
-        #~ return_val = request.NumberOfPositions.value
-        #~ return pb2.Get_NumberOfPositions_Responses( NumberOfPositions=fwpb2.Integer(value=0) )
+        return pb2.Get_NumberOfPositions_Responses(
+            NumberOfPositions=fwpb2.Integer(value=self.num_of_valve_pos)
+        )
 
     def Subscribe_Position(self, request, context):
         """The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
@@ -94,8 +123,13 @@ class ValvePositionControllerReal():
         """
         logging.debug("Subscribe_Position - Mode: real ")
 
-        #~ yield_val = request.Position.value
-        #~ pb2.Subscribe_Position_Responses( Position=fwpb2.Integer(value=0) )
+        while True:
+            yield pb2.Subscribe_Position_Responses(
+                Position=fwpb2.Integer(value=self.valve.actual_valve_position())
+            )
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
 
 

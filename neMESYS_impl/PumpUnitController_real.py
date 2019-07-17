@@ -32,6 +32,7 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+import time
 
 import sila2lib.sila_error_handling as sila_error
 
@@ -107,14 +108,18 @@ class PumpUnitControllerReal():
         """
         logging.debug("Subscribe_FlowUnit - Mode: real ")
 
-        prefix, volume_unit, time_unit = self.pump.get_flow_unit()
-        prefix_string = uc.prefix_to_string(prefix)
-        volume_unit_string = "l"
-        time_unit_string = uc.time_unit_to_string(time_unit)
+        while True:
+            prefix, volume_unit, time_unit = self.pump.get_flow_unit()
+            prefix_string = uc.prefix_to_string(prefix)
+            volume_unit_string = "l"
+            time_unit_string = uc.time_unit_to_string(time_unit)
 
-        yield pb2.Subscribe_FlowUnit_Responses(FlowUnit=fwpb2.String(
-                value=prefix_string + volume_unit_string + "/" + time_unit_string
-        ))
+            yield pb2.Subscribe_FlowUnit_Responses(FlowUnit=fwpb2.String(
+                    value=prefix_string + volume_unit_string + "/" + time_unit_string
+            ))
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
 
     def Subscribe_VolumeUnit(self, request, context):
         """The currently used volume unit.
@@ -124,10 +129,14 @@ class PumpUnitControllerReal():
         """
         logging.debug("Subscribe_VolumeUnit - Mode: simulation ")
 
-        prefix, volume_unit = self.pump.get_volume_unit()
-        prefix_string = uc.prefix_to_string(prefix)
-        volume_unit_string = "l"
+        while True:
+            prefix, volume_unit = self.pump.get_volume_unit()
+            prefix_string = uc.prefix_to_string(prefix)
+            volume_unit_string = "l"
 
-        yield pb2.Subscribe_VolumeUnit_Responses(
-            VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string
-        ))
+            yield pb2.Subscribe_VolumeUnit_Responses(
+                VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string
+            ))
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)
