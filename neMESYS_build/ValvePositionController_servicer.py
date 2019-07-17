@@ -5,8 +5,8 @@ ________________________________________________________________________
 
 *valvepositioncontroller_server_simulation *
 
-:details: valvepositioncontroller_server_simulation: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position.. 
-           
+:details: valvepositioncontroller_server_simulation: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position..
+
 :file:    valvepositioncontroller_server_simulation.py
 :authors: Florian Meinicke
 
@@ -17,7 +17,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: - 
+.. todo:: -
 ________________________________________________________________________
 
 **Copyright**:
@@ -107,7 +107,8 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
         logging.debug("Subscribe_Position - Mode: simulation ")
 
         if self.implementation is not None:
-            self.implementation.Subscribe_Position(request, context)
+            for val in self.implementation.Subscribe_Position(request, context):
+                yield val
         else:
             #~ yield_val = request.Position.value
             pass #~ yield pb2.Subscribe_Position_Responses( Position=fwpb2.Integer(value=0) )
