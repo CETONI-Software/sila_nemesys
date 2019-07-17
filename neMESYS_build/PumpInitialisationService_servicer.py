@@ -5,11 +5,11 @@ ________________________________________________________________________
 
 *pumpinitialisationservice_server_simulation *
 
-:details: pumpinitialisationservice_server_simulation: 
+:details: pumpinitialisationservice_server_simulation:
             Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
             The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
-    . 
-           
+    .
+
 :file:    pumpinitialisationservice_server_simulation.py
 :authors: Florian Meinicke
 
@@ -20,7 +20,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: - 
+.. todo:: -
 ________________________________________________________________________
 
 **Copyright**:
@@ -42,7 +42,7 @@ import PumpInitialisationService_pb2_grpc as pb2_grpc
 
 
 class PumpInitialisationService(pb2_grpc.PumpInitialisationServiceServicer):
-    """ PumpInitialisationService - 
+    """ PumpInitialisationService -
 #            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
 #            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
 #     """
@@ -76,7 +76,7 @@ class PumpInitialisationService(pb2_grpc.PumpInitialisationServiceServicer):
     def RestoreDrivePositionCounter(self, request, context):
         """Restore the internal hardware position counter value of the pump drive.
                 In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.DrivePositionCounter: The drive position counter to restore.
@@ -100,7 +100,9 @@ class PumpInitialisationService(pb2_grpc.PumpInitialisationServiceServicer):
         logging.debug("Subscribe_DrivePositionCounter - Mode: simulation ")
 
         if self.implementation is not None:
-            self.implementation.Subscribe_DrivePositionCounter(request, context)
+            for val in self.implementation.Subscribe_DrivePositionCounter(
+                request, context):
+                yield val
         else:
             #~ yield_val = request.DrivePositionCounter.value
             pass #~ yield pb2.Subscribe_DrivePositionCounter_Responses( DrivePositionCounter=fwpb2.Real(value=0.0) )
