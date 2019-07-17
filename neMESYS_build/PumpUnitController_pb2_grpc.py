@@ -29,6 +29,11 @@ class PumpUnitControllerStub(object):
         request_serializer=PumpUnitController__pb2.Subscribe_FlowUnit_Parameters.SerializeToString,
         response_deserializer=PumpUnitController__pb2.Subscribe_FlowUnit_Responses.FromString,
         )
+    self.Subscribe_VolumeUnit = channel.unary_stream(
+        '/sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.PumpUnitController/Subscribe_VolumeUnit',
+        request_serializer=PumpUnitController__pb2.Subscribe_VolumeUnit_Parameters.SerializeToString,
+        response_deserializer=PumpUnitController__pb2.Subscribe_VolumeUnit_Responses.FromString,
+        )
 
 
 class PumpUnitControllerServicer(object):
@@ -56,6 +61,13 @@ class PumpUnitControllerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Subscribe_VolumeUnit(self, request, context):
+    """remark: Property Parameters are always Empty
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_PumpUnitControllerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -73,6 +85,11 @@ def add_PumpUnitControllerServicer_to_server(servicer, server):
           servicer.Subscribe_FlowUnit,
           request_deserializer=PumpUnitController__pb2.Subscribe_FlowUnit_Parameters.FromString,
           response_serializer=PumpUnitController__pb2.Subscribe_FlowUnit_Responses.SerializeToString,
+      ),
+      'Subscribe_VolumeUnit': grpc.unary_stream_rpc_method_handler(
+          servicer.Subscribe_VolumeUnit,
+          request_deserializer=PumpUnitController__pb2.Subscribe_VolumeUnit_Parameters.FromString,
+          response_serializer=PumpUnitController__pb2.Subscribe_VolumeUnit_Responses.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

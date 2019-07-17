@@ -204,6 +204,11 @@ class neMESYSClient(s2client.SiLA2Client):
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
+                response = next(self.PumpUnitController_serv_stub.Subscribe_VolumeUnit(PumpUnitController_pb2.Subscribe_VolumeUnit_Parameters()))
+                #~ logging.debug("Subscribe_VolumeUnit response:{}".format(response.VolumeUnit) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
                 response = next(self.PumpInitialisationService_serv_stub.Subscribe_DrivePositionCounter(PumpInitialisationService_pb2.Subscribe_DrivePositionCounter_Parameters()))
                 #~ logging.debug("Subscribe_DrivePositionCounter response:{}".format(response.DrivePositionCounter) )
             except grpc.RpcError as err:

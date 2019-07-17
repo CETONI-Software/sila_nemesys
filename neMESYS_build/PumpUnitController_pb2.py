@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x18PumpUnitController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1\x1a\x13SiLAFramework.proto\"\xae\x01\n\x16SetFlowUnit_Parameters\x12.\n\x06Prefix\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x32\n\nVolumeUnit\x18\x02 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x30\n\x08TimeUnit\x18\x03 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x17\n\x15SetFlowUnit_Responses\"~\n\x18SetVolumeUnit_Parameters\x12.\n\x06Prefix\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x32\n\nVolumeUnit\x18\x02 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x19\n\x17SetVolumeUnit_Responses\"\x1f\n\x1dSubscribe_FlowUnit_Parameters\"P\n\x1cSubscribe_FlowUnit_Responses\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String2\xca\x04\n\x12PumpUnitController\x12\xb0\x01\n\x0bSetFlowUnit\x12P.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Parameters\x1aO.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Responses\x12\xb6\x01\n\rSetVolumeUnit\x12R.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Parameters\x1aQ.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Responses\x12\xc7\x01\n\x12Subscribe_FlowUnit\x12W.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Parameters\x1aV.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x18PumpUnitController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1\x1a\x13SiLAFramework.proto\"\xae\x01\n\x16SetFlowUnit_Parameters\x12.\n\x06Prefix\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x32\n\nVolumeUnit\x18\x02 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x30\n\x08TimeUnit\x18\x03 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x17\n\x15SetFlowUnit_Responses\"~\n\x18SetVolumeUnit_Parameters\x12.\n\x06Prefix\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\x12\x32\n\nVolumeUnit\x18\x02 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x19\n\x17SetVolumeUnit_Responses\"\x1f\n\x1dSubscribe_FlowUnit_Parameters\"P\n\x1cSubscribe_FlowUnit_Responses\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"!\n\x1fSubscribe_VolumeUnit_Parameters\"T\n\x1eSubscribe_VolumeUnit_Responses\x12\x32\n\nVolumeUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String2\x9a\x06\n\x12PumpUnitController\x12\xb0\x01\n\x0bSetFlowUnit\x12P.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Parameters\x1aO.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Responses\x12\xb6\x01\n\rSetVolumeUnit\x12R.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Parameters\x1aQ.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Responses\x12\xc7\x01\n\x12Subscribe_FlowUnit\x12W.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Parameters\x1aV.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Responses0\x01\x12\xcd\x01\n\x14Subscribe_VolumeUnit\x12Y.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Parameters\x1aX.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses0\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -213,18 +213,76 @@ _SUBSCRIBE_FLOWUNIT_RESPONSES = _descriptor.Descriptor(
   serialized_end=577,
 )
 
+
+_SUBSCRIBE_VOLUMEUNIT_PARAMETERS = _descriptor.Descriptor(
+  name='Subscribe_VolumeUnit_Parameters',
+  full_name='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Parameters',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=579,
+  serialized_end=612,
+)
+
+
+_SUBSCRIBE_VOLUMEUNIT_RESPONSES = _descriptor.Descriptor(
+  name='Subscribe_VolumeUnit_Responses',
+  full_name='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='VolumeUnit', full_name='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses.VolumeUnit', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=614,
+  serialized_end=698,
+)
+
 _SETFLOWUNIT_PARAMETERS.fields_by_name['Prefix'].message_type = SiLAFramework__pb2._STRING
 _SETFLOWUNIT_PARAMETERS.fields_by_name['VolumeUnit'].message_type = SiLAFramework__pb2._STRING
 _SETFLOWUNIT_PARAMETERS.fields_by_name['TimeUnit'].message_type = SiLAFramework__pb2._STRING
 _SETVOLUMEUNIT_PARAMETERS.fields_by_name['Prefix'].message_type = SiLAFramework__pb2._STRING
 _SETVOLUMEUNIT_PARAMETERS.fields_by_name['VolumeUnit'].message_type = SiLAFramework__pb2._STRING
 _SUBSCRIBE_FLOWUNIT_RESPONSES.fields_by_name['FlowUnit'].message_type = SiLAFramework__pb2._STRING
+_SUBSCRIBE_VOLUMEUNIT_RESPONSES.fields_by_name['VolumeUnit'].message_type = SiLAFramework__pb2._STRING
 DESCRIPTOR.message_types_by_name['SetFlowUnit_Parameters'] = _SETFLOWUNIT_PARAMETERS
 DESCRIPTOR.message_types_by_name['SetFlowUnit_Responses'] = _SETFLOWUNIT_RESPONSES
 DESCRIPTOR.message_types_by_name['SetVolumeUnit_Parameters'] = _SETVOLUMEUNIT_PARAMETERS
 DESCRIPTOR.message_types_by_name['SetVolumeUnit_Responses'] = _SETVOLUMEUNIT_RESPONSES
 DESCRIPTOR.message_types_by_name['Subscribe_FlowUnit_Parameters'] = _SUBSCRIBE_FLOWUNIT_PARAMETERS
 DESCRIPTOR.message_types_by_name['Subscribe_FlowUnit_Responses'] = _SUBSCRIBE_FLOWUNIT_RESPONSES
+DESCRIPTOR.message_types_by_name['Subscribe_VolumeUnit_Parameters'] = _SUBSCRIBE_VOLUMEUNIT_PARAMETERS
+DESCRIPTOR.message_types_by_name['Subscribe_VolumeUnit_Responses'] = _SUBSCRIBE_VOLUMEUNIT_RESPONSES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 SetFlowUnit_Parameters = _reflection.GeneratedProtocolMessageType('SetFlowUnit_Parameters', (_message.Message,), {
@@ -269,6 +327,20 @@ Subscribe_FlowUnit_Responses = _reflection.GeneratedProtocolMessageType('Subscri
   })
 _sym_db.RegisterMessage(Subscribe_FlowUnit_Responses)
 
+Subscribe_VolumeUnit_Parameters = _reflection.GeneratedProtocolMessageType('Subscribe_VolumeUnit_Parameters', (_message.Message,), {
+  'DESCRIPTOR' : _SUBSCRIBE_VOLUMEUNIT_PARAMETERS,
+  '__module__' : 'PumpUnitController_pb2'
+  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Parameters)
+  })
+_sym_db.RegisterMessage(Subscribe_VolumeUnit_Parameters)
+
+Subscribe_VolumeUnit_Responses = _reflection.GeneratedProtocolMessageType('Subscribe_VolumeUnit_Responses', (_message.Message,), {
+  'DESCRIPTOR' : _SUBSCRIBE_VOLUMEUNIT_RESPONSES,
+  '__module__' : 'PumpUnitController_pb2'
+  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses)
+  })
+_sym_db.RegisterMessage(Subscribe_VolumeUnit_Responses)
+
 
 
 _PUMPUNITCONTROLLER = _descriptor.ServiceDescriptor(
@@ -277,8 +349,8 @@ _PUMPUNITCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=580,
-  serialized_end=1166,
+  serialized_start=701,
+  serialized_end=1495,
   methods=[
   _descriptor.MethodDescriptor(
     name='SetFlowUnit',
@@ -305,6 +377,15 @@ _PUMPUNITCONTROLLER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SUBSCRIBE_FLOWUNIT_PARAMETERS,
     output_type=_SUBSCRIBE_FLOWUNIT_RESPONSES,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Subscribe_VolumeUnit',
+    full_name='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.PumpUnitController.Subscribe_VolumeUnit',
+    index=3,
+    containing_service=None,
+    input_type=_SUBSCRIBE_VOLUMEUNIT_PARAMETERS,
+    output_type=_SUBSCRIBE_VOLUMEUNIT_RESPONSES,
     serialized_options=None,
   ),
 ])

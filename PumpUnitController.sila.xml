@@ -68,4 +68,13 @@
             </DataType>
             <Observable>Yes</Observable>
         </Property>
+        <Property>
+            <Identifier>VolumeUnit</Identifier>
+            <DisplayName>Volume Unit</DisplayName>
+            <Description>The currently used volume unit.</Description>
+            <DataType>
+                <Basic>String</Basic>
+            </DataType>
+            <Observable>Yes</Observable>
+        </Property>
 </Feature>
