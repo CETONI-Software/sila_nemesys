@@ -84,7 +84,7 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("SetFillLevel_Info - Mode: real ")
 
-        #~ uuid = request.CommandExecutionUUID.value
+        #~ uuid = request.commandId
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -123,7 +123,7 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("DoseVolume_Info - Mode: real ")
 
-        #~ uuid = request.CommandExecutionUUID.value
+        #~ uuid = request.commandId
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -165,7 +165,7 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("GenerateFlow_Intermediate - Mode: real ")
 
-        #~ uuid = request.CommandExecutionUUID.value
+        #~ uuid = request.commandId
         #~ yield pb2.GenerateFlow_Intermediate_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
 
     def GenerateFlow_Info(self, request, context):
@@ -178,7 +178,7 @@ class PumpFluidDosingServiceReal():
         """
         logging.debug("GenerateFlow_Info - Mode: real ")
 
-        #~ uuid = request.CommandExecutionUUID.value
+        #~ uuid = request.commandId
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
         #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)

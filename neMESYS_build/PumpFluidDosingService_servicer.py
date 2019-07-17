@@ -100,7 +100,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             for info_resp in self.implementation.SetFillLevel_Info(request, context):
                 yield info_resp 
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -149,7 +149,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             for info_resp in self.implementation.DoseVolume_Info(request, context):
                 yield info_resp 
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -201,7 +201,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             for intermed_resp in self.implementation.GenerateFlow_Intermediate(request, context):
                 yield intermed_resp 
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ yield pb2.GenerateFlow_Intermediate_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
 
     def GenerateFlow_Info(self, request, context):
@@ -218,7 +218,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             for info_resp in self.implementation.GenerateFlow_Info(request, context):
                 yield info_resp 
         else:
-            pass #~ uuid = request.CommandExecutionUUID.value
+            pass #~ uuid = request.commandId
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)

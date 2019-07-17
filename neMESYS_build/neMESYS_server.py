@@ -6,8 +6,8 @@ ________________________________________________________________________
 
 *neMESYS *
 
-:details: neMESYS: This is a test service for neMESYS syringe pumps via SiLA2. 
-           
+:details: neMESYS: This is a test service for neMESYS syringe pumps via SiLA2.
+
 :file:    neMESYS.py
 :authors: Florian Meinicke
 
@@ -15,7 +15,7 @@ ________________________________________________________________________
 :date: (last modification) 20190627
 
 .. note:: - 0.1.6
-.. todo:: - 
+.. todo:: -
 ________________________________________________________________________
 
 **Copyright**:
@@ -42,16 +42,16 @@ import ValvePositionController_pb2_grpc
 
 from PumpFluidDosingService_servicer import PumpFluidDosingService
 
-from PumpFluidDosingService_simulation import PumpFluidDosingServiceSimulation 
-from PumpFluidDosingService_real import PumpFluidDosingServiceReal 
+from PumpFluidDosingService_simulation import PumpFluidDosingServiceSimulation
+from PumpFluidDosingService_real import PumpFluidDosingServiceReal
 from PumpInitialisationService_servicer import PumpInitialisationService
 
-from PumpInitialisationService_simulation import PumpInitialisationServiceSimulation 
-from PumpInitialisationService_real import PumpInitialisationServiceReal 
+from PumpInitialisationService_simulation import PumpInitialisationServiceSimulation
+from PumpInitialisationService_real import PumpInitialisationServiceReal
 from ValvePositionController_servicer import ValvePositionController
 
-from ValvePositionController_simulation import ValvePositionControllerSimulation 
-from ValvePositionController_real import ValvePositionControllerReal 
+from ValvePositionController_simulation import ValvePositionControllerSimulation
+from ValvePositionController_real import ValvePositionControllerReal
 
 
 class neMESYSServer(slss.SiLA2Server):
@@ -60,9 +60,9 @@ class neMESYSServer(slss.SiLA2Server):
         super().__init__(name=parsed_args.server_name,
                          description=parsed_args.description,
                          server_type=parsed_args.server_type,
-                         version=__version__, 
+                         version=__version__,
                          vendor_URL="cetoni.de")
-        
+
         """ Class initialiser """
         # registering features
         self.PumpFluidDosingService_servicer = PumpFluidDosingService()
@@ -77,11 +77,11 @@ class neMESYSServer(slss.SiLA2Server):
         ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(self.ValvePositionController_servicer, self.grpc_server)
         self.addFeature('ValvePositionController', '.')
 
+        self.switchToSimMode()
 
-            
         # starting and running the gRPC/SiLA2 server
         self.run()
-        
+
     def switchToSimMode(self):
         """overwriting base class method"""
         self.simulation_mode = True
@@ -101,13 +101,13 @@ class neMESYSServer(slss.SiLA2Server):
 
         success = True
         logging.debug("switched to real mode {}".format(success) )
-        
+
 
 def parseCommandLine():
     """ just looking for commandline arguments ...
        :param - : -"""
     help = "SiLA2 service: neMESYS"
-    
+
     parser = argparse.ArgumentParser(description="A SiLA2 service: neMESYS")
     parser.add_argument('-s','--server-name', action='store',
                          default="neMESYS", help='start SiLA server with [server-name]' )
@@ -117,19 +117,19 @@ def parseCommandLine():
                          default="This is a test service for neMESYS syringe pumps via SiLA2", help='SiLA server description' )
     parser.add_argument('-v','--version', action='version', version='%(prog)s ' + __version__)
     return parser.parse_args()
-    
-        
+
+
 if __name__ == '__main__':
     """Main: """
-    logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s:%(message)s', level=logging.DEBUG)
-    #~ logging.basicConfig(format='%(levelname)s|%(module)s.%(funcName)s:%(message)s', level=logging.ERROR)
-    
+    logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
+    #~ logging.basicConfig(format='%(levelname)s|%(module)s.%(funcName)s: %(message)s', level=logging.ERROR)
+
     parsed_args = parseCommandLine()
-                
+
     if parsed_args.server_name :
         # mv to class
         logging.info("starting SiLA2 server with server name: {server_name}".format(server_name=parsed_args.server_name))
-        
+
         # generate SiLAserver
         sila_server = neMESYSServer(parsed_args=parsed_args )
-        
+
