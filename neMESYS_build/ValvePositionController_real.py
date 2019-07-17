@@ -5,8 +5,8 @@ ________________________________________________________________________
 
 *valvepositioncontroller_server_real *
 
-:details: valvepositioncontroller_server_real: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position..
-
+:details: valvepositioncontroller_server_real: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position.. 
+           
 :file:    valvepositioncontroller_server_real.py
 :authors: Florian Meinicke
 
@@ -17,7 +17,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -37,18 +37,12 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 import ValvePositionController_pb2 as pb2
 import ValvePositionController_pb2_grpc as pb2_grpc
 
-# import qmixsdk
-from qmixsdk import qmixbus
-from qmixsdk import qmixpump
 
 class ValvePositionControllerReal():
     """ ValvePositionControllerReal - Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position. """
-    def __init__ (self, bus, pump):
+    def __init__ (self):
         """ ValvePositionControllerReal class initialiser """
         logging.debug("init class: ValvePositionControllerReal ")
-
-        self.bus = bus
-        self.pump = pump
 
 
 

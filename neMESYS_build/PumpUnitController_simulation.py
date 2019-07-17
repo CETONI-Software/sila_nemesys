@@ -5,8 +5,8 @@ ________________________________________________________________________
 
 *pumpunitcontroller_server_simulation *
 
-:details: pumpunitcontroller_server_simulation: Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump..
-
+:details: pumpunitcontroller_server_simulation: Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump.. 
+           
 :file:    pumpunitcontroller_server_simulation.py
 :authors: Florian Meinicke
 
@@ -17,7 +17,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -51,6 +51,7 @@ class PumpUnitControllerSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param request.FlowUnit: The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.
+
         """
         logging.debug("SetFlowUnit - Mode: simulation ")
 
@@ -62,6 +63,7 @@ class PumpUnitControllerSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param request.VolumeUnit: The volume unit to set. It has to be something like "ml" or "µl", for instance.
+
         """
         logging.debug("SetVolumeUnit - Mode: simulation ")
 
@@ -73,6 +75,7 @@ class PumpUnitControllerSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param response.FlowUnit: The currently used flow unit.
+
         """
         logging.debug("Subscribe_FlowUnit - Mode: simulation ")
 
@@ -84,6 +87,7 @@ class PumpUnitControllerSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param response.VolumeUnit: The currently used volume unit.
+
         """
         logging.debug("Subscribe_VolumeUnit - Mode: simulation ")
 

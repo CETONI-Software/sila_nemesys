@@ -5,8 +5,8 @@ ________________________________________________________________________
 
 *pumpunitcontroller_server_simulation *
 
-:details: pumpunitcontroller_server_simulation: Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump..
-
+:details: pumpunitcontroller_server_simulation: Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump.. 
+           
 :file:    pumpunitcontroller_server_simulation.py
 :authors: Florian Meinicke
 
@@ -17,7 +17,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -60,6 +60,7 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param request.FlowUnit: The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.
+
         """
         logging.debug("SetFlowUnit - Mode: simulation ")
 
@@ -74,6 +75,7 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param request.VolumeUnit: The volume unit to set. It has to be something like "ml" or "µl", for instance.
+
         """
         logging.debug("SetVolumeUnit - Mode: simulation ")
 
@@ -88,12 +90,12 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param response.FlowUnit: The currently used flow unit.
+
         """
         logging.debug("Subscribe_FlowUnit - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_FlowUnit(request, context):
-                yield val
+            self.implementation.Subscribe_FlowUnit(request, context)
         else:
             #~ yield_val = request.FlowUnit.value
             pass #~ yield pb2.Subscribe_FlowUnit_Responses( FlowUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )
@@ -103,12 +105,12 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param response.VolumeUnit: The currently used volume unit.
+
         """
         logging.debug("Subscribe_VolumeUnit - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_VolumeUnit(request, context):
-                yield val
+            self.implementation.Subscribe_VolumeUnit(request, context)
         else:
             #~ yield_val = request.VolumeUnit.value
             pass #~ yield pb2.Subscribe_VolumeUnit_Responses( VolumeUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )

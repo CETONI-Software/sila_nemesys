@@ -5,8 +5,8 @@ ________________________________________________________________________
 
 *valvepositioncontroller_server_simulation *
 
-:details: valvepositioncontroller_server_simulation: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position..
-
+:details: valvepositioncontroller_server_simulation: Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to obtain the current valve position.. 
+           
 :file:    valvepositioncontroller_server_simulation.py
 :authors: Florian Meinicke
 
@@ -17,7 +17,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -44,8 +44,6 @@ class ValvePositionControllerSimulation():
         """ ValvePositionControllerSimulation class initialiser """
         logging.debug("init class: ValvePositionControllerSimulation ")
 
-        self.position = 0
-        self.num_positions = 3
 
 
     def SwitchToPosition(self, request, context):
@@ -53,17 +51,12 @@ class ValvePositionControllerSimulation():
             :param request: gRPC request
             :param context: gRPC context
             :param request.Position: The target position that the valve should be switched to.
+
         """
         logging.debug("SwitchToPosition - Mode: simulation ")
 
-        requested_position = request.Position.value
-        if requested_position < 0 or requested_position > self.num_positions - 1:
-            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
-                parameter="Position",
-                cause="The given valve position is not in the range between 0 and NumberOfPositions - 1."))
-
-        self.position = requested_position
-        return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=True))
+        #~ return_val = request.Position.value
+        #~ return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=False))
 
     def TogglePosition(self, request, context):
         """This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.
@@ -71,7 +64,8 @@ class ValvePositionControllerSimulation():
         """
         logging.debug("TogglePosition - Mode: simulation ")
 
-        return pb2.TogglePosition_Responses(Success=fwpb2.Boolean(value=False))
+        #~ return_val = request.Void.value
+        #~ return pb2.TogglePosition_Responses(Success=fwpb2.Boolean(value=False))
 
     def Get_NumberOfPositions(self, request, context):
         """The number of the valve positions available.
@@ -82,19 +76,20 @@ class ValvePositionControllerSimulation():
         """
         logging.debug("Get_NumberOfPositions - Mode: simulation ")
 
-        return pb2.Get_NumberOfPositions_Responses(
-            NumberOfPositions=fwpb2.Integer(value=self.num_positions) )
+        #~ return_val = request.NumberOfPositions.value
+        #~ return pb2.Get_NumberOfPositions_Responses( NumberOfPositions=fwpb2.Integer(value=0) )
 
     def Subscribe_Position(self, request, context):
         """The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
             :param request: gRPC request
             :param context: gRPC context
             :param response.Position: The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
+
         """
         logging.debug("Subscribe_Position - Mode: simulation ")
 
-        yield pb2.Subscribe_Position_Responses(
-            Position=fwpb2.Integer(value=self.position) )
+        #~ yield_val = request.Position.value
+        #~ pb2.Subscribe_Position_Responses( Position=fwpb2.Integer(value=0) )
 
 
 

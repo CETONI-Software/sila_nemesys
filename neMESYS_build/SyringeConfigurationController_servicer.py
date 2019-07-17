@@ -5,10 +5,10 @@ ________________________________________________________________________
 
 *syringeconfigurationcontroller_server_simulation *
 
-:details: syringeconfigurationcontroller_server_simulation:
+:details: syringeconfigurationcontroller_server_simulation: 
             Syringe pump specific functions for configuration.
-    .
-
+    . 
+           
 :file:    syringeconfigurationcontroller_server_simulation.py
 :authors: Florian Meinicke
 
@@ -19,7 +19,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -41,7 +41,7 @@ import SyringeConfigurationController_pb2_grpc as pb2_grpc
 
 
 class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServicer):
-    """ SyringeConfigurationController -
+    """ SyringeConfigurationController - 
 #            Syringe pump specific functions for configuration.
 #     """
     def __init__ (self):
@@ -63,11 +63,12 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
         """
             Set syringe parameters.
             If you change the syringe in one device, you need to setup the new syringe parameters to get proper conversion of flow rate und volume units.
-
+        
             :param request: gRPC request
             :param context: gRPC context
             :param request.InnerDiameter: Inner diameter of the syringe tube in millimetres.
             :param request.MaxPistonStroke: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
+
         """
         logging.debug("SetSyringeParameters - Mode: simulation ")
 
@@ -82,12 +83,12 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
             :param request: gRPC request
             :param context: gRPC context
             :param response.InnerDiameter: Inner diameter of the syringe tube in millimetres.
+
         """
         logging.debug("Subscribe_InnerDiameter - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_InnerDiameter(request, context):
-                yield val
+            self.implementation.Subscribe_InnerDiameter(request, context)
         else:
             #~ yield_val = request.InnerDiameter.value
             pass #~ yield pb2.Subscribe_InnerDiameter_Responses( InnerDiameter=fwpb2.Real(value=0.0) )
@@ -97,12 +98,12 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
             :param request: gRPC request
             :param context: gRPC context
             :param response.MaxPistonStroke: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
+
         """
         logging.debug("Subscribe_MaxPistonStroke - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_MaxPistonStroke(request, context):
-                yield val
+            self.implementation.Subscribe_MaxPistonStroke(request, context)
         else:
             #~ yield_val = request.MaxPistonStroke.value
             pass #~ yield pb2.Subscribe_MaxPistonStroke_Responses( MaxPistonStroke=fwpb2.Real(value=0.0) )

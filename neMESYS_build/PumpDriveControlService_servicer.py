@@ -5,13 +5,12 @@ ________________________________________________________________________
 
 *pumpdrivecontrolservice_server_simulation *
 
-:details: pumpdrivecontrolservice_server_simulation:
+:details: pumpdrivecontrolservice_server_simulation: 
         Functionality to control and maintain the drive that drives the pump.
-        Allows to initialise a pump (e.g. by executing a reference move).
-        The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
-        Obtain status information about the pump drive's current state (e.g. enabled/disabled or fault state).
-    .
-
+        Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump drive's current state (i.e. enabled/disabled).
+        The initialization has to be successful in order for the pump to work correctly and dose fluids. If the initialization fails, the StandardExecutionError InitializationFailed is thrown.
+    . 
+           
 :file:    pumpdrivecontrolservice_server_simulation.py
 :authors: Florian Meinicke
 
@@ -22,7 +21,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: -
+.. todo:: - 
 ________________________________________________________________________
 
 **Copyright**:
@@ -44,11 +43,10 @@ import PumpDriveControlService_pb2_grpc as pb2_grpc
 
 
 class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
-    """ PumpDriveControlService -
+    """ PumpDriveControlService - 
 #        Functionality to control and maintain the drive that drives the pump.
-#        Allows to initialise a pump (e.g. by executing a reference move).
-#        The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
-#        Obtain status information about the pump drive's current state (e.g. enabled/disabled or fault state).
+#        Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump drive's current state (i.e. enabled/disabled).
+#        The initialization has to be successful in order for the pump to work correctly and dose fluids. If the initialization fails, the StandardExecutionError InitializationFailed is thrown.
 #     """
     def __init__ (self):
         """ PumpDriveControlService class initialiser """
@@ -79,8 +77,7 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
 
     def EnablePumpDrive(self, request, context):
         """Set the pump into enabled state.
-            :param request: gRPC request
-            :param context: gRPC context
+        empty parameter
         """
         logging.debug("EnablePumpDrive - Mode: simulation ")
 
@@ -88,12 +85,11 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
             return self.implementation.EnablePumpDrive(request, context)
         else:
             pass #~ return_val = request.Void.value
-            #~ return pb2.EnablePumpDrive_Responses()
+            #~ return pb2.EnablePumpDrive_Responses(  )
 
     def DisablePumpDrive(self, request, context):
         """Set the pump into disabled state.
-            :param request: gRPC request
-            :param context: gRPC context
+        empty parameter
         """
         logging.debug("DisablePumpDrive - Mode: simulation ")
 
@@ -101,7 +97,7 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
             return self.implementation.DisablePumpDrive(request, context)
         else:
             pass #~ return_val = request.Void.value
-            #~ return pb2.DisablePumpDrive_Responses()
+            #~ return pb2.DisablePumpDrive_Responses(  )
 
     def Subscribe_PumpDriveState(self, request, context):
         """The current state of the pump. This is either enabled or disabled. Only if the sate is enabled, the pump can dose fluids.
@@ -113,23 +109,26 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
         logging.debug("Subscribe_PumpDriveState - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_PumpDriveState(request, context):
-                yield val
+            self.implementation.Subscribe_PumpDriveState(request, context)
         else:
             #~ yield_val = request.PumpDriveState.value
             pass #~ yield pb2.Subscribe_PumpDriveState_Responses( PumpDriveState=fwpb2.Boolean(value=False) )
 
     def Subscribe_FaultState(self, request, context):
-        """Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling ClearFaultState.
+        """Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling EnablePumpDrive.
             :param request: gRPC request
             :param context: gRPC context
-            :param response.FaultState: Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling ClearFaultState.
+            :param response.FaultState: Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling EnablePumpDrive.
+
         """
         logging.debug("Subscribe_FaultState - Mode: simulation ")
 
         if self.implementation is not None:
-            for val in self.implementation.Subscribe_FaultState(request, context):
-                yield val
+            self.implementation.Subscribe_FaultState(request, context)
         else:
             #~ yield_val = request.FaultState.value
             pass #~ yield pb2.Subscribe_FaultState_Responses( FaultState=fwpb2.Boolean(value=False) )
+
+
+
+
