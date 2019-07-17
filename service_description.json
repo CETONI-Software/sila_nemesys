@@ -14,7 +14,8 @@
     "PumpUnitController",
     "PumpFluidDosingService",
     "SyringeConfigurationController",
-    "ValvePositionController"
+    "ValvePositionController",
+    "ShutdownController"
   ],
   "communication_port" : "50053",
   "IP_address" : "127.0.0.1",

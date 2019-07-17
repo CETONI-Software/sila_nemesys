@@ -54,11 +54,10 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
     implementation: Union[ValvePositionControllerSimulation, ValvePositionControllerReal]
     simulation_mode: bool
 
-    def __init__(self, bus, pump, simulation_mode: bool = True):
+    def __init__(self, pump, simulation_mode: bool = True):
         """
         Class initialiser
 
-        :param bus: A valid `qxmixbus` for this service to use
         :param pump: A valid `qxmixpump` for this service to use
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
