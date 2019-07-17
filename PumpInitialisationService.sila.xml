@@ -27,7 +27,7 @@
     </Command>
     <Command>
         <Identifier>RestoreDrivePositionCounter</Identifier>
-        <DisplayName>Restore Drive Positino Counter</DisplayName>
+        <DisplayName>Restore Drive Position Counter</DisplayName>
         <Description>Restore the internal hardware position counter value of the pump drive.
                 In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
         </Description>
