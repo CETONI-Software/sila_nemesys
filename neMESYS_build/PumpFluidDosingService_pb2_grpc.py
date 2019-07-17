@@ -50,11 +50,6 @@ class PumpFluidDosingServiceStub(object):
         request_serializer=PumpFluidDosingService__pb2.GenerateFlow_Parameters.SerializeToString,
         response_deserializer=SiLAFramework__pb2.CommandConfirmation.FromString,
         )
-    self.GenerateFlow_Intermediate = channel.unary_stream(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/GenerateFlow_Intermediate',
-        request_serializer=SiLAFramework__pb2.CommandExecutionUUID.SerializeToString,
-        response_deserializer=PumpFluidDosingService__pb2.GenerateFlow_IntermediateResponses.FromString,
-        )
     self.GenerateFlow_Info = channel.unary_stream(
         '/sila2.de.cetoni.pumps.syringepumps.pumpfluiddosingservice.v1.PumpFluidDosingService/GenerateFlow_Info',
         request_serializer=SiLAFramework__pb2.CommandExecutionUUID.SerializeToString,
@@ -145,13 +140,6 @@ class PumpFluidDosingServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def GenerateFlow_Intermediate(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def GenerateFlow_Info(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -238,11 +226,6 @@ def add_PumpFluidDosingServiceServicer_to_server(servicer, server):
           servicer.GenerateFlow,
           request_deserializer=PumpFluidDosingService__pb2.GenerateFlow_Parameters.FromString,
           response_serializer=SiLAFramework__pb2.CommandConfirmation.SerializeToString,
-      ),
-      'GenerateFlow_Intermediate': grpc.unary_stream_rpc_method_handler(
-          servicer.GenerateFlow_Intermediate,
-          request_deserializer=SiLAFramework__pb2.CommandExecutionUUID.FromString,
-          response_serializer=PumpFluidDosingService__pb2.GenerateFlow_IntermediateResponses.SerializeToString,
       ),
       'GenerateFlow_Info': grpc.unary_stream_rpc_method_handler(
           servicer.GenerateFlow_Info,

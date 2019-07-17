@@ -117,6 +117,8 @@ class neMESYSServer(slss.SiLA2Server):
 
         self.bus = qmixbus.Bus()
         # let's see if that helps...
+        # NOTE: probably caused by a pump in fault state.
+        # TBD in the future with another Feature
         try:
             self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
         except qmixbus.DeviceError as err:
@@ -128,6 +130,8 @@ class neMESYSServer(slss.SiLA2Server):
         self.pump.lookup_by_name("neMESYS_Low_Pressure_1_Pump")
 
         # let's see if that helps...
+        # NOTE: probably caused by a pump in fault state.
+        # TBD in the future with another Feature
         try:
             self.bus.start()
         except qmixbus.DeviceError as err:

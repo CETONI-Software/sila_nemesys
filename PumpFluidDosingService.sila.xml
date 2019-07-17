@@ -110,14 +110,6 @@
                 <Basic>Boolean</Basic>
             </DataType>
         </Response>
-        <IntermediateResponse>
-            <Identifier>Test</Identifier>
-            <DisplayName>Test</DisplayName>
-            <Description>Test</Description>
-            <DataType>
-                <Basic>String</Basic>
-            </DataType>
-        </IntermediateResponse>
         <StandardExecutionErrors>
             <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
         </StandardExecutionErrors>

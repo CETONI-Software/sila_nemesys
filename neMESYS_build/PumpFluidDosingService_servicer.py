@@ -193,23 +193,6 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
             pass #~ command_uuid = fwpb2.CommandExecutionUUID( str(uuid.uuid4()) )
             #~ return fwpb2.CommandConfirmation( commandId = command_uuid )
 
-    def GenerateFlow_Intermediate(self, request, context):
-        """
-            Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
-
-            :param request: gRPC request
-            :param context: gRPC context
-            :param request.commandId: identifies the command execution
-        """
-        logging.debug("GenerateFlow_Intermediate - Mode: simulation ")
-
-        if self.implementation is not None:
-            for intermed_resp in self.implementation.GenerateFlow_Intermediate(request, context):
-                yield intermed_resp
-        else:
-            pass #~ uuid = request.commandId
-            #~ yield pb2.GenerateFlow_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
-
     def GenerateFlow_Info(self, request, context):
         """
             Generate a continous flow with the given flow rate. Dosing continues until it gets stopped manually by calling StopDosage or until the pusher reached one of its limits.
@@ -318,7 +301,3 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         else:
             #~ yield_val = request.FlowRate.value
             pass #~ yield pb2.Subscribe_FlowRate_Responses( FlowRate=fwpb2.Real(value=0.0) )
-
-
-
-
