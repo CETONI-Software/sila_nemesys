@@ -84,7 +84,7 @@ class ValvePositionControllerReal:
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="Position",
                 cause="The given position is not in the range for this valve.",
-                action="Adjust the valve position to fit in the range between 0 and NumberOfPositions!"
+                action=f"Adjust the valve position to fit in the range between 0 and {self.num_of_valve_pos}!"
             ))
 
         try:

@@ -8,6 +8,7 @@ class UnitConversionError(Exception):
 
     def __init__(self, param, message):
         """
+        Class initializer
             :param param: the parameter of the unit that failed the conversion
             :param message: a description of what went wrong
         """
@@ -18,7 +19,8 @@ class UnitConversionError(Exception):
 
     @property
     def param(self):
-        """the parameter of the unit that failed the conversion
+        """
+        The parameter of the unit that failed the conversion
         """
         return self.__param
 
@@ -28,7 +30,8 @@ class UnitConversionError(Exception):
 
     @property
     def message(self):
-        """a description of what went wrong
+        """
+        A description of what went wrong
         """
         return self.__message
 
@@ -41,8 +44,8 @@ def evaluate_units(requested_volume_unit, requested_time_unit=None):
     """
     Converts the given volume and time unit from strings to qmixpump units
     and returns a 2-tuple or a 3-tuple (if a time unit is provided).
-    :param requested_volume_unit: the volume unit to convert to a string
-    :param requested_time_unit: the time unit to convert to a string
+        :param requested_volume_unit: the volume unit to convert to a string
+        :param requested_time_unit: the time unit to convert to a string
     """
     prefix_string = requested_volume_unit[0] if len(requested_volume_unit) > 1 else " "
     volume_unit_string = requested_volume_unit[-1]
@@ -59,7 +62,8 @@ def evaluate_units(requested_volume_unit, requested_time_unit=None):
 
 
 def evaluate_prefix(prefix_string):
-    """Converts the given prefix_string to a qmixpump.UnitPrefix
+    """
+    Converts the given prefix_string to a `qmixpump.UnitPrefix`
     """
     switcher = {
         " ": qmixpump.UnitPrefix.unit,
@@ -75,7 +79,8 @@ def evaluate_prefix(prefix_string):
     return prefix
 
 def evaluate_volume_unit(volume_unit_string):
-    """ Converts a given volume_unit_string to a qmixpump.VolumeUnit
+    """
+    Converts a given volume_unit_string to a `qmixpump.VolumeUnit`
     """
     if volume_unit_string == "l":
         return qmixpump.VolumeUnit.litres
@@ -83,7 +88,8 @@ def evaluate_volume_unit(volume_unit_string):
     raise UnitConversionError("volume_unit", f"Wrong volume unit: '{volume_unit_string}' not supported")
 
 def evaluate_time_unit(time_unit_string):
-    """Converts a given time_unit_string into a qmixpump.TimeUnit
+    """
+    Converts a given time_unit_string into a `qmixpump.TimeUnit`
     """
     switcher = {
         "s"  : qmixpump.TimeUnit.per_second,
@@ -98,7 +104,8 @@ def evaluate_time_unit(time_unit_string):
     return time_unit
 
 def prefix_to_string(prefix):
-    """Converts a given prefix to a human readable string
+    """
+    Converts a given prefix to a human readable string
         :param prefix: qmixpump.UnitPrefix
     """
     switcher = {
@@ -110,7 +117,8 @@ def prefix_to_string(prefix):
     return switcher.get(prefix, "")
 
 def time_unit_to_string(time_unit):
-    """Converts a given time_unit to a human readable string
+    """
+    Converts a given time_unit to a human readable string
         :param time_unit: qmixpump.TimeUnit
     """
     switcher = {

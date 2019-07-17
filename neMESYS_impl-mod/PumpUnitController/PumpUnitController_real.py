@@ -84,7 +84,7 @@ class PumpUnitControllerReal:
         except ValueError as err:
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="FlowUnit",
-                cause="The given flow unit is malformed. It has to be something like 'ml/s' for instance."
+                cause="The given flow unit is malformed. It has to be something like 'ml/s', for instance."
             ))
         except uc.UnitConversionError as err:
             sila_error.raiseRPCError(context, sila_error.getValidationError(

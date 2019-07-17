@@ -80,6 +80,7 @@ class PumpFluidDosingServiceReal:
         """
 
         max_fill_level = self.pump.get_volume_max()
+        max_flow_rate = self.pump.get_flow_rate_max()
 
         # We only allow one dosage at a time.
         # -> Stop the currently running dosage and after that start the new one.
@@ -87,24 +88,25 @@ class PumpFluidDosingServiceReal:
             self.StopDosage(0, 0)
             # wait for the currently running dosage to catch up
             time.sleep(0.1)
-        if flow_rate < 0 or flow_rate > self.pump.get_flow_rate_max():
+        if flow_rate < 0 or flow_rate > max_flow_rate:
             logging.error("Requested Flow Rate Out Of Range - FlowRate: %5.2f", flow_rate)
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="FlowRate",
-                cause="The specified flow rate is not in the range bewteen 0 and MaxFlowRate for this pump."
+                cause=f"The specified flow rate is not in the range bewteen 0 and {max_flow_rate} for this pump."
             ))
         if fill_level is not None and (fill_level < 0 or fill_level > max_fill_level):
             logging.error("Requested Fill Level Out Of Range - FillLevel: %5.2f", fill_level)
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="FillLevel",
-                cause="The fill level requested in SetFillLevel is greater than MaxSyringeFillLevel or less than 0.",
+                cause=f"The fill level requested in SetFillLevel is greater than {max_fill_level} or less than 0.",
                 action="Adjust the FillLevel parameter to fit in the specified range."
             ))
         if volume is not None and (volume < 0 or volume > max_fill_level):
             logging.error("Requested Volume Out Of Range - Volume: %5.2f", volume)
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="Volume",
-                cause="The volume requested in DoseVolume is greater than MaxSyringeFillLevel or less than 0.",
+                cause=fMaxSyringeFillLevel
+MaxSyringeFillLevel"The volume requested in DoseVolume is greater than {max_fill_level} or less than 0.",
                 action="Adjust the Volume parameter to fit in the specified range."
             ))
 
