@@ -208,7 +208,7 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
                 yield intermed_resp
         else:
             pass #~ uuid = request.commandId
-            #~ yield pb2.GenerateFlow_Intermediate_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
+            #~ yield pb2.GenerateFlow_IntermediateResponses( Success=fwpb2.String(value="DEFAULTstring" + return_val) )
 
     def GenerateFlow_Info(self, request, context):
         """

@@ -95,7 +95,7 @@ class PumpFluidDosingServiceSimulation():
         elif requested_fill_level < 0 or requested_fill_level > self.MaxFillLevel:
             logging.error(f"Requested Fill Level Out Of Range - FillLevel: {requested_fill_level}ml")
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
-                parameter="FlowRate",
+                parameter="FillLevel",
                 cause="The fill level requested in SetFillLevel is greater than MaxSyringeFillLevel or less than 0.",
                 action="Adjust the FillLevel parameter to fit in the specified range."))
         elif requested_flow_rate < self.MinFlowRate or requested_flow_rate > self.MaxFlowRate:
@@ -118,7 +118,7 @@ class PumpFluidDosingServiceSimulation():
         else:
             self.Dosage_UUID = str(uuid.uuid4())
             logging.info("Started dosing with flow rate of {}ml/s until fill level of {}ml is reached (UUID: {})".format(
-                request.FlowRate.value, request.FillLevel.value, self.Dosage_UUID))
+                requested_flow_rate, requested_fill_level, self.Dosage_UUID))
             command_uuid = fwpb2.CommandExecutionUUID(
                 commandId=self.Dosage_UUID)
 
@@ -246,8 +246,42 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("GenerateFlow - Mode: simulation ")
 
-        command_uuid = fwpb2.CommandExecutionUUID(commandId=str(uuid.uuid4()))
-        return fwpb2.CommandConfirmation(commandId=command_uuid)
+        requested_flow_rate = request.FlowRate.value
+        # We only allow one dosage at a time.
+        # -> Throw an error if another dosage should be started when there already is one.
+        if self.Dosage_UUID:
+            # return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(errorType=fwpb2.FrameworkError.ErrorType.COMMAND_EXECUTION_NOT_ACCEPTED))
+            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+        elif requested_flow_rate < self.MinFlowRate or requested_flow_rate > self.MaxFlowRate:
+            logging.error(f"Requested Flow Rate Out Of Range - FlowRate: {requested_flow_rate}ml/s")
+            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+                parameter="FlowRate",
+                cause="The specified flow rate is not in the range bewteen MaxFlowRate and MinFlowRate for this pump."))
+        elif (requested_flow_rate > 0 and self.FillLevel <= 0):
+            logging.error("Cannot dispense from an empty syringe (self.FillLevel: {}ml, FlowRate: {}ml/s)".format(
+                self.FillLevel, requested_flow_rate))
+            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+                parameter="FlowRate",
+                cause="Cannot dispense any more fluid due to already empty syringe."))
+        elif (requested_flow_rate < 0 and self.FillLevel >= self.MaxFillLevel):
+            logging.error("Cannot aspirate to a filled syringe (self.FillLevel: {}ml, FlowRate: {}ml/s)".format(
+                self.FillLevel, requested_flow_rate))
+            return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
+                parameter="FlowRate",
+                cause="Cannot aspirate any more fluid due to already filled syringe."))
+        else:
+            self.Dosage_UUID = str(uuid.uuid4())
+            logging.info("Started dosing with flow rate of {}ml/s (UUID: {})".format(
+                request.FlowRate.value, self.Dosage_UUID))
+            command_uuid = fwpb2.CommandExecutionUUID(
+                commandId=self.Dosage_UUID)
+
+            self.FlowRate = requested_flow_rate # ml/s
+            self.Dosing = True
+
+            return fwpb2.CommandConfirmation(commandId=command_uuid)
+
 
     def GenerateFlow_Intermediate(self, request, context):
         """
@@ -260,8 +294,8 @@ class PumpFluidDosingServiceSimulation():
         logging.debug("GenerateFlow_Intermediate - Mode: simulation ")
 
         uuid = request.commandId
-        yield pb2.GenerateFlow_Intermediate_IntermediateResponses(
-            Success=fwpb2.String(value="DEFAULTstring" + return_val))
+        yield pb2.GenerateFlow_IntermediateResponses(
+            Test=fwpb2.String(value="intermediate"))
 
     def GenerateFlow_Info(self, request, context):
         """
@@ -272,11 +306,28 @@ class PumpFluidDosingServiceSimulation():
             :param request.commandId: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: simulation ")
+        logging.info(
+            f"Requested GenerateFlow_Info for dosage (UUID: {request.commandId})")
+        logging.info(f"Current dosage is UUID: {self.Dosage_UUID}")
 
-        uuid = request.commandId
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
-        yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
-        yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
+
+        # catch invalid CommandExecutionUUID:
+        if not request.commandId or self.Dosage_UUID != request.commandId:
+            yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
+        else:
+            while self.Dosing and (
+                (self.FlowRate > 0 and self.FillLevel >= 0) or (self.FlowRate < 0 and self.FillLevel <= self.MaxFillLevel)
+                ):
+                self.FillLevel -= self.FlowRate
+                time.sleep(0.5)
+                logging.info("Dosage progress: currently at {0:5.2f}ml".format(self.FillLevel))
+
+                yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
+
+            yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
+
 
     def GenerateFlow_Result(self, request, context):
         """
@@ -288,8 +339,19 @@ class PumpFluidDosingServiceSimulation():
         """
         logging.debug("GenerateFlow_Result - Mode: simulation ")
 
-        uuid = request.commandId
-        return pb2.GenerateFlow_Responses(Success=fwpb2.Boolean(value=False))
+        logging.debug("request.commandId {}".format(request.commandId))
+
+        # if dosage was stopped by a call to StopDosage AND we get a valid UUID
+        # OR if we get a valid UUID AND it is the current dosage -> stop dosing and return result
+        if (not self.Dosing and request.commandId) or (request.commandId and self.Dosage_UUID == request.commandId):
+            logging.info(f"Finished dosing! (UUID: {self.Dosage_UUID})")
+            self.Dosage_UUID = ""
+            self.FlowRate = 0.0
+            self.Dosing = False
+            return pb2.GenerateFlow_Responses(Success=fwpb2.Boolean(value=True))
+        else:
+            return fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
+                errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
 
     def StopDosage(self, request, context):
         """Stops a currently running dosage immediately.
