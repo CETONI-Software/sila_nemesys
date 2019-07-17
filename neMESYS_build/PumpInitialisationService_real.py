@@ -32,10 +32,11 @@ ________________________________________________________________________
 """
 __version__ = "0.0.1"
 
-
+import os
 import logging
-import uuid
 import time
+from configparser import ConfigParser, NoSectionError, NoOptionError
+
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpInitialisationService_pb2 as pb2
@@ -51,12 +52,29 @@ class PumpInitialisationServiceReal():
 #            Allows to initialise a pump (e.g. by executiong a reference move).
 #            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
 #     """
-    def __init__ (self, bus, pump):
+    def __init__ (self, bus, pump, sila2_conf):
         """ PumpInitialisationServiceReal class initialiser """
         logging.debug("init class: PumpInitialisationServiceReal ")
 
         self.bus = bus
         self.pump = pump
+        self.sila2_conf = sila2_conf
+
+        self.restore_last_drive_position_counter()
+
+    def restore_last_drive_position_counter(self):
+        """Reads the last drive position counter from the server's config file.
+        """
+        pump_name = self.pump.get_pump_name()
+        try:
+            drive_pos_counter = int(self.sila2_conf[pump_name]["drive_pos_counter"])
+            logging.debug("Restoring drive position counter: %d", drive_pos_counter)
+            self.pump.restore_position_counter_value(drive_pos_counter)
+        except NoSectionError as err:
+            logging.error("No section for %s in SiLA2 config file: %s", pump_name, err)
+        except (NoOptionError, KeyError) as err:
+            logging.error("Cannot read config file option in %s", err)
+            logging.error("No drive position counter found! Reference move needed!")
 
 
     def wait_calibration_finished(self, timeout_sec):

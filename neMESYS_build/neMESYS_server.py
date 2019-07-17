@@ -27,8 +27,11 @@ ________________________________________________________________________
 """
 __version__ = "0.0.1"
 
+import os
 import logging
+import coloredlogs
 import argparse
+import pickle
 
 import sila2lib.sila_server as slss
 
@@ -74,19 +77,23 @@ class neMESYSServer(slss.SiLA2Server):
         """ Class initialiser """
         # registering features
         self.PumpFluidDosingService_servicer = PumpFluidDosingService()
-        PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(self.PumpFluidDosingService_servicer, self.grpc_server)
+        PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(
+            self.PumpFluidDosingService_servicer, self.grpc_server)
         self.addFeature('PumpFluidDosingService', '.')
 
         self.PumpUnitController_servicer = PumpUnitController()
-        PumpUnitController_pb2_grpc.add_PumpUnitControllerServicer_to_server(self.PumpUnitController_servicer, self.grpc_server)
+        PumpUnitController_pb2_grpc.add_PumpUnitControllerServicer_to_server(
+            self.PumpUnitController_servicer, self.grpc_server)
         self.addFeature('PumpUnitController', '.')
 
         self.PumpInitialisationService_servicer = PumpInitialisationService()
-        PumpInitialisationService_pb2_grpc.add_PumpInitialisationServiceServicer_to_server(self.PumpInitialisationService_servicer, self.grpc_server)
+        PumpInitialisationService_pb2_grpc.add_PumpInitialisationServiceServicer_to_server(
+            self.PumpInitialisationService_servicer, self.grpc_server)
         self.addFeature('PumpInitialisationService', '.')
 
         self.ValvePositionController_servicer = ValvePositionController()
-        ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(self.ValvePositionController_servicer, self.grpc_server)
+        ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(
+            self.ValvePositionController_servicer, self.grpc_server)
         self.addFeature('ValvePositionController', '.')
 
         self.connect_to_bus_and_enable_pump()
@@ -95,7 +102,9 @@ class neMESYSServer(slss.SiLA2Server):
 
         # starting and running the gRPC/SiLA2 server
         self.run()
+        print()
 
+        self.save_drive_position_counter()
         self.stop_and_close_bus()
 
 
@@ -135,19 +144,38 @@ class neMESYSServer(slss.SiLA2Server):
     def stop_and_close_bus(self):
         """ Stops and closes the bus communication.
         """
-        print()
         logging.debug("Closing bus...")
         self.bus.stop()
         self.bus.close()
 
+    def save_drive_position_counter(self):
+        """Saves the current drive position counter so that it can be restored next time.
+        """
+        config_dir = os.path.join(os.environ.get('APPDATA') or os.path.join(
+            os.environ['HOME'], '.config', 'sila2', ), self.server_name)
+        config_filename = os.path.join(config_dir, self.server_name + '.conf')
+
+        pump_name = self.pump.get_pump_name()
+        drive_pos_counter = self.pump.get_position_counter_value()
+        self.sila2_config[pump_name] = {}
+        self.sila2_config[pump_name]["drive_pos_counter"] = str(drive_pos_counter)
+        logging.debug("Saving drive position counter (%d) to file: %s",
+                      drive_pos_counter, config_filename)
+
+        with open(config_filename, "w") as config_file:
+            self.sila2_config.write(config_file)
 
     def switchToSimMode(self):
         """overwriting base class method"""
         self.simulation_mode = True
-        self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceSimulation()) # or use 'None' for default simulation implementation
-        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerSimulation()) # or use 'None' for default simulation implementation
-        self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceSimulation()) # or use 'None' for default simulation implementation
-        self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerSimulation()) # or use 'None' for default simulation implementation
+        self.PumpFluidDosingService_servicer.injectImplementation(
+            PumpFluidDosingServiceSimulation()) # or use 'None' for default simulation implementation
+        self.PumpUnitController_servicer.injectImplementation(
+            PumpUnitControllerSimulation()) # or use 'None' for default simulation implementation
+        self.PumpInitialisationService_servicer.injectImplementation(
+            PumpInitialisationServiceSimulation()) # or use 'None' for default simulation implementation
+        self.ValvePositionController_servicer.injectImplementation(
+            ValvePositionControllerSimulation()) # or use 'None' for default simulation implementation
 
         success = True
         logging.debug("switched to sim mode {}".format(success) )
@@ -155,10 +183,14 @@ class neMESYSServer(slss.SiLA2Server):
     def switchToRealMode(self):
         """overwriting base class method"""
         self.simulation_mode = False
-        self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceReal(self.bus, self.pump))
-        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerReal(self.bus, self.pump))
-        self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceReal(self.bus, self.pump))
-        self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerReal(self.bus, self.pump))
+        self.PumpFluidDosingService_servicer.injectImplementation(
+            PumpFluidDosingServiceReal(self.bus, self.pump))
+        self.PumpUnitController_servicer.injectImplementation(
+            PumpUnitControllerReal(self.bus, self.pump))
+        self.PumpInitialisationService_servicer.injectImplementation(
+            PumpInitialisationServiceReal(self.bus, self.pump, self.sila2_config))
+        self.ValvePositionController_servicer.injectImplementation(
+            ValvePositionControllerReal(self.bus, self.pump))
 
         success = True
         logging.debug("switched to real mode {}".format(success) )
@@ -182,7 +214,8 @@ def parseCommandLine():
 
 if __name__ == '__main__':
     """Main: """
-    logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
+    coloredlogs.install(fmt='%(asctime)s %(levelname)s| %(module)s.%(funcName)s: %(message)s',
+                        level=logging.DEBUG)
     #~ logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.ERROR)
 
     parsed_args = parseCommandLine()
