@@ -3,12 +3,13 @@
     "python.linting.pylintPath": "/home/user1/.virtualenvs/sila2_dev-test/bin/pylint",
     "python.linting.pylintArgs": [
         "--init-hook",
-        "import sys; sys.path.append('/home/user1/Documents/SiLA/sila_python/sila_library/').append('/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/')"
+        "import sys; sys.path.append('/home/user1/Documents/SiLA/sila_python/sila_library/'); sys.path.append('/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/'); sys.path.append('/home/user1/Documents/QmixSDK_Linux/python')"
     ],
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.autoComplete.extraPaths": [
         "/home/user1/Documents/SiLA/sila_python/sila_library/",
-        "/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/"
+        "/home/user1/Documents/SiLA/sila_python/sila_tools/sila2codegenerator/",
+        "/home/user1/Documents/QmixSDK_Linux/python"
     ],
 }

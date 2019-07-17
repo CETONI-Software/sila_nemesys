@@ -44,8 +44,8 @@ class ValvePositionControllerSimulation():
         """ ValvePositionControllerSimulation class initialiser """
         logging.debug("init class: ValvePositionControllerSimulation ")
 
-        self.Position = 0
-        self.NumOfPositions = 3
+        self.position = 0
+        self.num_positions = 3
 
 
     def SwitchToPosition(self, request, context):
@@ -57,12 +57,12 @@ class ValvePositionControllerSimulation():
         logging.debug("SwitchToPosition - Mode: simulation ")
 
         requested_position = request.Position.value
-        if requested_position < 0 or requested_position > self.NumOfPositions - 1:
+        if requested_position < 0 or requested_position > self.num_positions - 1:
             return fwpb2.SiLAError(validationError=fwpb2.ValidationError(
                 parameter="Position",
                 cause="The given valve position is not in the range between 0 and NumberOfPositions - 1."))
 
-        self.Position = requested_position
+        self.position = requested_position
         return pb2.SwitchToPosition_Responses(Success=fwpb2.Boolean(value=True))
 
     def TogglePosition(self, request, context):
@@ -83,7 +83,7 @@ class ValvePositionControllerSimulation():
         logging.debug("Get_NumberOfPositions - Mode: simulation ")
 
         return pb2.Get_NumberOfPositions_Responses(
-            NumberOfPositions=fwpb2.Integer(value=self.NumOfPositions) )
+            NumberOfPositions=fwpb2.Integer(value=self.num_positions) )
 
     def Subscribe_Position(self, request, context):
         """The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
@@ -94,7 +94,7 @@ class ValvePositionControllerSimulation():
         logging.debug("Subscribe_Position - Mode: simulation ")
 
         yield pb2.Subscribe_Position_Responses(
-            Position=fwpb2.Integer(value=self.Position) )
+            Position=fwpb2.Integer(value=self.position) )
 
 
 

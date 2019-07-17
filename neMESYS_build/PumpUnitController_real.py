@@ -37,12 +37,18 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpUnitController_pb2 as pb2
 import PumpUnitController_pb2_grpc as pb2_grpc
 
+# import qmixsdk
+from qmixsdk import qmixbus
+from qmixsdk import qmixpump
 
 class PumpUnitControllerReal():
     """ PumpUnitControllerReal - Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump. """
-    def __init__ (self):
+    def __init__ (self, bus, pump):
         """ PumpUnitControllerReal class initialiser """
         logging.debug("init class: PumpUnitControllerReal ")
+
+        self.bus = bus
+        self.pump = pump
 
 
 

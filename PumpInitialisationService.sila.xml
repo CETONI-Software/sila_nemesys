@@ -37,7 +37,7 @@
             <DisplayName>Drive Position Counter</DisplayName>
             <Description>The drive position counter to restore.</Description>
             <DataType>
-                <Basic>Real</Basic>
+                <Basic>Integer</Basic>
             </DataType>
         </Parameter>
         <Response>
@@ -56,7 +56,7 @@
         <DisplayName>Drive Position Counter</DisplayName>
         <Description>The value of the internal drive position counter.</Description>
         <DataType>
-            <Basic>Real</Basic>
+            <Basic>Integer</Basic>
         </DataType>
         <Observable>Yes</Observable>
     </Property>

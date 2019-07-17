@@ -49,7 +49,7 @@ class PumpInitialisationServiceSimulation():
         """ PumpInitialisationServiceSimulation class initialiser """
         logging.debug("init class: PumpInitialisationServiceSimulation ")
 
-        self.DrivePositionCounter = 4.2
+        self.drive_position_counter = 42
 
 
     def InitializePumpDrive(self, request, context):
@@ -71,7 +71,7 @@ class PumpInitialisationServiceSimulation():
         """
         logging.debug("RestoreDrivePositionCounter - Mode: simulation ")
 
-        self.DrivePositionCounter = request.DrivePositionCounter.value
+        self.drive_position_counter = request.DrivePositionCounter.value
         return pb2.RestoreDrivePositionCounter_Responses(Success=fwpb2.Boolean(value=True))
 
     def Subscribe_DrivePositionCounter(self, request, context):
@@ -83,8 +83,4 @@ class PumpInitialisationServiceSimulation():
         logging.debug("Subscribe_DrivePositionCounter - Mode: simulation ")
 
         yield pb2.Subscribe_DrivePositionCounter_Responses(
-            DrivePositionCounter=fwpb2.Real(value=self.DrivePositionCounter) )
-
-
-
-
+            DrivePositionCounter=fwpb2.Integer(value=self.drive_position_counter))

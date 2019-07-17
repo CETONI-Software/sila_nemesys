@@ -5,11 +5,11 @@ ________________________________________________________________________
 
 *pumpinitialisationservice_server_real *
 
-:details: pumpinitialisationservice_server_real: 
+:details: pumpinitialisationservice_server_real:
             Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
             The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
-    . 
-           
+    .
+
 :file:    pumpinitialisationservice_server_real.py
 :authors: Florian Meinicke
 
@@ -20,7 +20,7 @@ ________________________________________________________________________
 
 
            - 0.1.6
-.. todo:: - 
+.. todo:: -
 ________________________________________________________________________
 
 **Copyright**:
@@ -35,22 +35,41 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+import time
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import PumpInitialisationService_pb2 as pb2
 import PumpInitialisationService_pb2_grpc as pb2_grpc
 
+# import qmixsdk
+from qmixsdk import qmixbus
+from qmixsdk import qmixpump
+
 
 class PumpInitialisationServiceReal():
-    """ PumpInitialisationServiceReal - 
+    """ PumpInitialisationServiceReal -
 #            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
 #            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
 #     """
-    def __init__ (self):
+    def __init__ (self, bus, pump):
         """ PumpInitialisationServiceReal class initialiser """
         logging.debug("init class: PumpInitialisationServiceReal ")
 
+        self.bus = bus
+        self.pump = pump
 
+
+    def wait_calibration_finished(self, pump, timeout_sec):
+        """
+        The function waits until pump calibration has finished or
+        until the timeout occurs.
+        """
+        timer = qmixbus.PollingTimer(timeout_sec * 1000)
+        result = False
+        while not (result or timer.is_expired()):
+            time.sleep(0.1)
+            result = pump.is_calibration_finished()
+        return result
 
     def InitializePumpDrive(self, request, context):
         """Initialize the pump drive (e.g. by executing a reference move).
@@ -58,13 +77,17 @@ class PumpInitialisationServiceReal():
         """
         logging.debug("InitializePumpDrive - Mode: real ")
 
-        #~ return_val = request.Void.value
-        #~ return pb2.InitializePumpDrive_Responses(Success=fwpb2.Boolean(value=False))
+        self.pump.calibrate()
+        time.sleep(0.2)
+        calibration_finished = self.wait_calibration_finished(self.pump, 30)
+        print("Pump calibrated: ", calibration_finished)
+
+        return pb2.InitializePumpDrive_Responses(Success=fwpb2.Boolean(value=calibration_finished))
 
     def RestoreDrivePositionCounter(self, request, context):
         """Restore the internal hardware position counter value of the pump drive.
                 In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
-        
+
             :param request: gRPC request
             :param context: gRPC context
             :param request.DrivePositionCounter: The drive position counter to restore.
@@ -72,8 +95,10 @@ class PumpInitialisationServiceReal():
         """
         logging.debug("RestoreDrivePositionCounter - Mode: real ")
 
-        #~ return_val = request.DrivePositionCounter.value
-        #~ return pb2.RestoreDrivePositionCounter_Responses(Success=fwpb2.Boolean(value=False))
+        self.pump.restore_position_counter_value(request.DrivePositionCounter.value)
+        time.sleep(0.2)
+
+        return pb2.RestoreDrivePositionCounter_Responses(Success=fwpb2.Boolean(value=True))
 
     def Subscribe_DrivePositionCounter(self, request, context):
         """The value of the internal drive position counter.
@@ -84,9 +109,5 @@ class PumpInitialisationServiceReal():
         """
         logging.debug("Subscribe_DrivePositionCounter - Mode: real ")
 
-        #~ yield_val = request.DrivePositionCounter.value
-        #~ pb2.Subscribe_DrivePositionCounter_Responses( DrivePositionCounter=fwpb2.Real(value=0.0) )
-
-
-
-
+        yield pb2.Subscribe_DrivePositionCounter_Responses(
+            DrivePositionCounter=fwpb2.Integer(value=self.pump.get_position_counter_value()))

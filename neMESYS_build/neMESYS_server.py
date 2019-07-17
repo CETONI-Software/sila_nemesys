@@ -34,6 +34,8 @@ import sila2lib.sila_server as slss
 
 import PumpFluidDosingService_pb2
 import PumpFluidDosingService_pb2_grpc
+import PumpUnitController_pb2
+import PumpUnitController_pb2_grpc
 import PumpInitialisationService_pb2
 import PumpInitialisationService_pb2_grpc
 import ValvePositionController_pb2
@@ -56,6 +58,9 @@ from ValvePositionController_servicer import ValvePositionController
 from ValvePositionController_simulation import ValvePositionControllerSimulation
 from ValvePositionController_real import ValvePositionControllerReal
 
+# import qmixsdk
+from qmixsdk import qmixbus
+from qmixsdk import qmixpump
 
 class neMESYSServer(slss.SiLA2Server):
     """ Class doc """
@@ -84,10 +89,43 @@ class neMESYSServer(slss.SiLA2Server):
         ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(self.ValvePositionController_servicer, self.grpc_server)
         self.addFeature('ValvePositionController', '.')
 
-        self.switchToSimMode()
+        self.connect_to_bus_and_enable_pump()
+
+        self.switchToRealMode()
 
         # starting and running the gRPC/SiLA2 server
         self.run()
+
+        self.stop_and_close_bus()
+
+
+    def connect_to_bus_and_enable_pump(self):
+        """
+            Loads a valid Qmix configuration, connects to the bus,
+            retrieves the pump and enables it.
+        """
+        logging.debug("Opening bus")
+        self.bus = qmixbus.Bus()
+        self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
+
+        self.pump = qmixpump.Pump()
+        self.pump.lookup_by_name("neMESYS_Low_Pressure_1_Pump")
+
+        self.bus.start()
+
+        if self.pump.is_in_fault_state():
+            self.pump.clear_fault()
+        if not self.pump.is_enabled():
+            self.pump.enable(True)
+
+
+    def stop_and_close_bus(self):
+        """ Stops and closes the bus communication.
+        """
+        logging.debug("Closing bus...")
+        self.bus.stop()
+        self.bus.close()
+
 
     def switchToSimMode(self):
         """overwriting base class method"""
@@ -103,10 +141,10 @@ class neMESYSServer(slss.SiLA2Server):
     def switchToRealMode(self):
         """overwriting base class method"""
         self.simulation_mode = False
-        self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceReal())
-        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerReal())
-        self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceReal())
-        self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerReal())
+        self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceReal(self.bus, self.pump))
+        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerReal(self.bus, self.pump))
+        self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceReal(self.bus, self.pump))
+        self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerReal(self.bus, self.pump))
 
         success = True
         logging.debug("switched to real mode {}".format(success) )

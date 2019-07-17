@@ -154,7 +154,7 @@ class neMESYSClient(s2client.SiLA2Client):
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
-                pass #~ response = self.PumpInitialisationService_serv_stub.RestoreDrivePositionCounter(PumpInitialisationService_pb2.RestoreDrivePositionCounter_Parameters(DrivePositionCounter=fwpb2.Real(value=0.0)))
+                pass #~ response = self.PumpInitialisationService_serv_stub.RestoreDrivePositionCounter(PumpInitialisationService_pb2.RestoreDrivePositionCounter_Parameters(DrivePositionCounter=fwpb2.Integer(value=0)))
                 #~ logging.debug("RestoreDrivePositionCounter response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
