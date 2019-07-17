@@ -6,7 +6,7 @@
   "version" : "0.0.1",
   "vendor_url" : "cetoni.de",
   "SiLA_standard_feature_list" : ["SiLAService", "SimulationController"],
-  "SiLA_feature_list" : ["PumpFluidDosingService", "PumpInitialisationService", "ValvePositionController"],
+  "SiLA_feature_list" : ["PumpFluidDosingService", "PumpUnitController", "PumpInitialisationService", "ValvePositionController"],
   "communication_port" : "50053",
   "IP_address" : "127.0.0.1",
   "hostname" : "localhost"

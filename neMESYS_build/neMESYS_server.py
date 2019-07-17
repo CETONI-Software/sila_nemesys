@@ -41,15 +41,18 @@ import ValvePositionController_pb2_grpc
 
 
 from PumpFluidDosingService_servicer import PumpFluidDosingService
-
 from PumpFluidDosingService_simulation import PumpFluidDosingServiceSimulation
 from PumpFluidDosingService_real import PumpFluidDosingServiceReal
-from PumpInitialisationService_servicer import PumpInitialisationService
 
+from PumpUnitController_servicer import PumpUnitController
+from PumpUnitController_simulation import PumpUnitControllerSimulation
+from PumpUnitController_real import PumpUnitControllerReal
+
+from PumpInitialisationService_servicer import PumpInitialisationService
 from PumpInitialisationService_simulation import PumpInitialisationServiceSimulation
 from PumpInitialisationService_real import PumpInitialisationServiceReal
-from ValvePositionController_servicer import ValvePositionController
 
+from ValvePositionController_servicer import ValvePositionController
 from ValvePositionController_simulation import ValvePositionControllerSimulation
 from ValvePositionController_real import ValvePositionControllerReal
 
@@ -69,6 +72,10 @@ class neMESYSServer(slss.SiLA2Server):
         PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(self.PumpFluidDosingService_servicer, self.grpc_server)
         self.addFeature('PumpFluidDosingService', '.')
 
+        self.PumpUnitController_servicer = PumpUnitController()
+        PumpUnitController_pb2_grpc.add_PumpUnitControllerServicer_to_server(self.PumpUnitController_servicer, self.grpc_server)
+        self.addFeature('PumpUnitController', '.')
+
         self.PumpInitialisationService_servicer = PumpInitialisationService()
         PumpInitialisationService_pb2_grpc.add_PumpInitialisationServiceServicer_to_server(self.PumpInitialisationService_servicer, self.grpc_server)
         self.addFeature('PumpInitialisationService', '.')
@@ -86,6 +93,7 @@ class neMESYSServer(slss.SiLA2Server):
         """overwriting base class method"""
         self.simulation_mode = True
         self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceSimulation()) # or use 'None' for default simulation implementation
+        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerSimulation()) # or use 'None' for default simulation implementation
         self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceSimulation()) # or use 'None' for default simulation implementation
         self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerSimulation()) # or use 'None' for default simulation implementation
 
@@ -96,6 +104,7 @@ class neMESYSServer(slss.SiLA2Server):
         """overwriting base class method"""
         self.simulation_mode = False
         self.PumpFluidDosingService_servicer.injectImplementation(PumpFluidDosingServiceReal())
+        self.PumpUnitController_servicer.injectImplementation(PumpUnitControllerReal())
         self.PumpInitialisationService_servicer.injectImplementation(PumpInitialisationServiceReal())
         self.ValvePositionController_servicer.injectImplementation(ValvePositionControllerReal())
 

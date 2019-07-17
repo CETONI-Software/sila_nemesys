@@ -15,7 +15,7 @@
             <DisplayName>Prefix</DisplayName>
             <Description>The prefix for the velocity unit.</Description>
             <DataType>
-                <DataTypeIdentifier>Prefix</DataTypeIdentifier>
+                <Basic>String</Basic>
             </DataType>
         </Parameter>
         <Parameter>
@@ -23,7 +23,7 @@
             <DisplayName>Volume Unit</DisplayName>
             <Description>The volume unit (numerator) of the velocity unit.</Description>
             <DataType>
-                <DataTypeIdentifier>Volume</DataTypeIdentifier>
+                <Basic>String</Basic>
             </DataType>
         </Parameter>
         <Parameter>
@@ -31,7 +31,7 @@
             <DisplayName>Time Unit</DisplayName>
             <Description>The time unit (denominator) of the velocity unit.</Description>
             <DataType>
-                <DataTypeIdentifier>Time</DataTypeIdentifier>
+                <Basic>String</Basic>
             </DataType>
         </Parameter>
     </Command>
@@ -45,86 +45,27 @@
                 <DisplayName>Prefix</DisplayName>
                 <Description>The prefix for the velocity unit.</Description>
                 <DataType>
-                    <DataTypeIdentifier>Prefix</DataTypeIdentifier>
+                    <Basic>String</Basic>
                 </DataType>
             </Parameter>
             <Parameter>
                 <Identifier>VolumeUnit</Identifier>
                 <DisplayName>Volume Unit</DisplayName>
-                <Description>The volume unit (numerator) of the velocity unit.</Description>
+                <Description>The volume unit identifier.</Description>
                 <DataType>
-                    <DataTypeIdentifier>Volume</DataTypeIdentifier>
+                    <Basic>String</Basic>
                 </DataType>
             </Parameter>
         </Command>
 
         <!-- Properties -->
-        <!-- <Property>
+        <Property>
             <Identifier>FlowUnit</Identifier>
             <DisplayName>Flow Unit</DisplayName>
             <Description>The currently used flow unit.</Description>
             <DataType>
-                <DataTypeIdentifier>Flow</DataTypeIdentifier>
+                <Basic>String</Basic>
             </DataType>
             <Observable>Yes</Observable>
-        </Property> -->
-
-    <!-- Custom Data Types -->
-    <DataTypeDefinition>
-        <Identifier>Prefix</Identifier>
-        <DisplayName>Prefix</DisplayName>
-        <Description/>
-        <DataType>
-            <Constrained>
-                <DataType>
-                    <Basic>Integer</Basic>
-                </DataType>
-                <Constraints>
-                    <Enumeration>
-                        <Value>UNIT</Value>
-                        <Value>DECI</Value>
-                        <Value>CENTI</Value>
-                        <Value>MILLI</Value>
-                        <Value>MICRO</Value>
-                    </Enumeration>
-                </Constraints>
-            </Constrained>
-        </DataType>
-    </DataTypeDefinition>
-    <DataTypeDefinition>
-        <Identifier>Volume</Identifier>
-        <DisplayName>Volume</DisplayName>
-        <Description/>
-        <DataType>
-            <Constrained>
-                <DataType>
-                    <Basic>Integer</Basic>
-                </DataType>
-                <Constraints>
-                    <Enumeration>
-                        <Value>LITRES</Value>
-                    </Enumeration>
-                </Constraints>
-            </Constrained>
-        </DataType>
-    </DataTypeDefinition>
-    <DataTypeDefinition>
-        <Identifier>Time</Identifier>
-        <DisplayName>Time</DisplayName>
-        <Description/>
-        <DataType>
-            <Constrained>
-                <DataType>
-                    <Basic>Integer</Basic>
-                </DataType>
-                <Constraints>
-                    <Enumeration>
-                        <Value>PER_SECOND</Value>
-                        <Value>PER_MINUTE</Value>
-                        <Value>PER_HOUR</Value>
-                    </Enumeration>
-                </Constraints>
-            </Constrained>
-        </DataType>
-    </DataTypeDefinition>
+        </Property>
 </Feature>

@@ -44,6 +44,8 @@ from sila2lib.std_features import SimulationController_pb2_grpc as scpb2g
 
 import PumpFluidDosingService_pb2
 import PumpFluidDosingService_pb2_grpc
+import PumpUnitController_pb2
+import PumpUnitController_pb2_grpc
 import PumpInitialisationService_pb2
 import PumpInitialisationService_pb2_grpc
 import ValvePositionController_pb2
@@ -70,6 +72,7 @@ class neMESYSClient(s2client.SiLA2Client):
             param cert=None: server certificate filename, e.g. 'sila_server.crt'  """
                 
         self.PumpFluidDosingService_serv_stub = PumpFluidDosingService_pb2_grpc.PumpFluidDosingServiceStub(self.channel)
+        self.PumpUnitController_serv_stub = PumpUnitController_pb2_grpc.PumpUnitControllerStub(self.channel)
         self.PumpInitialisationService_serv_stub = PumpInitialisationService_pb2_grpc.PumpInitialisationServiceStub(self.channel)
         self.ValvePositionController_serv_stub = ValvePositionController_pb2_grpc.ValvePositionControllerStub(self.channel)
 
@@ -133,6 +136,17 @@ class neMESYSClient(s2client.SiLA2Client):
                 #~ logging.debug("StopDosage response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
+            # --> calling PumpUnitController
+            try :
+                pass #~ response = self.PumpUnitController_serv_stub.SetFlowUnit(PumpUnitController_pb2.SetFlowUnit_Parameters(Prefix=fwpb2.String(value="DEFAULTstring" + return_val)))
+                #~ logging.debug("SetFlowUnit response:{}".format(response.Void) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
+                pass #~ response = self.PumpUnitController_serv_stub.SetVolumeUnit(PumpUnitController_pb2.SetVolumeUnit_Parameters(Prefix=fwpb2.String(value="DEFAULTstring" + return_val)))
+                #~ logging.debug("SetVolumeUnit response:{}".format(response.Void) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
             # --> calling PumpInitialisationService
             try :
                 pass #~ response = self.PumpInitialisationService_serv_stub.InitializePumpDrive(PumpInitialisationService_pb2.InitializePumpDrive_Parameters())
@@ -182,6 +196,11 @@ class neMESYSClient(s2client.SiLA2Client):
             try :
                 response = next(self.PumpFluidDosingService_serv_stub.Subscribe_FlowRate(PumpFluidDosingService_pb2.Subscribe_FlowRate_Parameters()))
                 #~ logging.debug("Subscribe_FlowRate response:{}".format(response.FlowRate) )
+            except grpc.RpcError as err:
+                logging.error("grpc/SiLA error: {}".format(err) )
+            try :
+                response = next(self.PumpUnitController_serv_stub.Subscribe_FlowUnit(PumpUnitController_pb2.Subscribe_FlowUnit_Parameters()))
+                #~ logging.debug("Subscribe_FlowUnit response:{}".format(response.FlowUnit) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
