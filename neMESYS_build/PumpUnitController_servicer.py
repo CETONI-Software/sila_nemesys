@@ -62,7 +62,6 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request.Prefix: The prefix for the velocity unit.
             :param request.VolumeUnit: The volume unit (numerator) of the velocity unit.
             :param request.TimeUnit: The time unit (denominator) of the velocity unit.
-
         """
         logging.debug("SetFlowUnit - Mode: simulation ")
 
@@ -78,7 +77,6 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param context: gRPC context
             :param request.Prefix: The prefix for the velocity unit.
             :param request.VolumeUnit: The volume unit identifier.
-
         """
         logging.debug("SetVolumeUnit - Mode: simulation ")
 
@@ -93,7 +91,6 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
             :param request: gRPC request
             :param context: gRPC context
             :param response.FlowUnit: The currently used flow unit.
-
         """
         logging.debug("Subscribe_FlowUnit - Mode: simulation ")
 
@@ -103,6 +100,21 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
         else:
             #~ yield_val = request.FlowUnit.value
             pass #~ yield pb2.Subscribe_FlowUnit_Responses( FlowUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )
+
+    def Subscribe_VolumeUnit(self, request, context):
+        """The currently used volume unit.
+            :param request: gRPC request
+            :param context: gRPC context
+            :param response.VolumeUnit: The currently used volume unit.
+        """
+        logging.debug("Subscribe_VolumeUnit - Mode: simulation ")
+
+        if self.implementation is not None:
+            for val in self.implementation.Subscribe_VolumeUnit(request, context):
+                yield val
+        else:
+            #~ yield_val = request.VolumeUnit.value
+            pass #~ yield pb2.Subscribe_VolumeUnit_Responses( VolumeUnit=fwpb2.String(value="DEFAULTstring" + yield_val) )
 
 
 

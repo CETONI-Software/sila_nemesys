@@ -105,13 +105,26 @@ class neMESYSServer(slss.SiLA2Server):
             retrieves the pump and enables it.
         """
         logging.debug("Opening bus")
+
         self.bus = qmixbus.Bus()
-        self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
+        # let's see if that helps...
+        try:
+            self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
+        except qmixbus.DeviceError as err:
+            logging.error("qmixbus.open(): %s", err)
+            logging.info("trying again...")
+            self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
 
         self.pump = qmixpump.Pump()
         self.pump.lookup_by_name("neMESYS_Low_Pressure_1_Pump")
 
-        self.bus.start()
+        # let's see if that helps...
+        try:
+            self.bus.start()
+        except qmixbus.DeviceError as err:
+            logging.error("qmixbus.start(): %s", err)
+            logging.info("trying again...")
+            self.bus.start()
 
         if self.pump.is_in_fault_state():
             self.pump.clear_fault()
@@ -122,6 +135,7 @@ class neMESYSServer(slss.SiLA2Server):
     def stop_and_close_bus(self):
         """ Stops and closes the bus communication.
         """
+        print()
         logging.debug("Closing bus...")
         self.bus.stop()
         self.bus.close()
