@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1fPumpInitialisationService.proto\x12?sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1\x1a\x13SiLAFramework.proto\" \n\x1eInitializePumpDrive_Parameters\"Q\n\x1dInitializePumpDrive_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"d\n&RestoreDrivePositionCounter_Parameters\x12:\n\x14\x44rivePositionCounter\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"Y\n%RestoreDrivePositionCounter_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"+\n)Subscribe_DrivePositionCounter_Parameters\"i\n(Subscribe_DrivePositionCounter_Responses\x12=\n\x14\x44rivePositionCounter\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer2\xe1\x05\n\x19PumpInitialisationService\x12\xd6\x01\n\x13InitializePumpDrive\x12_.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.InitializePumpDrive_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.InitializePumpDrive_Responses\x12\xee\x01\n\x1bRestoreDrivePositionCounter\x12g.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Parameters\x1a\x66.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Responses\x12\xf9\x01\n\x1eSubscribe_DrivePositionCounter\x12j.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Parameters\x1ai.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1fPumpInitialisationService.proto\x12?sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1\x1a\x13SiLAFramework.proto\" \n\x1eInitializePumpDrive_Parameters\"Q\n\x1dInitializePumpDrive_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean2\xf4\x01\n\x19PumpInitialisationService\x12\xd6\x01\n\x13InitializePumpDrive\x12_.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.InitializePumpDrive_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.InitializePumpDrive_Responsesb\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -82,133 +82,9 @@ _INITIALIZEPUMPDRIVE_RESPONSES = _descriptor.Descriptor(
   serialized_end=236,
 )
 
-
-_RESTOREDRIVEPOSITIONCOUNTER_PARAMETERS = _descriptor.Descriptor(
-  name='RestoreDrivePositionCounter_Parameters',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Parameters',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='DrivePositionCounter', full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Parameters.DrivePositionCounter', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=238,
-  serialized_end=341,
-)
-
-
-_RESTOREDRIVEPOSITIONCOUNTER_RESPONSES = _descriptor.Descriptor(
-  name='RestoreDrivePositionCounter_Responses',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Responses',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='Success', full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Responses.Success', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=343,
-  serialized_end=432,
-)
-
-
-_SUBSCRIBE_DRIVEPOSITIONCOUNTER_PARAMETERS = _descriptor.Descriptor(
-  name='Subscribe_DrivePositionCounter_Parameters',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Parameters',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=434,
-  serialized_end=477,
-)
-
-
-_SUBSCRIBE_DRIVEPOSITIONCOUNTER_RESPONSES = _descriptor.Descriptor(
-  name='Subscribe_DrivePositionCounter_Responses',
-  full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Responses',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='DrivePositionCounter', full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Responses.DrivePositionCounter', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=476,
-  serialized_end=581,
-)
-
 _INITIALIZEPUMPDRIVE_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb2._BOOLEAN
-_RESTOREDRIVEPOSITIONCOUNTER_PARAMETERS.fields_by_name['DrivePositionCounter'].message_type = SiLAFramework__pb2._INTEGER
-_RESTOREDRIVEPOSITIONCOUNTER_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb2._BOOLEAN
-_SUBSCRIBE_DRIVEPOSITIONCOUNTER_RESPONSES.fields_by_name['DrivePositionCounter'].message_type = SiLAFramework__pb2._INTEGER
 DESCRIPTOR.message_types_by_name['InitializePumpDrive_Parameters'] = _INITIALIZEPUMPDRIVE_PARAMETERS
 DESCRIPTOR.message_types_by_name['InitializePumpDrive_Responses'] = _INITIALIZEPUMPDRIVE_RESPONSES
-DESCRIPTOR.message_types_by_name['RestoreDrivePositionCounter_Parameters'] = _RESTOREDRIVEPOSITIONCOUNTER_PARAMETERS
-DESCRIPTOR.message_types_by_name['RestoreDrivePositionCounter_Responses'] = _RESTOREDRIVEPOSITIONCOUNTER_RESPONSES
-DESCRIPTOR.message_types_by_name['Subscribe_DrivePositionCounter_Parameters'] = _SUBSCRIBE_DRIVEPOSITIONCOUNTER_PARAMETERS
-DESCRIPTOR.message_types_by_name['Subscribe_DrivePositionCounter_Responses'] = _SUBSCRIBE_DRIVEPOSITIONCOUNTER_RESPONSES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 InitializePumpDrive_Parameters = _reflection.GeneratedProtocolMessageType('InitializePumpDrive_Parameters', (_message.Message,), {
@@ -225,34 +101,6 @@ InitializePumpDrive_Responses = _reflection.GeneratedProtocolMessageType('Initia
   })
 _sym_db.RegisterMessage(InitializePumpDrive_Responses)
 
-RestoreDrivePositionCounter_Parameters = _reflection.GeneratedProtocolMessageType('RestoreDrivePositionCounter_Parameters', (_message.Message,), {
-  'DESCRIPTOR' : _RESTOREDRIVEPOSITIONCOUNTER_PARAMETERS,
-  '__module__' : 'PumpInitialisationService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Parameters)
-  })
-_sym_db.RegisterMessage(RestoreDrivePositionCounter_Parameters)
-
-RestoreDrivePositionCounter_Responses = _reflection.GeneratedProtocolMessageType('RestoreDrivePositionCounter_Responses', (_message.Message,), {
-  'DESCRIPTOR' : _RESTOREDRIVEPOSITIONCOUNTER_RESPONSES,
-  '__module__' : 'PumpInitialisationService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.RestoreDrivePositionCounter_Responses)
-  })
-_sym_db.RegisterMessage(RestoreDrivePositionCounter_Responses)
-
-Subscribe_DrivePositionCounter_Parameters = _reflection.GeneratedProtocolMessageType('Subscribe_DrivePositionCounter_Parameters', (_message.Message,), {
-  'DESCRIPTOR' : _SUBSCRIBE_DRIVEPOSITIONCOUNTER_PARAMETERS,
-  '__module__' : 'PumpInitialisationService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Parameters)
-  })
-_sym_db.RegisterMessage(Subscribe_DrivePositionCounter_Parameters)
-
-Subscribe_DrivePositionCounter_Responses = _reflection.GeneratedProtocolMessageType('Subscribe_DrivePositionCounter_Responses', (_message.Message,), {
-  'DESCRIPTOR' : _SUBSCRIBE_DRIVEPOSITIONCOUNTER_RESPONSES,
-  '__module__' : 'PumpInitialisationService_pb2'
-  # @@protoc_insertion_point(class_scope:sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.Subscribe_DrivePositionCounter_Responses)
-  })
-_sym_db.RegisterMessage(Subscribe_DrivePositionCounter_Responses)
-
 
 
 _PUMPINITIALISATIONSERVICE = _descriptor.ServiceDescriptor(
@@ -261,8 +109,8 @@ _PUMPINITIALISATIONSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=584,
-  serialized_end=1321,
+  serialized_start=239,
+  serialized_end=483,
   methods=[
   _descriptor.MethodDescriptor(
     name='InitializePumpDrive',
@@ -271,24 +119,6 @@ _PUMPINITIALISATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_INITIALIZEPUMPDRIVE_PARAMETERS,
     output_type=_INITIALIZEPUMPDRIVE_RESPONSES,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='RestoreDrivePositionCounter',
-    full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService.RestoreDrivePositionCounter',
-    index=1,
-    containing_service=None,
-    input_type=_RESTOREDRIVEPOSITIONCOUNTER_PARAMETERS,
-    output_type=_RESTOREDRIVEPOSITIONCOUNTER_RESPONSES,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='Subscribe_DrivePositionCounter',
-    full_name='sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService.Subscribe_DrivePositionCounter',
-    index=2,
-    containing_service=None,
-    input_type=_SUBSCRIBE_DRIVEPOSITIONCOUNTER_PARAMETERS,
-    output_type=_SUBSCRIBE_DRIVEPOSITIONCOUNTER_RESPONSES,
     serialized_options=None,
   ),
 ])

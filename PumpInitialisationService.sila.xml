@@ -3,7 +3,7 @@
     <Identifier>PumpInitialisationService</Identifier>
     <DisplayName>Pump Initialisation Service</DisplayName>
     <Description>
-            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
+            Allows to initialise a pump (e.g. by executiong a reference move).
             The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
     </Description>
 
@@ -25,41 +25,6 @@
             <StandardExecutionErrorIdentifier>InitialisationFailed</StandardExecutionErrorIdentifier>
         </StandardExecutionErrors>
     </Command>
-    <Command>
-        <Identifier>RestoreDrivePositionCounter</Identifier>
-        <DisplayName>Restore Drive Position Counter</DisplayName>
-        <Description>Restore the internal hardware position counter value of the pump drive.
-                In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
-        </Description>
-        <Observable>No</Observable>
-        <Parameter>
-            <Identifier>DrivePositionCounter</Identifier>
-            <DisplayName>Drive Position Counter</DisplayName>
-            <Description>The drive position counter to restore.</Description>
-            <DataType>
-                <Basic>Integer</Basic>
-            </DataType>
-        </Parameter>
-        <Response>
-                <Identifier>Success</Identifier>
-                <DisplayName>Success</DisplayName>
-                <Description>A boolean value where false represents a failed initialisation and true represents a successful initialisation.</Description>
-                <DataType>
-                    <Basic>Boolean</Basic>
-                </DataType>
-        </Response>
-    </Command>
-
-    <!-- Properties -->
-    <Property>
-        <Identifier>DrivePositionCounter</Identifier>
-        <DisplayName>Drive Position Counter</DisplayName>
-        <Description>The value of the internal drive position counter.</Description>
-        <DataType>
-            <Basic>Integer</Basic>
-        </DataType>
-        <Observable>Yes</Observable>
-    </Property>
 
     <!-- Errors -->
     <StandardExecutionError>

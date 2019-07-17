@@ -6,7 +6,7 @@ ________________________________________________________________________
 *pumpinitialisationservice_server_real *
 
 :details: pumpinitialisationservice_server_real: 
-            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
+            Allows to initialise a pump (e.g. by executiong a reference move).
             The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
     . 
            

@@ -138,12 +138,12 @@ class neMESYSClient(s2client.SiLA2Client):
                 logging.error("grpc/SiLA error: {}".format(err) )
             # --> calling PumpUnitController
             try :
-                pass #~ response = self.PumpUnitController_serv_stub.SetFlowUnit(PumpUnitController_pb2.SetFlowUnit_Parameters(Prefix=fwpb2.String(value="DEFAULTstring" + return_val)))
+                pass #~ response = self.PumpUnitController_serv_stub.SetFlowUnit(PumpUnitController_pb2.SetFlowUnit_Parameters(FlowUnit=fwpb2.String(value="DEFAULTstring" + return_val)))
                 #~ logging.debug("SetFlowUnit response:{}".format(response.Void) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :
-                pass #~ response = self.PumpUnitController_serv_stub.SetVolumeUnit(PumpUnitController_pb2.SetVolumeUnit_Parameters(Prefix=fwpb2.String(value="DEFAULTstring" + return_val)))
+                pass #~ response = self.PumpUnitController_serv_stub.SetVolumeUnit(PumpUnitController_pb2.SetVolumeUnit_Parameters(VolumeUnit=fwpb2.String(value="DEFAULTstring" + return_val)))
                 #~ logging.debug("SetVolumeUnit response:{}".format(response.Void) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
@@ -151,11 +151,6 @@ class neMESYSClient(s2client.SiLA2Client):
             try :
                 pass #~ response = self.PumpInitialisationService_serv_stub.InitializePumpDrive(PumpInitialisationService_pb2.InitializePumpDrive_Parameters())
                 #~ logging.debug("InitializePumpDrive response:{}".format(response.Success) )
-            except grpc.RpcError as err:
-                logging.error("grpc/SiLA error: {}".format(err) )
-            try :
-                pass #~ response = self.PumpInitialisationService_serv_stub.RestoreDrivePositionCounter(PumpInitialisationService_pb2.RestoreDrivePositionCounter_Parameters(DrivePositionCounter=fwpb2.Integer(value=0)))
-                #~ logging.debug("RestoreDrivePositionCounter response:{}".format(response.Success) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             # --> calling ValvePositionController
@@ -201,11 +196,6 @@ class neMESYSClient(s2client.SiLA2Client):
             try :
                 response = next(self.PumpUnitController_serv_stub.Subscribe_VolumeUnit(PumpUnitController_pb2.Subscribe_VolumeUnit_Parameters()))
                 #~ logging.debug("Subscribe_VolumeUnit response:{}".format(response.VolumeUnit) )
-            except grpc.RpcError as err:
-                logging.error("grpc/SiLA error: {}".format(err) )
-            try :
-                response = next(self.PumpInitialisationService_serv_stub.Subscribe_DrivePositionCounter(PumpInitialisationService_pb2.Subscribe_DrivePositionCounter_Parameters()))
-                #~ logging.debug("Subscribe_DrivePositionCounter response:{}".format(response.DrivePositionCounter) )
             except grpc.RpcError as err:
                 logging.error("grpc/SiLA error: {}".format(err) )
             try :

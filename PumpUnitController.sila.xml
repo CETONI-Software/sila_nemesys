@@ -11,51 +11,27 @@
         <Description>Sets the flow unit for the pump. The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.</Description>
         <Observable>No</Observable>
         <Parameter>
-            <Identifier>Prefix</Identifier>
-            <DisplayName>Prefix</DisplayName>
-            <Description>The prefix for the velocity unit.</Description>
-            <DataType>
-                <Basic>String</Basic>
-            </DataType>
-        </Parameter>
-        <Parameter>
-            <Identifier>VolumeUnit</Identifier>
-            <DisplayName>Volume Unit</DisplayName>
-            <Description>The volume unit (numerator) of the velocity unit.</Description>
-            <DataType>
-                <Basic>String</Basic>
-            </DataType>
-        </Parameter>
-        <Parameter>
-            <Identifier>TimeUnit</Identifier>
-            <DisplayName>Time Unit</DisplayName>
-            <Description>The time unit (denominator) of the velocity unit.</Description>
+            <Identifier>FlowUnit</Identifier>
+            <DisplayName>FlowUnit</DisplayName>
+            <Description>The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.</Description>
             <DataType>
                 <Basic>String</Basic>
             </DataType>
         </Parameter>
     </Command>
     <Command>
-            <Identifier>SetVolumeUnit</Identifier>
-            <DisplayName>Set Volume Unit</DisplayName>
-            <Description>Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.</Description>
-            <Observable>No</Observable>
-            <Parameter>
-                <Identifier>Prefix</Identifier>
-                <DisplayName>Prefix</DisplayName>
-                <Description>The prefix for the velocity unit.</Description>
-                <DataType>
-                    <Basic>String</Basic>
-                </DataType>
-            </Parameter>
-            <Parameter>
-                <Identifier>VolumeUnit</Identifier>
-                <DisplayName>Volume Unit</DisplayName>
-                <Description>The volume unit identifier.</Description>
-                <DataType>
-                    <Basic>String</Basic>
-                </DataType>
-            </Parameter>
+        <Identifier>SetVolumeUnit</Identifier>
+        <DisplayName>Set Volume Unit</DisplayName>
+        <Description>Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.</Description>
+        <Observable>No</Observable>
+        <Parameter>
+            <Identifier>VolumeUnit</Identifier>
+            <DisplayName>Volume Unit</DisplayName>
+            <Description>The volume unit to set. It has to be something like "ml" or "µl", for instance.</Description>
+            <DataType>
+                <Basic>String</Basic>
+            </DataType>
+        </Parameter>
         </Command>
 
         <!-- Properties -->

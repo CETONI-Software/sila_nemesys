@@ -59,31 +59,28 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
         """Sets the flow unit for the pump. The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.Prefix: The prefix for the velocity unit.
-            :param request.VolumeUnit: The volume unit (numerator) of the velocity unit.
-            :param request.TimeUnit: The time unit (denominator) of the velocity unit.
+            :param request.FlowUnit: The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.
         """
         logging.debug("SetFlowUnit - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.SetFlowUnit(request, context)
         else:
-            pass #~ return_val = request.Prefix.value
+            pass #~ return_val = request.FlowUnit.value
             #~ return pb2.SetFlowUnit_Responses(  )
 
     def SetVolumeUnit(self, request, context):
         """Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.Prefix: The prefix for the velocity unit.
-            :param request.VolumeUnit: The volume unit identifier.
+            :param request.VolumeUnit: The volume unit to set. It has to be something like "ml" or "µl", for instance.
         """
         logging.debug("SetVolumeUnit - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.SetVolumeUnit(request, context)
         else:
-            pass #~ return_val = request.Prefix.value
+            pass #~ return_val = request.VolumeUnit.value
             #~ return pb2.SetVolumeUnit_Responses(  )
 
     def Subscribe_FlowUnit(self, request, context):

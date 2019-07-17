@@ -19,16 +19,6 @@ class PumpInitialisationServiceStub(object):
         request_serializer=PumpInitialisationService__pb2.InitializePumpDrive_Parameters.SerializeToString,
         response_deserializer=PumpInitialisationService__pb2.InitializePumpDrive_Responses.FromString,
         )
-    self.RestoreDrivePositionCounter = channel.unary_unary(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService/RestoreDrivePositionCounter',
-        request_serializer=PumpInitialisationService__pb2.RestoreDrivePositionCounter_Parameters.SerializeToString,
-        response_deserializer=PumpInitialisationService__pb2.RestoreDrivePositionCounter_Responses.FromString,
-        )
-    self.Subscribe_DrivePositionCounter = channel.unary_stream(
-        '/sila2.de.cetoni.pumps.syringepumps.pumpinitialisationservice.v1.PumpInitialisationService/Subscribe_DrivePositionCounter',
-        request_serializer=PumpInitialisationService__pb2.Subscribe_DrivePositionCounter_Parameters.SerializeToString,
-        response_deserializer=PumpInitialisationService__pb2.Subscribe_DrivePositionCounter_Responses.FromString,
-        )
 
 
 class PumpInitialisationServiceServicer(object):
@@ -42,20 +32,6 @@ class PumpInitialisationServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def RestoreDrivePositionCounter(self, request, context):
-    """Restore the internal hardware position counter value of the pump drive. In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def Subscribe_DrivePositionCounter(self, request, context):
-    """remark: Property Parameters are always Empty
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_PumpInitialisationServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -63,16 +39,6 @@ def add_PumpInitialisationServiceServicer_to_server(servicer, server):
           servicer.InitializePumpDrive,
           request_deserializer=PumpInitialisationService__pb2.InitializePumpDrive_Parameters.FromString,
           response_serializer=PumpInitialisationService__pb2.InitializePumpDrive_Responses.SerializeToString,
-      ),
-      'RestoreDrivePositionCounter': grpc.unary_unary_rpc_method_handler(
-          servicer.RestoreDrivePositionCounter,
-          request_deserializer=PumpInitialisationService__pb2.RestoreDrivePositionCounter_Parameters.FromString,
-          response_serializer=PumpInitialisationService__pb2.RestoreDrivePositionCounter_Responses.SerializeToString,
-      ),
-      'Subscribe_DrivePositionCounter': grpc.unary_stream_rpc_method_handler(
-          servicer.Subscribe_DrivePositionCounter,
-          request_deserializer=PumpInitialisationService__pb2.Subscribe_DrivePositionCounter_Parameters.FromString,
-          response_serializer=PumpInitialisationService__pb2.Subscribe_DrivePositionCounter_Responses.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

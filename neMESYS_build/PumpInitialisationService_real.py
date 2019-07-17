@@ -6,7 +6,7 @@ ________________________________________________________________________
 *pumpinitialisationservice_server_real *
 
 :details: pumpinitialisationservice_server_real:
-            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
+            Allows to initialise a pump (e.g. by executiong a reference move).
             The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
     .
 
@@ -48,7 +48,7 @@ from qmixsdk import qmixpump
 
 class PumpInitialisationServiceReal():
     """ PumpInitialisationServiceReal -
-#            Allows to initialise a pump by either executing a complete initialisation or by simply setting the pump's drive position counter. InitialisePumpDrive is mandatory if the last value of the drive position counter cannot be provided. Clients can query the DrivePositionCounter property to provide this at the next initialisation and then use RestoreDrivePositionCounter.
+#            Allows to initialise a pump (e.g. by executiong a reference move).
 #            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
 #     """
     def __init__ (self, bus, pump):
@@ -59,7 +59,7 @@ class PumpInitialisationServiceReal():
         self.pump = pump
 
 
-    def wait_calibration_finished(self, pump, timeout_sec):
+    def wait_calibration_finished(self, timeout_sec):
         """
         The function waits until pump calibration has finished or
         until the timeout occurs.
@@ -68,7 +68,7 @@ class PumpInitialisationServiceReal():
         result = False
         while not (result or timer.is_expired()):
             time.sleep(0.1)
-            result = pump.is_calibration_finished()
+            result = self.pump.is_calibration_finished()
         return result
 
     def InitializePumpDrive(self, request, context):
@@ -79,35 +79,7 @@ class PumpInitialisationServiceReal():
 
         self.pump.calibrate()
         time.sleep(0.2)
-        calibration_finished = self.wait_calibration_finished(self.pump, 30)
-        print("Pump calibrated: ", calibration_finished)
+        calibration_finished = self.wait_calibration_finished(30)
+        logging.info("Pump calibrated: %s", calibration_finished)
 
         return pb2.InitializePumpDrive_Responses(Success=fwpb2.Boolean(value=calibration_finished))
-
-    def RestoreDrivePositionCounter(self, request, context):
-        """Restore the internal hardware position counter value of the pump drive.
-                In many drives the actual position value is counted by a quadrature decoder. This internal position counter value will get lost, as soon as the device is switched off. In order to restore this position counter value after power on, a client can query the internal position counter value (DrivePositionCounter), store it persistently into a configuration file and restore it later by calling this function.
-
-            :param request: gRPC request
-            :param context: gRPC context
-            :param request.DrivePositionCounter: The drive position counter to restore.
-
-        """
-        logging.debug("RestoreDrivePositionCounter - Mode: real ")
-
-        self.pump.restore_position_counter_value(request.DrivePositionCounter.value)
-        time.sleep(0.2)
-
-        return pb2.RestoreDrivePositionCounter_Responses(Success=fwpb2.Boolean(value=True))
-
-    def Subscribe_DrivePositionCounter(self, request, context):
-        """The value of the internal drive position counter.
-            :param request: gRPC request
-            :param context: gRPC context
-            :param response.DrivePositionCounter: The value of the internal drive position counter.
-
-        """
-        logging.debug("Subscribe_DrivePositionCounter - Mode: real ")
-
-        yield pb2.Subscribe_DrivePositionCounter_Responses(
-            DrivePositionCounter=fwpb2.Integer(value=self.pump.get_position_counter_value()))
