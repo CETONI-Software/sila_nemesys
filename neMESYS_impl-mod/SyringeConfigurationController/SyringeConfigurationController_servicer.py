@@ -7,7 +7,7 @@ ________________________________________________________________________
 
 :details: SyringeConfigurationController:
     Syringe pump specific functions for configuration.
-           
+
 :file:    SyringeConfigurationController_servicer.py
 :authors: Florian Meinicke
 
@@ -53,18 +53,21 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
     implementation: Union[SyringeConfigurationControllerSimulation, SyringeConfigurationControllerReal]
     simulation_mode: bool
 
-    def __init__(self, simulation_mode: bool = True):
+    def __init__(self, pump, simulation_mode: bool = True):
         """
         Class initialiser
 
+        :param pump: A valid `qxmixpump` for this service to use
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
 
+        self.pump = pump
+
         self.simulation_mode = simulation_mode
         if simulation_mode:
-            self._inject_implementation(SyringeConfigurationControllerSimulation())
+            self.switch_to_simulation_mode()
         else:
-            self._inject_implementation(SyringeConfigurationControllerReal())
+            self.switch_to_real_mode()
 
     def _inject_implementation(self,
                                implementation: Union[SyringeConfigurationControllerSimulation,
@@ -86,23 +89,23 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
 
     def switch_to_real_mode(self):
         self.simulation_mode = False
-        self._inject_implementation(SyringeConfigurationControllerReal())
+        self._inject_implementation(SyringeConfigurationControllerReal(self.pump))
 
     def SetSyringeParameters(self, request, context) -> pb2.SetSyringeParameters_Responses:
         """
         Executes the unobservable command Set Syringe Parameters
             Set syringe parameters.
             If you change the syringe in one device, you need to setup the new syringe parameters to get proper conversion of flow rate und volume units.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.InnerDiameter (Inner Diameter): Inner diameter of the syringe tube in millimetres.
             request.MaxPistonStroke (Max Piston Stroke): The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
+
         logging.debug(
             "SetSyringeParameters called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
@@ -114,38 +117,38 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
         """
         Requests the observable property Inner Diameter
             Inner diameter of the syringe tube in millimetres.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.InnerDiameter (Inner Diameter): Inner diameter of the syringe tube in millimetres.
         """
-    
+
         logging.debug(
             "Property InnerDiameter requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_InnerDiameter(request, context)
-    
-    
+
+
     def Subscribe_MaxPistonStroke(self, request, context) -> pb2.Subscribe_MaxPistonStroke_Responses:
         """
         Requests the observable property Max Piston Stroke
             The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.MaxPistonStroke (Max Piston Stroke): The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
         """
-    
+
         logging.debug(
             "Property MaxPistonStroke requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_MaxPistonStroke(request, context)
-    
+

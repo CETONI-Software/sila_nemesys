@@ -7,7 +7,7 @@ ________________________________________________________________________
 
 :details: PumpUnitController:
     Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump.
-           
+
 :file:    PumpUnitController_servicer.py
 :authors: Florian Meinicke
 
@@ -53,18 +53,21 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
     implementation: Union[PumpUnitControllerSimulation, PumpUnitControllerReal]
     simulation_mode: bool
 
-    def __init__(self, simulation_mode: bool = True):
+    def __init__(self, pump, simulation_mode: bool = True):
         """
         Class initialiser
 
+        :param pump: A valid `qxmixpump` for this service to use
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
 
+        self.pump = pump
+
         self.simulation_mode = simulation_mode
         if simulation_mode:
-            self._inject_implementation(PumpUnitControllerSimulation())
+            self.switch_to_simulation_mode()
         else:
-            self._inject_implementation(PumpUnitControllerReal())
+            self.switch_to_real_mode()
 
     def _inject_implementation(self,
                                implementation: Union[PumpUnitControllerSimulation,
@@ -86,41 +89,41 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
 
     def switch_to_real_mode(self):
         self.simulation_mode = False
-        self._inject_implementation(PumpUnitControllerReal())
+        self._inject_implementation(PumpUnitControllerReal(self.pump))
 
     def SetFlowUnit(self, request, context) -> pb2.SetFlowUnit_Responses:
         """
         Executes the unobservable command Set Flow Unit
             Sets the flow unit for the pump. The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.FlowUnit (FlowUnit): The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
+
         logging.debug(
             "SetFlowUnit called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.SetFlowUnit(request, context)
-    
+
     def SetVolumeUnit(self, request, context) -> pb2.SetVolumeUnit_Responses:
         """
         Executes the unobservable command Set Volume Unit
             Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.VolumeUnit (Volume Unit): The volume unit to set. It has to be something like "ml" or "µl", for instance.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
+
         logging.debug(
             "SetVolumeUnit called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
@@ -132,38 +135,38 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
         """
         Requests the observable property Flow Unit
             The currently used flow unit.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.FlowUnit (Flow Unit): The currently used flow unit.
         """
-    
+
         logging.debug(
             "Property FlowUnit requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_FlowUnit(request, context)
-    
-    
+
+
     def Subscribe_VolumeUnit(self, request, context) -> pb2.Subscribe_VolumeUnit_Responses:
         """
         Requests the observable property Volume Unit
             The currently used volume unit.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.VolumeUnit (Volume Unit): The currently used volume unit.
         """
-    
+
         logging.debug(
             "Property VolumeUnit requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_VolumeUnit(request, context)
-    
+

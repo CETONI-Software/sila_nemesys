@@ -33,8 +33,14 @@ import logging
 import uuid
 import time
 
+# import qmixsdk
+from qmixsdk import qmixpump
+
+import PumpUnitController.unit_conversion as uc
+
 # import SiLA2 library
 import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.sila_error_handling as sila_error
 
 # import gRPC modules for this feature
 from .gRPC import PumpUnitController_pb2 as pb2
@@ -51,154 +57,108 @@ class PumpUnitControllerReal:
         This is a test service for neMESYS syringe pumps via SiLA2
     """
 
-    def __init__(self):
+    def __init__(self, pump: qmixpump.Pump):
         """Class initialiser"""
 
         logging.debug('Started server in mode: {mode}'.format(mode='Real'))
 
-    def _get_command_state(self, command_uuid: str) -> fwpb2.ExecutionInfo:
-        """
-
-        :param command_uuid: The uuid of the command for which to return the current state
-
-        :return: An execution info object with the current command state
-        """
-
-        #: Enumeration of fwpb2.ExecutionInfo.CommandStatus
-        command_status = fwpb2.ExecutionInfo.CommandStatus.waiting
-        #: Real fwpb2.Real(0...1)
-        command_progress = None
-        #: Duration fwpb2.Duration(seconds=<seconds>, nanos=<nanos>)
-        command_estimated_remaining = None
-        #: Duration fwpb2.Duration(seconds=<seconds>, nanos=<nanos>)
-        command_lifetime_of_execution = None
-
-        # just return a default in this example
-        return fwpb2.ExecutionInfo(
-            commandStatus=command_status,
-            progressInfo=(
-                command_progress if command_progress is not None else None
-            ),
-            estimatedRemainingTime=(
-                command_estimated_remaining if command_estimated_remaining is not None else None
-            ),
-            updatedLifetimeOfExecution=(
-                command_lifetime_of_execution if command_lifetime_of_execution is not None else None
-            )
-        )
+        self.pump = pump
 
     def SetFlowUnit(self, request, context) -> pb2.SetFlowUnit_Responses:
         """
         Executes the unobservable command Set Flow Unit
             Sets the flow unit for the pump. The flow unit defines the unit to be used for all flow values passed to or retrieved from the pump.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.FlowUnit (FlowUnit): The flow unit to set. It has to something like "ml/s" or "µl/s", for instance.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
-        # initialise the return value
-        return_value = None
-    
-        # TODO:
-        #   Add implementation of Real for command SetFlowUnit here and write the resulting response
-        #   in return_value
-    
-        # fallback to default
-        if return_value is None:
-            return_value = pb2.SetFlowUnit_Responses(
-                **default_dict['SetFlowUnit_Responses']
-            )
-    
-        return return_value
-    
+
+        try:
+            requested_volume_unit, requested_time_unit = request.FlowUnit.value.split("/")
+            prefix, volume_unit, time_unit = uc.evaluate_units(requested_volume_unit,
+                                                               requested_time_unit)
+        except ValueError as err:
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter="FlowUnit",
+                cause="The given flow unit is malformed. It has to be something like 'ml/s' for instance."
+            ))
+        except uc.UnitConversionError as err:
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter=err.param, cause=err.message
+            ))
+        else:
+            self.pump.set_flow_unit(prefix, volume_unit, time_unit)
+        return pb2.SetFlowUnit_Responses()
+
+
     def SetVolumeUnit(self, request, context) -> pb2.SetVolumeUnit_Responses:
         """
         Executes the unobservable command Set Volume Unit
             Sets the default volume unit. The volume unit defines the unit to be used for all volume values passed to or retrieved from the pump.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.VolumeUnit (Volume Unit): The volume unit to set. It has to be something like "ml" or "µl", for instance.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
-        # initialise the return value
-        return_value = None
-    
-        # TODO:
-        #   Add implementation of Real for command SetVolumeUnit here and write the resulting response
-        #   in return_value
-    
-        # fallback to default
-        if return_value is None:
-            return_value = pb2.SetVolumeUnit_Responses(
-                **default_dict['SetVolumeUnit_Responses']
-            )
-    
-        return return_value
+
+        try:
+            prefix, volume_unit = uc.evaluate_units(request.VolumeUnit.value)
+        except uc.UnitConversionError as err:
+            sila_error.raiseRPCError(context, sila_error.getValidationError(
+                parameter=err.param, cause=err.message
+            ))
+        else:
+            self.pump.set_volume_unit(prefix, volume_unit)
+        return pb2.SetVolumeUnit_Responses()
 
     def Subscribe_FlowUnit(self, request, context) -> pb2.Subscribe_FlowUnit_Responses:
         """
         Requests the observable property Flow Unit
             The currently used flow unit.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response object with the following fields:
             request.FlowUnit (Flow Unit): The currently used flow unit.
         """
-    
-        # initialise the return value
-        return_value: pb2.Subscribe_FlowUnit_Responses = None
-    
-        # create the default value
-        if return_value is None:
-            return_value = pb2.Subscribe_FlowUnit_Responses(
-                **default_dict['Subscribe_FlowUnit_Responses']
-            )
-    
-        # we could use a timeout here if we wanted
-        while True:
-            # TODO:
-            #   Add implementation of Real for property FlowUnit here and write the resulting
-            #   response in return_value
-    
-            yield return_value
-    
-    
+
+        prefix, volume_unit, time_unit = self.pump.get_flow_unit()
+        prefix_string = uc.prefix_to_string(prefix)
+        volume_unit_string = "l"
+        time_unit_string = uc.time_unit_to_string(time_unit)
+
+        yield pb2.Subscribe_FlowUnit_Responses(FlowUnit=fwpb2.String(
+            value=prefix_string + volume_unit_string + "/" + time_unit_string
+        ))
+
     def Subscribe_VolumeUnit(self, request, context) -> pb2.Subscribe_VolumeUnit_Responses:
         """
         Requests the observable property Volume Unit
             The currently used volume unit.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response object with the following fields:
             request.VolumeUnit (Volume Unit): The currently used volume unit.
         """
-    
-        # initialise the return value
-        return_value: pb2.Subscribe_VolumeUnit_Responses = None
-    
-        # create the default value
-        if return_value is None:
-            return_value = pb2.Subscribe_VolumeUnit_Responses(
-                **default_dict['Subscribe_VolumeUnit_Responses']
-            )
-    
-        # we could use a timeout here if we wanted
+
         while True:
-            # TODO:
-            #   Add implementation of Real for property VolumeUnit here and write the resulting
-            #   response in return_value
-    
-            yield return_value
-    
+            prefix, volume_unit = self.pump.get_volume_unit()
+            prefix_string = uc.prefix_to_string(prefix)
+            volume_unit_string = "l"
+
+            yield pb2.Subscribe_VolumeUnit_Responses(
+                VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string)
+            )
+
+            # we add a small delay to give the client a chance to keep up.
+            time.sleep(0.5)

@@ -11,7 +11,7 @@ ________________________________________________________________________
     drive's current state (i.e. enabled/disabled).
     The initialization has to be successful in order for the pump to work correctly and dose fluids. If the
     initialization fails, the StandardExecutionError InitializationFailed is thrown.
-           
+
 :file:    PumpDriveControlService_servicer.py
 :authors: Florian Meinicke
 
@@ -57,18 +57,23 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
     implementation: Union[PumpDriveControlServiceSimulation, PumpDriveControlServiceReal]
     simulation_mode: bool
 
-    def __init__(self, simulation_mode: bool = True):
+    def __init__(self, pump, sila2_conf, simulation_mode: bool = True):
         """
         Class initialiser
 
+        :param pump: A valid `qxmixpump` for this service to use
+        :param sila2_conf: The config of the server
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
 
+        self.pump = pump
+        self.sila2_conf = sila2_conf
+
         self.simulation_mode = simulation_mode
         if simulation_mode:
-            self._inject_implementation(PumpDriveControlServiceSimulation())
+            self.switch_to_simulation_mode()
         else:
-            self._inject_implementation(PumpDriveControlServiceReal())
+            self.switch_to_real_mode()
 
     def _inject_implementation(self,
                                implementation: Union[PumpDriveControlServiceSimulation,
@@ -90,61 +95,61 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
 
     def switch_to_real_mode(self):
         self.simulation_mode = False
-        self._inject_implementation(PumpDriveControlServiceReal())
+        self._inject_implementation(PumpDriveControlServiceReal(self.pump, self.sila2_conf))
 
     def InitializePumpDrive(self, request, context) -> pb2.InitializePumpDrive_Responses:
         """
         Executes the unobservable command Initialize Pump Drive
             Initialize the pump drive (e.g. by executing a reference move).
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.Success (Success): A boolean value where false represents a failed initialisation and true represents a successful initialisation.
         """
-    
+
         logging.debug(
             "InitializePumpDrive called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.InitializePumpDrive(request, context)
-    
+
     def EnablePumpDrive(self, request, context) -> pb2.EnablePumpDrive_Responses:
         """
         Executes the unobservable command Enable Pump Drive
             Set the pump into enabled state.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
+
         logging.debug(
             "EnablePumpDrive called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.EnablePumpDrive(request, context)
-    
+
     def DisablePumpDrive(self, request, context) -> pb2.DisablePumpDrive_Responses:
         """
         Executes the unobservable command Disable Pump Drive
             Set the pump into disabled state.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
-    
+
         logging.debug(
             "DisablePumpDrive called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
@@ -156,38 +161,38 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
         """
         Requests the observable property Pump Drive State
             The current state of the pump. This is either enabled or disabled. Only if the sate is enabled, the pump can dose fluids.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.PumpDriveState (Pump Drive State): The current state of the pump. This is either enabled or disabled. Only if the sate is enabled, the pump can dose fluids.
         """
-    
+
         logging.debug(
             "Property PumpDriveState requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_PumpDriveState(request, context)
-    
-    
+
+
     def Subscribe_FaultState(self, request, context) -> pb2.Subscribe_FaultState_Responses:
         """
         Requests the observable property Fault State
             Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling EnablePumpDrive.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.FaultState (Fault State): Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling EnablePumpDrive.
         """
-    
+
         logging.debug(
             "Property FaultState requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_FaultState(request, context)
-    
+

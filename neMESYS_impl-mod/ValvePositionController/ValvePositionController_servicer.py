@@ -8,7 +8,7 @@ ________________________________________________________________________
 :details: ValvePositionController:
     Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time
     to obtain the current valve position.
-           
+
 :file:    ValvePositionController_servicer.py
 :authors: Florian Meinicke
 
@@ -54,18 +54,22 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
     implementation: Union[ValvePositionControllerSimulation, ValvePositionControllerReal]
     simulation_mode: bool
 
-    def __init__(self, simulation_mode: bool = True):
+    def __init__(self, bus, pump, simulation_mode: bool = True):
         """
         Class initialiser
 
+        :param bus: A valid `qxmixbus` for this service to use
+        :param pump: A valid `qxmixpump` for this service to use
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
 
+        self.pump = pump
+
         self.simulation_mode = simulation_mode
         if simulation_mode:
-            self._inject_implementation(ValvePositionControllerSimulation())
+            self.switch_to_simulation_mode()
         else:
-            self._inject_implementation(ValvePositionControllerReal())
+            self.switch_to_real_mode()
 
     def _inject_implementation(self,
                                implementation: Union[ValvePositionControllerSimulation,
@@ -87,41 +91,41 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
 
     def switch_to_real_mode(self):
         self.simulation_mode = False
-        self._inject_implementation(ValvePositionControllerReal())
+        self._inject_implementation(ValvePositionControllerReal(self.pump))
 
     def SwitchToPosition(self, request, context) -> pb2.SwitchToPosition_Responses:
         """
         Executes the unobservable command Switch To Position
             Switches the valve to the specified position. The given position has to be less than the NumberOfPositions or else a ValidationError is thrown.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.Position (Position): The target position that the valve should be switched to.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.Success (Success): A boolean value where false represents a failed command execution and true represents a successful command execution.
         """
-    
+
         logging.debug(
             "SwitchToPosition called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.SwitchToPosition(request, context)
-    
+
     def TogglePosition(self, request, context) -> pb2.TogglePosition_Responses:
         """
         Executes the unobservable command Toogle Position
             This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: The return object defined for the command with the following fields:
             request.Success (Success): A boolean value where false represents a failed command execution and true represents a successful command execution.
         """
-    
+
         logging.debug(
             "TogglePosition called in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
@@ -133,37 +137,37 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
         """
         Requests the unobservable property Number Of Positions
             The number of the valve positions available.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response object with the following fields:
             request.NumberOfPositions (Number Of Positions): The number of the valve positions available.
         """
-    
+
         logging.debug(
             "Property NumberOfPositions requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Get_NumberOfPositions(request, context)
-    
+
     def Subscribe_Position(self, request, context) -> pb2.Subscribe_Position_Responses:
         """
         Requests the observable property Position
             The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
-    
+
         :returns: A response stream with the following fields:
             request.Position (Position): The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
         """
-    
+
         logging.debug(
             "Property Position requested in {current_mode} mode".format(
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
         return self.implementation.Subscribe_Position(request, context)
-    
+

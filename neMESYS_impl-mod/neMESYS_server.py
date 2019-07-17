@@ -8,7 +8,7 @@ ________________________________________________________________________
 
 :details: neMESYS:
     This is a test service for neMESYS syringe pumps via SiLA2
-           
+
 :file:    neMESYS_server.py
 :authors: Florian Meinicke
 
@@ -28,8 +28,14 @@ ________________________________________________________________________
 """
 __version__ = "0.0.1"
 
+import os
 import logging
+import coloredlogs
 import argparse
+
+# import qmixsdk
+from qmixsdk import qmixbus
+from qmixsdk import qmixpump
 
 # Import the main SiLA library
 from sila2lib.sila_server import SiLA2Server
@@ -88,37 +94,52 @@ class neMESYSServer(SiLA2Server):
             )
         )
 
+        # connect to the QmixBUS and enable the pump drive
+        self.connect_to_bus_and_enable_pump()
+
         # registering features
         #  Register PumpDriveControlService
-        self.PumpDriveControlService_servicer = PumpDriveControlService(simulation_mode=simulation_mode)
+        self.PumpDriveControlService_servicer = PumpDriveControlService(
+            pump=self.pump,
+            sila2_conf=self.sila2_config,
+            simulation_mode=simulation_mode)
         PumpDriveControlService_pb2_grpc.add_PumpDriveControlServiceServicer_to_server(
             self.PumpDriveControlService_servicer,
             self.grpc_server
         )
         self.addFeature('PumpDriveControlService', 'meta')
         #  Register PumpUnitController
-        self.PumpUnitController_servicer = PumpUnitController(simulation_mode=simulation_mode)
+        self.PumpUnitController_servicer = PumpUnitController(
+            pump=self.pump,
+            simulation_mode=simulation_mode)
         PumpUnitController_pb2_grpc.add_PumpUnitControllerServicer_to_server(
             self.PumpUnitController_servicer,
             self.grpc_server
         )
         self.addFeature('PumpUnitController', 'meta')
         #  Register PumpFluidDosingService
-        self.PumpFluidDosingService_servicer = PumpFluidDosingService(simulation_mode=simulation_mode)
+        self.PumpFluidDosingService_servicer = PumpFluidDosingService(
+            pump=self.pump,
+            simulation_mode=simulation_mode)
         PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(
             self.PumpFluidDosingService_servicer,
             self.grpc_server
         )
         self.addFeature('PumpFluidDosingService', 'meta')
         #  Register SyringeConfigurationController
-        self.SyringeConfigurationController_servicer = SyringeConfigurationController(simulation_mode=simulation_mode)
+        self.SyringeConfigurationController_servicer = SyringeConfigurationController(
+            pump=self.pump,
+            simulation_mode=simulation_mode)
         SyringeConfigurationController_pb2_grpc.add_SyringeConfigurationControllerServicer_to_server(
             self.SyringeConfigurationController_servicer,
             self.grpc_server
         )
         self.addFeature('SyringeConfigurationController', 'meta')
         #  Register ValvePositionController
-        self.ValvePositionController_servicer = ValvePositionController(simulation_mode=simulation_mode)
+        self.ValvePositionController_servicer = ValvePositionController(
+            bus=self.bus,
+            pump=self.pump,
+            simulation_mode=simulation_mode)
         ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(
             self.ValvePositionController_servicer,
             self.grpc_server
@@ -129,7 +150,77 @@ class neMESYSServer(SiLA2Server):
 
         # starting and running the gRPC/SiLA2 server
         self.run()
-        
+
+        print()
+
+        self.save_drive_position_counter()
+        self.stop_and_close_bus()
+
+
+    def connect_to_bus_and_enable_pump(self):
+        """
+            Loads a valid Qmix configuration, connects to the bus,
+            retrieves the pump and enables it.
+        """
+        logging.debug("Opening bus")
+
+        self.bus = qmixbus.Bus()
+        # let's see if that helps...
+        # NOTE: probably caused by a pump in fault state.
+        # TBD in the future with another Feature
+        try:
+            self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
+        except qmixbus.DeviceError as err:
+            logging.error("qmixbus.open(): %s", err)
+            logging.info("trying again...")
+            self.bus.open("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA", 0)
+
+        self.pump = qmixpump.Pump()
+        self.pump.lookup_by_name("neMESYS_Low_Pressure_1_Pump")
+
+        # let's see if that helps...
+        # NOTE: probably caused by a pump in fault state.
+        # TBD in the future with another Feature
+        try:
+            self.bus.start()
+        except qmixbus.DeviceError as err:
+            logging.error("qmixbus.start(): %s", err)
+            logging.info("trying again...")
+            self.bus.start()
+
+        if self.pump.is_in_fault_state():
+            self.pump.clear_fault()
+            logging.debug("pump was in fault state")
+        if not self.pump.is_enabled():
+            self.pump.enable(True)
+            logging.debug("pump was in disabled state")
+
+
+    def stop_and_close_bus(self):
+        """ Stops and closes the bus communication.
+        """
+        logging.debug("Closing bus...")
+        self.bus.stop()
+        self.bus.close()
+
+    def save_drive_position_counter(self):
+        """Saves the current drive position counter so that it can be restored next time.
+        """
+        config_dir = os.path.join(os.environ.get('APPDATA') or os.path.join(
+            os.environ['HOME'], '.config', 'sila2', ), self.server_name)
+        config_filename = os.path.join(config_dir, self.server_name + '.conf')
+
+        pump_name = self.pump.get_pump_name()
+        drive_pos_counter = self.pump.get_position_counter_value()
+        self.sila2_config[pump_name] = {}
+        self.sila2_config[pump_name]["drive_pos_counter"] = str(drive_pos_counter)
+        logging.debug("Saving drive position counter (%d) to file: %s",
+                      drive_pos_counter, config_filename)
+
+        with open(config_filename, "w") as config_file:
+            self.sila2_config.write(config_file)
+
+
     def switchToSimMode(self):
         """Switch to simulation mode of the server"""
 
@@ -168,13 +259,15 @@ def parse_command_line():
                         default="This is a test service for neMESYS syringe pumps via SiLA2", help='SiLA server description')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
     return parser.parse_args()
-    
-        
+
+
 if __name__ == '__main__':
     # or use logging.ERROR for less output
-    logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
-    
+    coloredlogs.install(fmt='%(asctime)s %(levelname)s| %(module)s.%(funcName)s: %(message)s',
+                        level=logging.DEBUG)
+    # logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
+
     parsed_args = parse_command_line()
 
     # generate SiLA2Server
-    sila_server = neMESYSServer(args=parsed_args)
+    sila_server = neMESYSServer(args=parsed_args, simulation_mode=False)
