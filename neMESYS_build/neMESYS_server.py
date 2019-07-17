@@ -213,16 +213,16 @@ class neMESYSServer(slss.SiLA2Server):
         """overwriting base class method"""
         self.simulation_mode = False
         self.PumpInitialisationService_servicer.injectImplementation(
-            PumpInitialisationServiceReal(self.bus, self.pump, self.sila2_config)
+            PumpInitialisationServiceReal(self.pump, self.sila2_config)
         )
         self.PumpUnitController_servicer.injectImplementation(
-            PumpUnitControllerReal(self.bus, self.pump)
+            PumpUnitControllerReal(self.pump)
         )
         self.PumpFluidDosingService_servicer.injectImplementation(
-            PumpFluidDosingServiceReal(self.bus, self.pump)
+            PumpFluidDosingServiceReal(self.pump)
         )
         self.SyringeConfigurationController_servicer.injectImplementation(
-            SyringeConfigurationControllerReal(self.bus, self.pump)
+            SyringeConfigurationControllerReal(self.pump)
         )
         self.ValvePositionController_servicer.injectImplementation(
             ValvePositionControllerReal(self.bus, self.pump)

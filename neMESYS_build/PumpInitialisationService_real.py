@@ -52,11 +52,10 @@ class PumpInitialisationServiceReal():
 #            Allows to initialise a pump (e.g. by executiong a reference move).
 #            The initialisation has to be successful in order for the pump to work correctly and dose fluids. If the initialisation fails, the StandardExecutionError InitialisationFailed is thrown.
 #     """
-    def __init__ (self, bus, pump, sila2_conf):
+    def __init__ (self, pump, sila2_conf):
         """ PumpInitialisationServiceReal class initialiser """
         logging.debug("init class: PumpInitialisationServiceReal ")
 
-        self.bus = bus
         self.pump = pump
         self.sila2_conf = sila2_conf
 

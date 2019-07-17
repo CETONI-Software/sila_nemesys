@@ -68,11 +68,10 @@ class PumpFluidDosingServiceReal():
 #        The flow rate can be negative. In this case the pump aspirates the fluid instead of dispensing. The flow rate has to be a value between MaxFlowRate and MinFlowRate. If the value is not within this range (hence is invalid) a ValidationError will be thrown.
 #        At any time the property CurrentSyringeFillLevel can be queried to see how much fluid is left in the syringe. Similarly the property CurrentFlowRate can be queried to get the current flow rate at which the pump is dosing.
 #     """
-    def __init__ (self, bus, pump):
+    def __init__ (self, pump):
         """ PumpFluidDosingServiceReal class initialiser """
         logging.debug("init class: PumpFluidDosingServiceReal ")
 
-        self.bus = bus
         self.pump = pump
 
         self.max_fill_level = self.pump.get_volume_max()

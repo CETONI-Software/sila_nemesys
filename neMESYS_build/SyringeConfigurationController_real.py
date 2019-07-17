@@ -34,6 +34,9 @@ __version__ = "0.0.1"
 
 import logging
 import uuid
+
+import sila2lib.sila_error_handling as sila_error
+
 # importing protobuf and gRPC handler/stubs
 import sila2lib.SiLAFramework_pb2 as fwpb2
 import SyringeConfigurationController_pb2 as pb2
@@ -47,11 +50,10 @@ class SyringeConfigurationControllerReal():
     """ SyringeConfigurationControllerReal -
 #            Syringe pump specific functions for configuration.
 #     """
-    def __init__ (self, bus, pump):
+    def __init__(self, pump):
         """ SyringeConfigurationControllerReal class initialiser """
         logging.debug("init class: SyringeConfigurationControllerReal ")
 
-        self.bus = bus
         self.pump = pump
 
 
@@ -64,36 +66,53 @@ class SyringeConfigurationControllerReal():
             :param context: gRPC context
             :param request.InnerDiameter: Inner diameter of the syringe tube in millimetres.
             :param request.MaxPistonStroke: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
-
         """
         logging.debug("SetSyringeParameters - Mode: real ")
 
-        #~ return_val = request.InnerDiameter.value
-        #~ return pb2.SetSyringeParameters_Responses()
+        def check_less_than_zero(param, param_str: str):
+            if param < 0:
+                sila_error.raiseRPCError(context, sila_error.getValidationError(
+                    param_str,
+                    cause="The " + param_str + " cannot be less than 0",
+                    action="Adjust the " + param_str + " to be greater than 0."
+                ))
+
+        requested_inner_diameter = request.InnerDiameter.value
+        check_less_than_zero(requested_inner_diameter, "InnerDiameter")
+        requested_piston_stroke = request.MaxPistonStroke.value
+        check_less_than_zero(requested_piston_stroke, "MaxPistonStroke")
+
+        try:
+            self.pump.set_syringe_param(requested_inner_diameter, requested_piston_stroke)
+        except qmixbus.DeviceError as err:
+            logging.error("QmixSDK error: %s", err)
+            # sila_error.raiseRPCError(context, sila_error.getStandardExecutionError())
+        else:
+            return pb2.SetSyringeParameters_Responses()
 
     def Subscribe_InnerDiameter(self, request, context):
         """Inner diameter of the syringe tube in millimetres.
             :param request: gRPC request
             :param context: gRPC context
             :param response.InnerDiameter: Inner diameter of the syringe tube in millimetres.
-
         """
         logging.debug("Subscribe_InnerDiameter - Mode: real ")
 
-        #~ yield_val = request.InnerDiameter.value
-        #~ pb2.Subscribe_InnerDiameter_Responses( InnerDiameter=fwpb2.Real(value=0.0) )
+        yield pb2.Subscribe_InnerDiameter_Responses(InnerDiameter=fwpb2.Real(
+            value=self.pump.get_syringe_param().inner_diameter_mm
+        ))
 
     def Subscribe_MaxPistonStroke(self, request, context):
         """The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
             :param request: gRPC request
             :param context: gRPC context
             :param response.MaxPistonStroke: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher.
-
         """
         logging.debug("Subscribe_MaxPistonStroke - Mode: real ")
 
-        #~ yield_val = request.MaxPistonStroke.value
-        #~ pb2.Subscribe_MaxPistonStroke_Responses( MaxPistonStroke=fwpb2.Real(value=0.0) )
+        yield pb2.Subscribe_MaxPistonStroke_Responses(MaxPistonStroke=fwpb2.Real(
+            value=self.pump.get_syringe_param().max_piston_stroke_mm
+        ))
 
 
 

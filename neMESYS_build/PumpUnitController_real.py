@@ -50,11 +50,10 @@ import unit_conversion as uc
 class PumpUnitControllerReal():
     """ PumpUnitControllerReal - Allows to control the currently used units for passing and retrieving flow rates and volumes to and from a pump. """
 
-    def __init__(self, bus, pump):
+    def __init__(self, pump):
         """ PumpUnitControllerReal class initialiser """
         logging.debug("init class: PumpUnitControllerReal ")
 
-        self.bus = bus
         self.pump = pump
 
     def SetFlowUnit(self, request, context):
