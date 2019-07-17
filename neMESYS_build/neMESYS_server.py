@@ -31,31 +31,36 @@ import os
 import logging
 import coloredlogs
 import argparse
-import pickle
 
 import sila2lib.sila_server as slss
 
-import PumpFluidDosingService_pb2
-import PumpFluidDosingService_pb2_grpc
-import PumpUnitController_pb2
-import PumpUnitController_pb2_grpc
 import PumpInitialisationService_pb2
 import PumpInitialisationService_pb2_grpc
+import PumpUnitController_pb2
+import PumpUnitController_pb2_grpc
+import PumpFluidDosingService_pb2
+import PumpFluidDosingService_pb2_grpc
+import SyringeConfigurationController_pb2
+import SyringeConfigurationController_pb2_grpc
 import ValvePositionController_pb2
 import ValvePositionController_pb2_grpc
 
 
-from PumpFluidDosingService_servicer import PumpFluidDosingService
-from PumpFluidDosingService_simulation import PumpFluidDosingServiceSimulation
-from PumpFluidDosingService_real import PumpFluidDosingServiceReal
+from PumpInitialisationService_servicer import PumpInitialisationService
+from PumpInitialisationService_simulation import PumpInitialisationServiceSimulation
+from PumpInitialisationService_real import PumpInitialisationServiceReal
 
 from PumpUnitController_servicer import PumpUnitController
 from PumpUnitController_simulation import PumpUnitControllerSimulation
 from PumpUnitController_real import PumpUnitControllerReal
 
-from PumpInitialisationService_servicer import PumpInitialisationService
-from PumpInitialisationService_simulation import PumpInitialisationServiceSimulation
-from PumpInitialisationService_real import PumpInitialisationServiceReal
+from PumpFluidDosingService_servicer import PumpFluidDosingService
+from PumpFluidDosingService_simulation import PumpFluidDosingServiceSimulation
+from PumpFluidDosingService_real import PumpFluidDosingServiceReal
+
+from SyringeConfigurationController_servicer import SyringeConfigurationController
+from SyringeConfigurationController_simulation import SyringeConfigurationControllerSimulation
+from SyringeConfigurationController_real import SyringeConfigurationControllerReal
 
 from ValvePositionController_servicer import ValvePositionController
 from ValvePositionController_simulation import ValvePositionControllerSimulation
@@ -64,6 +69,7 @@ from ValvePositionController_real import ValvePositionControllerReal
 # import qmixsdk
 from qmixsdk import qmixbus
 from qmixsdk import qmixpump
+
 
 class neMESYSServer(slss.SiLA2Server):
     """ Class doc """
@@ -76,24 +82,34 @@ class neMESYSServer(slss.SiLA2Server):
 
         """ Class initialiser """
         # registering features
-        self.PumpFluidDosingService_servicer = PumpFluidDosingService()
-        PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(
-            self.PumpFluidDosingService_servicer, self.grpc_server)
-        self.addFeature('PumpFluidDosingService', '.')
+        self.PumpInitialisationService_servicer = PumpInitialisationService()
+        PumpInitialisationService_pb2_grpc.add_PumpInitialisationServiceServicer_to_server(
+            self.PumpInitialisationService_servicer, self.grpc_server
+        )
+        self.addFeature('PumpInitialisationService', '.')
 
         self.PumpUnitController_servicer = PumpUnitController()
         PumpUnitController_pb2_grpc.add_PumpUnitControllerServicer_to_server(
-            self.PumpUnitController_servicer, self.grpc_server)
+            self.PumpUnitController_servicer, self.grpc_server
+        )
         self.addFeature('PumpUnitController', '.')
 
-        self.PumpInitialisationService_servicer = PumpInitialisationService()
-        PumpInitialisationService_pb2_grpc.add_PumpInitialisationServiceServicer_to_server(
-            self.PumpInitialisationService_servicer, self.grpc_server)
-        self.addFeature('PumpInitialisationService', '.')
+        self.PumpFluidDosingService_servicer = PumpFluidDosingService()
+        PumpFluidDosingService_pb2_grpc.add_PumpFluidDosingServiceServicer_to_server(
+            self.PumpFluidDosingService_servicer, self.grpc_server
+        )
+        self.addFeature('PumpFluidDosingService', '.')
+
+        self.SyringeConfigurationController_servicer = SyringeConfigurationController()
+        SyringeConfigurationController_pb2_grpc.add_SyringeConfigurationControllerServicer_to_server(
+            self.SyringeConfigurationController_servicer, self.grpc_server
+        )
+        self.addFeature('SyringeConfigurationController', '.')
 
         self.ValvePositionController_servicer = ValvePositionController()
         ValvePositionController_pb2_grpc.add_ValvePositionControllerServicer_to_server(
-            self.ValvePositionController_servicer, self.grpc_server)
+            self.ValvePositionController_servicer, self.grpc_server
+        )
         self.addFeature('ValvePositionController', '.')
 
         self.connect_to_bus_and_enable_pump()
@@ -174,14 +190,21 @@ class neMESYSServer(slss.SiLA2Server):
     def switchToSimMode(self):
         """overwriting base class method"""
         self.simulation_mode = True
-        self.PumpFluidDosingService_servicer.injectImplementation(
-            PumpFluidDosingServiceSimulation()) # or use 'None' for default simulation implementation
-        self.PumpUnitController_servicer.injectImplementation(
-            PumpUnitControllerSimulation()) # or use 'None' for default simulation implementation
         self.PumpInitialisationService_servicer.injectImplementation(
-            PumpInitialisationServiceSimulation()) # or use 'None' for default simulation implementation
+            PumpInitialisationServiceSimulation()
+        ) # or use 'None' for default simulation implementation
+        self.PumpUnitController_servicer.injectImplementation(
+            PumpUnitControllerSimulation()
+        ) # or use 'None' for default simulation implementation
+        self.PumpFluidDosingService_servicer.injectImplementation(
+            PumpFluidDosingServiceSimulation()
+        ) # or use 'None' for default simulation implementation
+        self.SyringeConfigurationController_servicer.injectImplementation(
+            SyringeConfigurationControllerSimulation()
+        ) # or use 'None' for default simulation implementation
         self.ValvePositionController_servicer.injectImplementation(
-            ValvePositionControllerSimulation()) # or use 'None' for default simulation implementation
+            ValvePositionControllerSimulation()
+        ) # or use 'None' for default simulation implementation
 
         success = True
         logging.debug("switched to sim mode {}".format(success) )
@@ -189,14 +212,21 @@ class neMESYSServer(slss.SiLA2Server):
     def switchToRealMode(self):
         """overwriting base class method"""
         self.simulation_mode = False
-        self.PumpFluidDosingService_servicer.injectImplementation(
-            PumpFluidDosingServiceReal(self.bus, self.pump))
-        self.PumpUnitController_servicer.injectImplementation(
-            PumpUnitControllerReal(self.bus, self.pump))
         self.PumpInitialisationService_servicer.injectImplementation(
-            PumpInitialisationServiceReal(self.bus, self.pump, self.sila2_config))
+            PumpInitialisationServiceReal(self.bus, self.pump, self.sila2_config)
+        )
+        self.PumpUnitController_servicer.injectImplementation(
+            PumpUnitControllerReal(self.bus, self.pump)
+        )
+        self.PumpFluidDosingService_servicer.injectImplementation(
+            PumpFluidDosingServiceReal(self.bus, self.pump)
+        )
+        self.SyringeConfigurationController_servicer.injectImplementation(
+            SyringeConfigurationControllerReal(self.bus, self.pump)
+        )
         self.ValvePositionController_servicer.injectImplementation(
-            ValvePositionControllerReal(self.bus, self.pump))
+            ValvePositionControllerReal(self.bus, self.pump)
+        )
 
         success = True
         logging.debug("switched to real mode {}".format(success) )
@@ -226,7 +256,7 @@ if __name__ == '__main__':
 
     parsed_args = parseCommandLine()
 
-    if parsed_args.server_name :
+    if parsed_args.server_name:
         # mv to class
         logging.info("starting SiLA2 server with server name: {server_name}".format(server_name=parsed_args.server_name))
 

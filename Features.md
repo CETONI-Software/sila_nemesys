@@ -163,6 +163,38 @@ observable: no
 - none
 
 
+
+# SyringeConfigurationController
+Syringe pump specific functions for configuration.
+
+## Commands
+### `SetSyringeParameters`
+Set syringe parameters.  
+If you change the syringe in one device, you need to setup the new syringe parameters to get proper conversion of flow rate und volume units. 
+
+Parameters:
+- `InnerDiameter`: Inner diameter of the syringe tube in millimetres. 
+- `MaxPistonStroke`: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube. The maximum piston stroke limits the maximum travel range of the syringe pump pusher. 
+
+Response:
+- none
+
+observable: no
+
+
+## Properties
+- `InnerDiameter`: Inner diameter of the syringe tube in millimetres.
+    * observable: Yes
+- `MaxPistonStroke`: The maximum piston stroke defines the maximum position the piston can be moved to before it slips out of the syringe tube.
+    * observable: Yes
+
+## Errors
+### DefinedExecutionErrors
+- none
+
+### UndefinedExecutionErrors
+- none
+
 # ValvePositionController
 Allows to specify a certain logical position for a valve. The [`CurrentPosition`](#Properties-2) property can be querried at any time to obtain the current valve position.  
 
