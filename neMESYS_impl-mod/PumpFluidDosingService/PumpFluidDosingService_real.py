@@ -105,8 +105,7 @@ class PumpFluidDosingServiceReal:
             logging.error("Requested Volume Out Of Range - Volume: %5.2f", volume)
             sila_error.raiseRPCError(context, sila_error.getValidationError(
                 parameter="Volume",
-                cause=fMaxSyringeFillLevel
-MaxSyringeFillLevel"The volume requested in DoseVolume is greater than {max_fill_level} or less than 0.",
+                cause=f"The volume requested in DoseVolume is greater than {max_fill_level} or less than 0.",
                 action="Adjust the Volume parameter to fit in the specified range."
             ))
 
