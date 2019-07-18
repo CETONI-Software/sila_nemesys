@@ -58,25 +58,16 @@ class ShutdownControllerReal:
         This is a test service for neMESYS syringe pumps via SiLA2
     """
 
-    def __init__(self, bus, pump, server_name, sila2_conf):
+    def __init__(self, pump, server_name, sila2_conf):
         """Class initialiser"""
 
         logging.debug('Started server in mode: {mode}'.format(mode='Real'))
 
-        self.bus = bus
         self.pump = pump
         self.server_name = server_name
         self.sila2_config = sila2_conf
 
         self.command_uuid = ""
-
-    def _stop_and_close_bus(self):
-        """
-        Stops and closes the bus communication.
-        """
-        logging.debug("Closing bus...")
-        self.bus.stop()
-        self.bus.close()
 
     def _save_drive_position_counter(self):
         """
@@ -145,10 +136,6 @@ class ShutdownControllerReal:
                 commandStatus=fwpb2.ExecutionInfo.CommandStatus.running
             )
             self._save_drive_position_counter()
-            yield fwpb2.ExecutionInfo(
-                commandStatus=fwpb2.ExecutionInfo.CommandStatus.running
-            )
-            self._stop_and_close_bus()
         except qmixbus.DeviceError as err:
             logging.error("QmixSDK Error: %s", err)
             yield fwpb2.ExecutionInfo(

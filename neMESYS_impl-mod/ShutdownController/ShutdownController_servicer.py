@@ -55,18 +55,16 @@ class ShutdownController(pb2_grpc.ShutdownControllerServicer):
     implementation: Union[ShutdownControllerSimulation, ShutdownControllerReal]
     simulation_mode: bool
 
-    def __init__(self, bus, pump, server_name, sila2_conf, simulation_mode: bool = True):
+    def __init__(self, pump, server_name, sila2_conf, simulation_mode: bool = True):
         """
         Class initialiser
 
         :param bus: A valid `qxmixbus` for this service to use
-        :param pump: A valid `qxmixpump` for this service to use
         :param server_name: The name of the SiLA server
         :param sila2_conf: The config of the server
         :param simulation_mode: Sets whether at initialisation the simulation mode is active or the real mode
         """
 
-        self.bus = bus
         self.pump = pump
         self.server_name = server_name
         self.sila2_conf = sila2_conf
@@ -98,7 +96,6 @@ class ShutdownController(pb2_grpc.ShutdownControllerServicer):
     def switch_to_real_mode(self):
         self.simulation_mode = False
         self._inject_implementation(ShutdownControllerReal(
-            bus=self.bus,
             pump=self.pump,
             server_name=self.server_name,
             sila2_conf=self.sila2_conf
@@ -108,7 +105,7 @@ class ShutdownController(pb2_grpc.ShutdownControllerServicer):
         """
         Executes the observable command Shutdown
             Initiates the shutdown routine. If no errors occured during the shutdown process the server shoudl be considered ready to be physically shutdown (i.e. the device can be shutdown/powered off).
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
