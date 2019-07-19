@@ -27,7 +27,7 @@ ________________________________________________________________________
 __version__ = "0.0.1"
 
 import time
-from argparse import Namespace
+import argparse
 import logging
 import coloredlogs
 
@@ -109,6 +109,19 @@ def stop_and_close_bus(bus: qmixbus.Bus):
     bus.stop()
     bus.close()
 
+def parse_command_line():
+    """
+    Just looking for commandline arguments
+    """
+    parser = argparse.ArgumentParser(
+        description="Launches as many SiLA2 neMESYS servers as there are pumps in the configuraion")
+    parser.add_argument('config_path', metavar='configuration_path', type=str,
+                        help="""a path to a valid Qmix configuration folder
+                             (If you don't have a configuration yet,
+                             create one with the QmixElements software first.)""")
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
+    return parser.parse_args()
+
 
 if __name__ == '__main__':
     # or use logging.ERROR for less output
@@ -116,7 +129,9 @@ if __name__ == '__main__':
                         level=logging.DEBUG)
     # logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
 
-    bus = open_bus("/mnt/hgfs/Win_Data/SiLA/NDM-SiLA") # TODO: read from cmd line
+    parsed_args = parse_command_line()
+
+    bus = open_bus(parsed_args.config_path)
     pumps = get_availabe_pumps()
     start_bus_and_enable_pumps(bus, pumps)
 
@@ -124,13 +139,13 @@ if __name__ == '__main__':
     BASE_PORT = 50051
     servers = []
     for pump in pumps:
-        args = Namespace(
+        args = argparse.Namespace(
             port=BASE_PORT + pumps.index(pump),
             server_name=pump.get_device_name().replace("_", " "),
             server_type="TestServer",
             description="This is a test service for neMESYS syringe pumps via SiLA2"
         )
-        server = neMESYSServer(args, pump, False)
+        server = neMESYSServer(args=args, qmix_pump=pump, simulation_mode=False)
         server.run(block=False)
         servers += [server]
 
