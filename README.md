@@ -1,3 +1,5 @@
+![neMESYS SiLA2 Logo](doc/sila_nemesys_logo.png) 
+
 # neMESYS SiLA2 driver
 This repository contains the official [SiLA2](https://sila-standard.com/) driver for the [neMESYS High Precision Syringe Pumps](https://www.cetoni.com/products/pumps). This SiLA2 driver is based on the [Qmix SDK for Python](https://github.com/CETONI-Software/qmixsdk-for-python) for device control of the neMESYS pumps.
 
