@@ -17,6 +17,7 @@ These SiLA2 drivers were developed under Linux (Ubuntu 19.04) and are therefore 
 
 ## Install required dependencies
 The SiLA2 drivers in this repository need the following dependencies to work correctly:
+* SocketCAN driver (either [SysTec](https://www.systec-electronic.com/en/company/support/device-driver/) or [IXXAT](https://www.ixxat.com/support/file-and-documents-download/drivers/socketcan-driver) depending on your CETONI base module)
 * QmixSDK for Python
 * SiLA2 Python Library
 * (gRPC Library + protobuf compiler `protoc`)
