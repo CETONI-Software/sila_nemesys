@@ -9,11 +9,8 @@ The folder **neMESYS_impl-mod** contains the SiLA2 driver for the
 [SiLA2 Python Library](https://gitlab.com/SiLA2/sila_python).
 
 # Getting Started
-----
-### Note:
-These SiLA2 drivers were developed under Linux (Ubuntu 19.04) and are therefore expected to work on Linux systems, pther operationg system should work as well, but have not been tested yet!
-
-----
+> ### Note:
+> These SiLA2 drivers were developed under Linux (Ubuntu 19.04) and are therefore expected to work on Linux systems, other operationg system should work as well, but have not been tested yet!
 
 ## Install required dependencies
 The SiLA2 drivers in this repository need the following dependencies to work correctly:
