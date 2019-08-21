@@ -20,12 +20,14 @@ The SiLA2 drivers in this repository need the following dependencies to work cor
 * (gRPC Library + protobuf compiler `protoc`)
 
 ### QmixSDK installation
-For instructions on how to install the QmixSDK for Python on your system and get a valid Qmix configuration for your pumps see the [QmixSDK Documentation](https://www.cetoni.de/fileadmin/user_upload/Documents/Manuals/QmixSDK/index.html)
+For instructions on how to install the QmixSDK for Python on your system and get a valid Qmix configuration for your pumps see the [QmixSDK Documentation](https://www.cetoni.de/fileadmin/user_upload/Documents/Manuals/QmixSDK/index.html).
 
 ### SiLA2 Python Library installation
+> Note: The SiLA2 Python Repository is currently under development since the SiLA2 standard itself is still not completely ready. There will definitely be some breaking changes in the near future, which might lead to equally big changes in this repository, as well.
+
 Follow the instructions in the [README.md](https://gitlab.com/SiLA2/sila_python) in the repository of the SiLA2 Python reference implementation (*Tip: If you want to use python virtualenv, set up a virtualenv **before** you run the installtion script and don't let the installer create one for you!*). This automatically installs the gRPC library and the protobuf compiler `protoc`. Now you are ready to use the driver in the `neMESYS_impl` directory and build it yourself, if you like to (See [Building the drivers](#building-the-drivers) for more details on how to build the drivers yourself).
 
-However, I recommend you use the improved version of the SiLA2 codegenerator. If you cloned the repository you need to checkout the corresponding branch `codegenerator-mod`. Again follow the instructions in the [README.md](https://gitlab.com/SiLA2/sila_python). Then change into the `sila_tools/SiLA2CodeGeneratorPackage/` directory and follow the installations instruction in this directory's [README.md](https://gitlab.com/SiLA2/sila_python/blob/codegenerator-mod/sila_tools/SiLA2CodeGeneratorPackage/README.md). To see if the installation is complete, run 
+However, I recommend you use the improved version of the SiLA2 code-generator. If you cloned the repository, you need to checkout the corresponding branch `codegenerator-mod`. Again follow the instructions in the [README.md](https://gitlab.com/SiLA2/sila_python). Then change into the `sila_tools/SiLA2CodeGeneratorPackage/` directory and follow the installation instruction in this directory's [README.md](https://gitlab.com/SiLA2/sila_python/blob/codegenerator-mod/sila_tools/SiLA2CodeGeneratorPackage/README.md). To see if the installation is complete, run 
 ```shell
 SiLA2CodeGenerator --help
 ```
@@ -34,6 +36,11 @@ SiLA2CodeGenerator --help
 As described above, the `neMESYS_impl*` directories already contain fully functioning SiLA2 drivers. The fastest way to get something up and running is by just running the `SiLA_neMESYS.py` script in the `neMESYS_impl-mod` directory giving it a path to a valid Qmix configuration folder:
 ```shell
 $ python3 SiLA_neMESYS.py ~/Documents/my_qmix_config
+```
+This requires you to have all necessary environment variables set (i.e. `$PATH`, `$PYTHON_PATH` and `$LD_LIBRARY_PATH`) to point to the correct paths of your QmixSDK's root directory, python directory and lib directory, respectively. See the [QmixSDK for Python Documentation](https://www.cetoni.de/fileadmin/user_upload/Documents/Manuals/QmixSDK/QmixSDK_Python.html) for more information on this.  
+If you don't have these variables set yet, you can also use the provided wrapper shell script in this repository. Before you use it, make sure the script uses the correct path to your QmixSDK installation. Simply edit the `$QMIXSDK_PATH` variable to point to the correct directory. Then you can run simply run the SiLA neMESYS server like this:
+```shell
+$ ../qmixsdk-py_wrapper.sh SiLA_neMESYS.py ~/Documents/my_qmix_config
 ```
 
 You can test and play around with the currently implemented SiLA2 Features by running the `neMESYS_impl-mod/neMESYS_Client.py` in a different terminal or you can use UniteLabs' SiLA Browser. You can download SiLA Browser from [here](http://www.unitelabs.ch/technology/plug-and-play/try-it-out). It runs as a web application in the browser (usually on port 8080) and should discover running SiLA2 neMESYS servers itself. If not, you can also manually enter the ports the SiLA2 neMESYS servers are running on (by default it's port 50051 and up, depending on the number of pumps you have).
