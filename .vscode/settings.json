@@ -1,15 +1,15 @@
 {
-    "python.pythonPath": "/home/user1/.virtualenvs/sila2_obs/bin/python3",
-    "python.linting.pylintPath": "/home/user1/.virtualenvs/sila2_obs/bin/pylint",
+    "python.pythonPath": "${env:HOME}/.virtualenvs/sila2/bin/python3",
+    "python.linting.pylintPath": "${env:HOME}/.virtualenvs/sila2/bin/pylint",
     "python.linting.pylintArgs": [
         "--init-hook",
-        "import sys; sys.path.append('/home/user1/.virtualenvs/sila2_obs/lib/python3.7/site-packages/sila2lib/'); sys.path.append('/home/user1/.virtualenvs/sila2_obs/lib/python3.7/site-packages/sila2codegen/'); sys.path.append('/home/user1/Documents/QmixSDK_Linux/python')"
+        "import sys; sys.path.append('${env:HOME}/.virtualenvs/sila2/lib/python3.7/site-packages/sila2lib/'); sys.path.append('${env:HOME}/.virtualenvs/sila2/lib/python3.7/site-packages/sila2codegen/'); sys.path.append('${env:HOME}/QmixSDK_Linux/python')"
     ],
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.autoComplete.extraPaths": [
-        "/home/user1/.virtualenvs/sila2_obs/lib/python3.7/site-packages/sila2lib/",
-        "/home/user1/.virtualenvs/sila2_obs/lib/python3.7/site-packages/sila2codegen/",
-        "/home/user1/Documents/QmixSDK_Linux/python"
+        "${env:HOME}/.virtualenvs/sila2/lib/python3.7/site-packages/sila2lib/",
+        "${env:HOME}/.virtualenvs/sila2/lib/python3.7/site-packages/sila2codegen/",
+        "${env:HOME}/QmixSDK_Linux/python"
     ],
 }
