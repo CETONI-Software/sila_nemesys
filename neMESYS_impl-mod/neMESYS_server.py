@@ -32,6 +32,7 @@ import os
 import logging
 import coloredlogs
 import argparse
+from configparser import ConfigParser
 
 # import qmixsdk
 from qmixsdk import qmixbus
@@ -99,11 +100,24 @@ class neMESYSServer(SiLA2Server):
             )
         )
 
+        # reading config file
+        config_dir = os.path.join(
+            os.environ.get('APPDATA') or os.path.join(
+                os.environ['HOME'],
+                '.config',
+                'sila2'
+            ),
+            self.server_name
+        )
+        config_filename = os.path.join(config_dir, self.server_name + '.conf')
+        sila2_config = ConfigParser()
+        sila2_config.read(config_filename)
+
         # registering features
         #  Register PumpDriveControlService
         self.PumpDriveControlService_servicer = PumpDriveControlService(
             pump=qmix_pump,
-            sila2_conf=self.sila2_config,
+            sila2_conf=sila2_config,
             simulation_mode=simulation_mode)
         PumpDriveControlService_pb2_grpc.add_PumpDriveControlServiceServicer_to_server(
             self.PumpDriveControlService_servicer,
@@ -150,7 +164,7 @@ class neMESYSServer(SiLA2Server):
         self.ShutdownController_servicer = ShutdownController(
             pump=qmix_pump,
             server_name=self.server_name,
-            sila2_conf=self.sila2_config,
+            sila2_conf=sila2_config,
             simulation_mode=simulation_mode
         )
         ShutdownController_pb2_grpc.add_ShutdownControllerServicer_to_server(
