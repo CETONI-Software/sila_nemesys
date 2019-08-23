@@ -6,7 +6,7 @@
 #
 
 # change this path to point to your QmixSDK installation
-export QMIXSDK_PATH="$HOME/QmixSDK_Raspi"
+export QMIXSDK_PATH="$HOME/QmixSDK_Linux"
 
 export PATH="$QMIXSDK_PATH":"$PATH"
 export PYTHONPATH="$QMIXSDK_PATH/python":"$PYTHONPATH"
