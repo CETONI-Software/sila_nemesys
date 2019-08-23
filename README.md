@@ -10,7 +10,7 @@ The folder **neMESYS_impl-mod** contains the SiLA2 driver for the
 
 # Getting Started
 > ### Note:
-> These SiLA2 drivers were developed under Linux (Ubuntu 19.04) and are therefore expected to work on Linux systems, other operationg system should work as well, but have not been tested yet!
+> These SiLA2 drivers were developed under Linux (Ubuntu 19.04) and are therefore expected to work on Linux systems, other operating system should work as well, but have not been tested yet!
 
 ## Install required dependencies
 The SiLA2 drivers in this repository need the following dependencies to work correctly:
@@ -91,5 +91,5 @@ Further you need to copy the following files/directories entirely:
 Then add your implementations for the new properties or commands.
 
 # Contributing
-You can change and improve the current implementations, create new commands, properties, or even whole new SiLA2 Features. If you think your changes might be interesting for other users as well, feel free to open a pull request.  
-Also if you have any questions or problems with the drivers just open an issue and we'll try to help you.
+You can change and improve the current implementations, create new commands, properties, or even whole new SiLA2 Features. If you think your changes might be interesting for other us and users as well, feel free to open a pull request.  
+Also if you have any questions or problems with the drivers, just open an issue and we'll try to help you.
