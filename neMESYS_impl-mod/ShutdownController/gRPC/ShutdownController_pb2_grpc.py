@@ -8,8 +8,8 @@ import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
 class ShutdownControllerStub(object):
   """Feature: Shutdown Controller
 
-  Provides a generic way of telling a SiLA2 server that it is about to be shutdown. The server implements a
-  routine to be executed before the hardware is shutdown (e.g. saving device paramters or bringing the device into a safe
+  Provides a generic way of telling a SiLA2 server that it is about to be shut down. The server implements a
+  routine to be executed before the hardware is shut down (e.g. saving device paramters or bringing the device into a safe
   position).
 
   """
@@ -40,8 +40,8 @@ class ShutdownControllerStub(object):
 class ShutdownControllerServicer(object):
   """Feature: Shutdown Controller
 
-  Provides a generic way of telling a SiLA2 server that it is about to be shutdown. The server implements a
-  routine to be executed before the hardware is shutdown (e.g. saving device paramters or bringing the device into a safe
+  Provides a generic way of telling a SiLA2 server that it is about to be shut down. The server implements a
+  routine to be executed before the hardware is shut down (e.g. saving device paramters or bringing the device into a safe
   position).
 
   """
@@ -49,8 +49,8 @@ class ShutdownControllerServicer(object):
   def Shutdown(self, request, context):
     """Shutdown
 
-    Initiates the shutdown routine. If no errors occured during the shutdown process the server shoudl be
-    considered ready to be physically shutdown (i.e. the device can be shutdown/powered off).
+    Initiates the shutdown routine. If no errors occured during the shutdown process the server should be
+    considered ready to be physically shutdown (i.e. the device can be shut down/powered off).
 
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)

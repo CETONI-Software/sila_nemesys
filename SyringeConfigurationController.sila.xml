@@ -3,7 +3,7 @@
     <Identifier>SyringeConfigurationController</Identifier>
     <DisplayName>Syringe Configuration Controller</DisplayName>
     <Description>
-            Syringe pump specific functions for configuration.
+            Provides syringe pump specific functions for configuration (i.e. the configuration of the syringe itself).
     </Description>
 
     <!-- Commands -->

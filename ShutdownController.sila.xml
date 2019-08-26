@@ -3,7 +3,7 @@
     <Identifier>ShutdownController</Identifier>
     <DisplayName>Shutdown Controller</DisplayName>
     <Description>
-        Provides a generic way of telling a SiLA2 server that it is about to be shutdown. The server implements a routine to be executed before the hardware is shutdown (e.g. saving device paramters or bringing the device into a safe position).
+        Provides a generic way of telling a SiLA2 server that it is about to be shut down. The server implements a routine to be executed before the hardware is shut down (e.g. saving device paramters or bringing the device into a safe position).
     </Description>
 
     <!-- Commands -->
@@ -11,7 +11,7 @@
         <Identifier>Shutdown</Identifier>
         <DisplayName>Shutdown</DisplayName>
         <Description>
-            Initiates the shutdown routine. If no errors occured during the shutdown process the server shoudl be considered ready to be physically shutdown (i.e. the device can be shutdown/powered off).
+            Initiates the shutdown routine. If no errors occured during the shutdown process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off).
         </Description>
         <Observable>Yes</Observable>
         <StandardExecutionErrors>

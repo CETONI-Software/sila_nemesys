@@ -85,8 +85,8 @@ class PumpDriveControlServiceServicer(object):
 
   def Subscribe_PumpDriveState(self, request, context):
     """Pump Drive State
-    The current state of the pump. This is either enabled or disabled. Only if the sate is enabled, the pump can dose
-    fluids.
+    The current state of the pump. This is either enabled (true) or disabled (false). Only if the sate is enabled, the pump
+    can dose fluids.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')

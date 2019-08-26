@@ -19,7 +19,7 @@ default_dict['SwitchToPosition_Parameters'] = {
 }
 
 default_dict['SwitchToPosition_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['TogglePosition_Parameters'] = {
@@ -27,7 +27,7 @@ default_dict['TogglePosition_Parameters'] = {
 }
 
 default_dict['TogglePosition_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['Get_NumberOfPositions_Responses'] = {

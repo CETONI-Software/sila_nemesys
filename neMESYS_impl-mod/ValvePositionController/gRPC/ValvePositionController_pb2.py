@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1dValvePositionController.proto\x12=sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1\x1a\x13SiLAFramework.proto\"P\n\x1bSwitchToPosition_Parameters\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"N\n\x1aSwitchToPosition_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"\x1b\n\x19TogglePosition_Parameters\"L\n\x18TogglePosition_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"\"\n Get_NumberOfPositions_Parameters\"]\n\x1fGet_NumberOfPositions_Responses\x12:\n\x11NumberOfPositions\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1f\n\x1dSubscribe_Position_Parameters\"Q\n\x1cSubscribe_Position_Responses\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer2\xda\x06\n\x17ValvePositionController\x12\xc9\x01\n\x10SwitchToPosition\x12Z.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Responses\x12\xc3\x01\n\x0eTogglePosition\x12X.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Responses\x12\xd8\x01\n\x15Get_NumberOfPositions\x12_.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Responses\x12\xd1\x01\n\x12Subscribe_Position\x12\\.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Parameters\x1a[.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1dValvePositionController.proto\x12=sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1\x1a\x13SiLAFramework.proto\"P\n\x1bSwitchToPosition_Parameters\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1c\n\x1aSwitchToPosition_Responses\"\x1b\n\x19TogglePosition_Parameters\"\x1a\n\x18TogglePosition_Responses\"\"\n Get_NumberOfPositions_Parameters\"]\n\x1fGet_NumberOfPositions_Responses\x12:\n\x11NumberOfPositions\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1f\n\x1dSubscribe_Position_Parameters\"Q\n\x1cSubscribe_Position_Responses\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer2\xda\x06\n\x17ValvePositionController\x12\xc9\x01\n\x10SwitchToPosition\x12Z.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Responses\x12\xc3\x01\n\x0eTogglePosition\x12X.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Responses\x12\xd8\x01\n\x15Get_NumberOfPositions\x12_.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Responses\x12\xd1\x01\n\x12Subscribe_Position\x12\\.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Parameters\x1a[.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Responses0\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -66,13 +66,6 @@ _SWITCHTOPOSITION_RESPONSES = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
-    _descriptor.FieldDescriptor(
-      name='Success', full_name='sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Responses.Success', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -86,7 +79,7 @@ _SWITCHTOPOSITION_RESPONSES = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=199,
-  serialized_end=277,
+  serialized_end=227,
 )
 
 
@@ -109,8 +102,8 @@ _TOGGLEPOSITION_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=279,
-  serialized_end=306,
+  serialized_start=229,
+  serialized_end=256,
 )
 
 
@@ -121,13 +114,6 @@ _TOGGLEPOSITION_RESPONSES = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
-    _descriptor.FieldDescriptor(
-      name='Success', full_name='sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Responses.Success', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -140,8 +126,8 @@ _TOGGLEPOSITION_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=308,
-  serialized_end=384,
+  serialized_start=258,
+  serialized_end=284,
 )
 
 
@@ -164,8 +150,8 @@ _GET_NUMBEROFPOSITIONS_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=386,
-  serialized_end=420,
+  serialized_start=286,
+  serialized_end=320,
 )
 
 
@@ -195,8 +181,8 @@ _GET_NUMBEROFPOSITIONS_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=422,
-  serialized_end=515,
+  serialized_start=322,
+  serialized_end=415,
 )
 
 
@@ -219,8 +205,8 @@ _SUBSCRIBE_POSITION_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=517,
-  serialized_end=548,
+  serialized_start=417,
+  serialized_end=448,
 )
 
 
@@ -250,13 +236,11 @@ _SUBSCRIBE_POSITION_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=550,
-  serialized_end=631,
+  serialized_start=450,
+  serialized_end=531,
 )
 
 _SWITCHTOPOSITION_PARAMETERS.fields_by_name['Position'].message_type = SiLAFramework__pb2._INTEGER
-_SWITCHTOPOSITION_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb2._BOOLEAN
-_TOGGLEPOSITION_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb2._BOOLEAN
 _GET_NUMBEROFPOSITIONS_RESPONSES.fields_by_name['NumberOfPositions'].message_type = SiLAFramework__pb2._INTEGER
 _SUBSCRIBE_POSITION_RESPONSES.fields_by_name['Position'].message_type = SiLAFramework__pb2._INTEGER
 DESCRIPTOR.message_types_by_name['SwitchToPosition_Parameters'] = _SWITCHTOPOSITION_PARAMETERS
@@ -333,8 +317,8 @@ _VALVEPOSITIONCONTROLLER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=634,
-  serialized_end=1492,
+  serialized_start=534,
+  serialized_end=1392,
   methods=[
   _descriptor.MethodDescriptor(
     name='SwitchToPosition',

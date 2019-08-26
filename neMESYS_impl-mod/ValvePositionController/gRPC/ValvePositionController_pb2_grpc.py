@@ -6,8 +6,8 @@ from . import ValvePositionController_pb2 as ValvePositionController__pb2
 
 class ValvePositionControllerStub(object):
   """Feature: Valve Position Controller
-  Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to
-  obtain the current valve position.
+  Allows to specify a certain logical position for a valve. The Position property can be querried at any time to obtain
+  the current valve position.
   """
 
   def __init__(self, channel):
@@ -40,8 +40,8 @@ class ValvePositionControllerStub(object):
 
 class ValvePositionControllerServicer(object):
   """Feature: Valve Position Controller
-  Allows to specify a certain logical position for a valve. The CurrentPosition property can be querried at any time to
-  obtain the current valve position.
+  Allows to specify a certain logical position for a valve. The Position property can be querried at any time to obtain
+  the current valve position.
   """
 
   def SwitchToPosition(self, request, context):
@@ -72,7 +72,7 @@ class ValvePositionControllerServicer(object):
 
   def Subscribe_Position(self, request, context):
     """Position
-    The current logic valve position. This is a value between 0 and NumberOfPositions - 1.
+    The current logical valve position. This is a value between 0 and NumberOfPositions - 1.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')

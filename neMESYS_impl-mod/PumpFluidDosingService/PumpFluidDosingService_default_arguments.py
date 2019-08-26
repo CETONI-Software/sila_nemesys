@@ -20,7 +20,7 @@ default_dict['SetFillLevel_Parameters'] = {
 }
 
 default_dict['SetFillLevel_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['DoseVolume_Parameters'] = {
@@ -29,7 +29,7 @@ default_dict['DoseVolume_Parameters'] = {
 }
 
 default_dict['DoseVolume_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['GenerateFlow_Parameters'] = {
@@ -37,7 +37,7 @@ default_dict['GenerateFlow_Parameters'] = {
 }
 
 default_dict['GenerateFlow_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['StopDosage_Parameters'] = {
@@ -45,7 +45,7 @@ default_dict['StopDosage_Parameters'] = {
 }
 
 default_dict['StopDosage_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['Subscribe_MaxSyringeFillLevel_Responses'] = {

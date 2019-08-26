@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1dPumpDriveControlService.proto\x12=sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1\x1a\x13SiLAFramework.proto\" \n\x1eInitializePumpDrive_Parameters\"Q\n\x1dInitializePumpDrive_Responses\x12\x30\n\x07Success\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"\x1c\n\x1a\x45nablePumpDrive_Parameters\"\x1b\n\x19\x45nablePumpDrive_Responses\"\x1d\n\x1b\x44isablePumpDrive_Parameters\"\x1c\n\x1a\x44isablePumpDrive_Responses\"%\n#Subscribe_PumpDriveState_Parameters\"]\n\"Subscribe_PumpDriveState_Responses\x12\x37\n\x0ePumpDriveState\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"!\n\x1fSubscribe_FaultState_Parameters\"U\n\x1eSubscribe_FaultState_Responses\x12\x33\n\nFaultState\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean2\xc3\x08\n\x17PumpDriveControlService\x12\xd2\x01\n\x13InitializePumpDrive\x12].sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.InitializePumpDrive_Parameters\x1a\\.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.InitializePumpDrive_Responses\x12\xc6\x01\n\x0f\x45nablePumpDrive\x12Y.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.EnablePumpDrive_Parameters\x1aX.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.EnablePumpDrive_Responses\x12\xc9\x01\n\x10\x44isablePumpDrive\x12Z.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.DisablePumpDrive_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.DisablePumpDrive_Responses\x12\xe3\x01\n\x18Subscribe_PumpDriveState\x12\x62.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_PumpDriveState_Parameters\x1a\x61.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_PumpDriveState_Responses0\x01\x12\xd7\x01\n\x14Subscribe_FaultState\x12^.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_FaultState_Parameters\x1a].sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_FaultState_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1dPumpDriveControlService.proto\x12=sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1\x1a\x13SiLAFramework.proto\" \n\x1eInitializePumpDrive_Parameters\"\x1f\n\x1dInitializePumpDrive_Responses\"\x1c\n\x1a\x45nablePumpDrive_Parameters\"\x1b\n\x19\x45nablePumpDrive_Responses\"\x1d\n\x1b\x44isablePumpDrive_Parameters\"\x1c\n\x1a\x44isablePumpDrive_Responses\"%\n#Subscribe_PumpDriveState_Parameters\"]\n\"Subscribe_PumpDriveState_Responses\x12\x37\n\x0ePumpDriveState\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean\"!\n\x1fSubscribe_FaultState_Parameters\"U\n\x1eSubscribe_FaultState_Responses\x12\x33\n\nFaultState\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Boolean2\xc3\x08\n\x17PumpDriveControlService\x12\xd2\x01\n\x13InitializePumpDrive\x12].sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.InitializePumpDrive_Parameters\x1a\\.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.InitializePumpDrive_Responses\x12\xc6\x01\n\x0f\x45nablePumpDrive\x12Y.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.EnablePumpDrive_Parameters\x1aX.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.EnablePumpDrive_Responses\x12\xc9\x01\n\x10\x44isablePumpDrive\x12Z.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.DisablePumpDrive_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.DisablePumpDrive_Responses\x12\xe3\x01\n\x18Subscribe_PumpDriveState\x12\x62.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_PumpDriveState_Parameters\x1a\x61.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_PumpDriveState_Responses0\x01\x12\xd7\x01\n\x14Subscribe_FaultState\x12^.sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_FaultState_Parameters\x1a].sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.Subscribe_FaultState_Responses0\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -59,13 +59,6 @@ _INITIALIZEPUMPDRIVE_RESPONSES = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
-    _descriptor.FieldDescriptor(
-      name='Success', full_name='sila2.de.cetoni.pumps.syringepumps.pumpdrivecontrolservice.v1.InitializePumpDrive_Responses.Success', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -79,7 +72,7 @@ _INITIALIZEPUMPDRIVE_RESPONSES = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=151,
-  serialized_end=232,
+  serialized_end=182,
 )
 
 
@@ -102,8 +95,8 @@ _ENABLEPUMPDRIVE_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=234,
-  serialized_end=262,
+  serialized_start=184,
+  serialized_end=212,
 )
 
 
@@ -126,8 +119,8 @@ _ENABLEPUMPDRIVE_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=264,
-  serialized_end=291,
+  serialized_start=214,
+  serialized_end=241,
 )
 
 
@@ -150,8 +143,8 @@ _DISABLEPUMPDRIVE_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=293,
-  serialized_end=322,
+  serialized_start=243,
+  serialized_end=272,
 )
 
 
@@ -174,8 +167,8 @@ _DISABLEPUMPDRIVE_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=324,
-  serialized_end=352,
+  serialized_start=274,
+  serialized_end=302,
 )
 
 
@@ -198,8 +191,8 @@ _SUBSCRIBE_PUMPDRIVESTATE_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=354,
-  serialized_end=391,
+  serialized_start=304,
+  serialized_end=341,
 )
 
 
@@ -229,8 +222,8 @@ _SUBSCRIBE_PUMPDRIVESTATE_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=393,
-  serialized_end=486,
+  serialized_start=343,
+  serialized_end=436,
 )
 
 
@@ -253,8 +246,8 @@ _SUBSCRIBE_FAULTSTATE_PARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=488,
-  serialized_end=521,
+  serialized_start=438,
+  serialized_end=471,
 )
 
 
@@ -284,11 +277,10 @@ _SUBSCRIBE_FAULTSTATE_RESPONSES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=523,
-  serialized_end=608,
+  serialized_start=473,
+  serialized_end=558,
 )
 
-_INITIALIZEPUMPDRIVE_RESPONSES.fields_by_name['Success'].message_type = SiLAFramework__pb2._BOOLEAN
 _SUBSCRIBE_PUMPDRIVESTATE_RESPONSES.fields_by_name['PumpDriveState'].message_type = SiLAFramework__pb2._BOOLEAN
 _SUBSCRIBE_FAULTSTATE_RESPONSES.fields_by_name['FaultState'].message_type = SiLAFramework__pb2._BOOLEAN
 DESCRIPTOR.message_types_by_name['InitializePumpDrive_Parameters'] = _INITIALIZEPUMPDRIVE_PARAMETERS
@@ -381,8 +373,8 @@ _PUMPDRIVECONTROLSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=611,
-  serialized_end=1702,
+  serialized_start=561,
+  serialized_end=1652,
   methods=[
   _descriptor.MethodDescriptor(
     name='InitializePumpDrive',

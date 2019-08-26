@@ -19,7 +19,7 @@ default_dict['InitializePumpDrive_Parameters'] = {
 }
 
 default_dict['InitializePumpDrive_Responses'] = {
-    'Success': fwpb2.Boolean(value=False)
+    
 }
 
 default_dict['EnablePumpDrive_Parameters'] = {

@@ -38,14 +38,6 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <Response>
-            <Identifier>Success</Identifier>
-            <DisplayName>Success</DisplayName>
-            <Description>A boolean value where false means that the dosage failed and true meaning the dosage was finished properly.</Description>
-            <DataType>
-                <Basic>Boolean</Basic>
-            </DataType>
-        </Response>
         <StandardExecutionErrors>
             <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
         </StandardExecutionErrors>
@@ -73,14 +65,6 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <Response>
-            <Identifier>Success</Identifier>
-            <DisplayName>Success</DisplayName>
-            <Description>A boolean value where false means that the dosage failed and true meaning the dosage was finished properly.</Description>
-            <DataType>
-                <Basic>Boolean</Basic>
-            </DataType>
-        </Response>
         <StandardExecutionErrors>
             <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
         </StandardExecutionErrors>
@@ -102,14 +86,6 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <Response>
-            <Identifier>Success</Identifier>
-            <DisplayName>Success</DisplayName>
-            <Description>A boolean value where false means that the dosage failed and true meaning the dosage was finished properly.</Description>
-            <DataType>
-                <Basic>Boolean</Basic>
-            </DataType>
-        </Response>
         <StandardExecutionErrors>
             <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
         </StandardExecutionErrors>
@@ -119,14 +95,6 @@
         <DisplayName>Stop Dosage</DisplayName>
         <Description>Stops a currently running dosage immediately.</Description>
         <Observable>No</Observable>
-        <Response>
-            <Identifier>Success</Identifier>
-            <DisplayName>Success</DisplayName>
-            <Description>A boolean value where false means that stopping the dosage failed and true meaning the dosage was stopped properly.</Description>
-            <DataType>
-                <Basic>Boolean</Basic>
-            </DataType>
-        </Response>
     </Command>
 
     <!-- Properties -->

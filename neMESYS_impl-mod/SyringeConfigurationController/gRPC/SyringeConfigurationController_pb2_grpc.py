@@ -7,7 +7,7 @@ from . import SyringeConfigurationController_pb2 as SyringeConfigurationControll
 class SyringeConfigurationControllerStub(object):
   """Feature: Syringe Configuration Controller
 
-  Syringe pump specific functions for configuration.
+  Provides syringe pump specific functions for configuration (i.e. the configuration of the syringe itself).
 
   """
 
@@ -37,7 +37,7 @@ class SyringeConfigurationControllerStub(object):
 class SyringeConfigurationControllerServicer(object):
   """Feature: Syringe Configuration Controller
 
-  Syringe pump specific functions for configuration.
+  Provides syringe pump specific functions for configuration (i.e. the configuration of the syringe itself).
 
   """
 
