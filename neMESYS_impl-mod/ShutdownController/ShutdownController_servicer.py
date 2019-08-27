@@ -43,6 +43,9 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 from .gRPC import ShutdownController_pb2 as pb2
 from .gRPC import ShutdownController_pb2_grpc as pb2_grpc
 
+# import SiLA errors
+import neMESYS_errors
+
 # import simulation and real implementation
 from .ShutdownController_simulation import ShutdownControllerSimulation
 from .ShutdownController_real import ShutdownControllerReal
@@ -105,7 +108,7 @@ class ShutdownController(pb2_grpc.ShutdownControllerServicer):
         """
         Executes the observable command Shutdown
             Initiates the shutdown routine. If no errors occured during the shutdown process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off).
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
@@ -142,7 +145,14 @@ class ShutdownController(pb2_grpc.ShutdownControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Shutdown_Info(request, context)
+
+        try:
+            return self.implementation.Shutdown_Info(request, context)
+        except (neMESYS_errors.SiLAFrameworkError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
     def Shutdown_Result(self, request, context) -> pb2.Shutdown_Responses:
         """

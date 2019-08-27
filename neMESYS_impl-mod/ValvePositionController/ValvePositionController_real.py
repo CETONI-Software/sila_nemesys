@@ -36,7 +36,6 @@ import time
 
 # import SiLA2 library
 import sila2lib.SiLAFramework_pb2 as fwpb2
-import sila2lib.sila_error_handling as sila_error
 
 # import gRPC modules for this feature
 from .gRPC import ValvePositionController_pb2 as pb2
@@ -44,6 +43,8 @@ from .gRPC import ValvePositionController_pb2_grpc as pb2_grpc
 
 # import default arguments
 from .ValvePositionController_default_arguments import default_dict
+# import SiLA errors
+import neMESYS_errors
 
 # import qmixsdk
 from qmixsdk import qmixbus
@@ -81,20 +82,14 @@ class ValvePositionControllerReal:
 
         requested_valve_pos = request.Position.value
         if requested_valve_pos < 0 or requested_valve_pos >= self.num_of_valve_pos:
-            sila_error.raiseRPCError(context, sila_error.getValidationError(
-                parameter="Position",
-                cause="The given position is not in the range for this valve.",
-                action=f"Adjust the valve position to fit in the range between 0 and {self.num_of_valve_pos} (excluding)!"
-            ))
+            raise neMESYS_errors.ValvePositionOutOfRangeError(
+                ("The given position is not in the range for this valve."
+                     "Adjust the valve position to fit in the range between 0 and "
+                     f"{self.num_of_valve_pos} (excluding)!"
+                )
+            )
 
-        try:
-            self.valve.switch_valve_to_position(requested_valve_pos)
-        except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
-                errorIdentifier="QmixSDKError", cause=str(err)
-            ))
-
+        self.valve.switch_valve_to_position(requested_valve_pos)
         return pb2.SwitchToPosition_Responses()
 
     def TogglePosition(self, request, context) -> pb2.TogglePosition_Responses:
@@ -111,22 +106,15 @@ class ValvePositionControllerReal:
         """
 
         if self.valve.number_of_valve_positions() > 2:
-            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
-                errorIdentifier="ValveNotToggleable",
-                cause="The current vale does not suppprt toggling because it has more than only two possible positions."
-            ))
+            raise neMESYS_errors.ValveNotToggleableError()
 
         try:
             curr_pos = self.valve.actual_valve_position()
             self.valve.switch_valve_to_position((curr_pos + 1) % 2)
+
+            return pb2.TogglePosition_Responses()
         except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
-                errorIdentifier="QmixSDKError", cause=str(err)
-            ))
-
-        return pb2.TogglePosition_Responses()
-
+            raise neMESYS_errors.QmixSDKError(err)
 
     def Get_NumberOfPositions(self, request, context) -> pb2.Get_NumberOfPositions_Responses:
         """
@@ -157,10 +145,12 @@ class ValvePositionControllerReal:
         """
 
         while True:
-            yield pb2.Subscribe_Position_Responses(
-                Position=fwpb2.Integer(value=self.valve.actual_valve_position())
-            )
+            try:
+                yield pb2.Subscribe_Position_Responses(
+                    Position=fwpb2.Integer(value=self.valve.actual_valve_position())
+                )
 
-            # we add a small delay to give the client a chance to keep up.
-            time.sleep(0.5)
-
+                # we add a small delay to give the client a chance to keep up.
+                time.sleep(0.5)
+            except qmixbus.DeviceError as err:
+                raise neMESYS_errors.QmixSDKError(err)

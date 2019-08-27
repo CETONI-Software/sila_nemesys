@@ -50,7 +50,9 @@
         <Parameter>
             <Identifier>Volume</Identifier>
             <DisplayName>Volume</DisplayName>
-            <Description>The amount of volume to dose.</Description>
+            <Description>
+                The amount of volume to dose. This value can be negative. In that case the pump aspirates the fluid.
+            </Description>
             <DataType>
                 <Basic>Real</Basic>
             </DataType>
@@ -58,9 +60,7 @@
         <Parameter>
             <Identifier>FlowRate</Identifier>
             <DisplayName>Flow Rate</DisplayName>
-            <Description>
-                The flow rate at which the pump should dose the fluid. This value can be negative. In that case the pump aspirates the fluid.
-            </Description>
+            <Description>The flow rate at which the pump should dose the fluid.</Description>
             <DataType>
                 <Basic>Real</Basic>
             </DataType>

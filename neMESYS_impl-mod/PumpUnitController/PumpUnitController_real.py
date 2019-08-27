@@ -40,11 +40,13 @@ import PumpUnitController.unit_conversion as uc
 
 # import SiLA2 library
 import sila2lib.SiLAFramework_pb2 as fwpb2
-import sila2lib.sila_error_handling as sila_error
 
 # import gRPC modules for this feature
 from .gRPC import PumpUnitController_pb2 as pb2
 from .gRPC import PumpUnitController_pb2_grpc as pb2_grpc
+
+# import SiLA errors
+import neMESYS_errors
 
 # import default arguments
 from .PumpUnitController_default_arguments import default_dict
@@ -81,15 +83,11 @@ class PumpUnitControllerReal:
             requested_volume_unit, requested_time_unit = request.FlowUnit.value.split("/")
             prefix, volume_unit, time_unit = uc.evaluate_units(requested_volume_unit,
                                                                requested_time_unit)
-        except ValueError as err:
-            sila_error.raiseRPCError(context, sila_error.getValidationError(
+        except ValueError:
+            raise neMESYS_errors.UnitConversionError(
                 parameter="FlowUnit",
-                cause="The given flow unit is malformed. It has to be something like 'ml/s', for instance."
-            ))
-        except uc.UnitConversionError as err:
-            sila_error.raiseRPCError(context, sila_error.getValidationError(
-                parameter=err.param, cause=err.message
-            ))
+                msg="The given flow unit is malformed. It has to be something like 'ml/s', for instance."
+            )
         else:
             self.pump.set_flow_unit(prefix, volume_unit, time_unit)
         return pb2.SetFlowUnit_Responses()
@@ -108,14 +106,9 @@ class PumpUnitControllerReal:
             request.EmptyResponse (Empty Response): An empty response data type used if no response is required.
         """
 
-        try:
-            prefix, volume_unit = uc.evaluate_units(request.VolumeUnit.value)
-        except uc.UnitConversionError as err:
-            sila_error.raiseRPCError(context, sila_error.getValidationError(
-                parameter=err.param, cause=err.message
-            ))
-        else:
-            self.pump.set_volume_unit(prefix, volume_unit)
+        prefix, volume_unit = uc.evaluate_units(request.VolumeUnit.value)
+        self.pump.set_volume_unit(prefix, volume_unit)
+
         return pb2.SetVolumeUnit_Responses()
 
     def Subscribe_FlowUnit(self, request, context) -> pb2.Subscribe_FlowUnit_Responses:

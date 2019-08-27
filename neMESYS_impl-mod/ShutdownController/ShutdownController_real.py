@@ -38,11 +38,13 @@ import time
 
 # import SiLA2 library
 import sila2lib.SiLAFramework_pb2 as fwpb2
-import sila2lib.sila_error_handling as sila_error
 
 # import gRPC modules for this feature
 from .gRPC import ShutdownController_pb2 as pb2
 from .gRPC import ShutdownController_pb2_grpc as pb2_grpc
+
+# import SiLA errors
+import neMESYS_errors
 
 # import default arguments
 from .ShutdownController_default_arguments import default_dict
@@ -74,7 +76,7 @@ class ShutdownControllerReal:
         Saves the current drive position counter so that it can be restored next time.
         """
         config_dir = os.path.join(os.environ.get('APPDATA') or os.path.join(
-            os.environ['HOME'], '.config', 'sila2', ), self.server_name)
+            os.environ['HOME'], '.config', 'sila2'), self.server_name)
         config_filename = os.path.join(config_dir, self.server_name + '.conf')
 
         pump_name = self.pump.get_pump_name()
@@ -92,7 +94,7 @@ class ShutdownControllerReal:
         """
         Executes the observable command Shutdown
             Initiates the shutdown routine. If no errors occured during the shutdown process the server should be considered ready to be physically shutdown (i.e. the device can be shut down/powered off).
-    
+
         :param request: gRPC request containing the parameters passed:
             request.EmptyParameter (Empty Parameter): An empty parameter data type used if no parameter is required.
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
@@ -127,27 +129,17 @@ class ShutdownControllerReal:
         command_uuid = request.commandId
 
         if not command_uuid or command_uuid != self.command_uuid:
-            sila_error.raiseRPCError(context, sila_error.getFrameworkError(
-                errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
-            ))
+            raise neMESYS_errors.SiLAFrameworkError(
+                error_type=neMESYS_errors.SiLAFrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
+            )
 
-        try:
-            yield fwpb2.ExecutionInfo(
-                commandStatus=fwpb2.ExecutionInfo.CommandStatus.running
-            )
-            self._save_drive_position_counter()
-        except qmixbus.DeviceError as err:
-            logging.error("QmixSDK Error: %s", err)
-            yield fwpb2.ExecutionInfo(
-                commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedWithError
-            )
-            sila_error.raiseRPCError(context, sila_error.getStandardExecutionError(
-                errorIdentifier="QmixSDKError", cause=str(err)
-            ))
-        else:
-            yield fwpb2.ExecutionInfo(
-                commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully
-            )
+        yield fwpb2.ExecutionInfo(
+            commandStatus=fwpb2.ExecutionInfo.CommandStatus.running
+        )
+        self._save_drive_position_counter()
+        yield fwpb2.ExecutionInfo(
+            commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully
+        )
 
     def Shutdown_Result(self, request, context) -> pb2.Shutdown_Responses:
         """

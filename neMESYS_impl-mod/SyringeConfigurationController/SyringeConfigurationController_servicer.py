@@ -7,7 +7,7 @@ ________________________________________________________________________
 
 :details: SyringeConfigurationController:
     Provides syringe pump specific functions for configuration (i.e. the configuration of the syringe itself).
-           
+
 :file:    SyringeConfigurationController_servicer.py
 :authors: Florian Meinicke
 
@@ -40,6 +40,9 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 # import gRPC modules for this feature
 from .gRPC import SyringeConfigurationController_pb2 as pb2
 from .gRPC import SyringeConfigurationController_pb2_grpc as pb2_grpc
+
+# import SiLA errors
+import neMESYS_errors
 
 # import simulation and real implementation
 from .SyringeConfigurationController_simulation import SyringeConfigurationControllerSimulation
@@ -111,7 +114,14 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.SetSyringeParameters(request, context)
+
+        try:
+            return self.implementation.SetSyringeParameters(request, context)
+        except (neMESYS_errors.DeviceError, neMESYS_errors.SiLAValidationError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
     def Subscribe_InnerDiameter(self, request, context) -> pb2.Subscribe_InnerDiameter_Responses:
         """
@@ -130,7 +140,13 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_InnerDiameter(request, context)
+
+        try:
+            return self.implementation.Subscribe_InnerDiameter(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
 
     def Subscribe_MaxPistonStroke(self, request, context) -> pb2.Subscribe_MaxPistonStroke_Responses:
@@ -150,5 +166,11 @@ class SyringeConfigurationController(pb2_grpc.SyringeConfigurationControllerServ
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_MaxPistonStroke(request, context)
+
+        try:
+            return self.implementation.Subscribe_MaxPistonStroke(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 

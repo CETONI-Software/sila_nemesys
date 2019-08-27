@@ -41,6 +41,9 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 from .gRPC import PumpUnitController_pb2 as pb2
 from .gRPC import PumpUnitController_pb2_grpc as pb2_grpc
 
+# import SiLA errors
+import neMESYS_errors
+
 # import simulation and real implementation
 from .PumpUnitController_simulation import PumpUnitControllerSimulation
 from .PumpUnitController_real import PumpUnitControllerReal
@@ -109,7 +112,14 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.SetFlowUnit(request, context)
+
+        try:
+            return self.implementation.SetFlowUnit(request, context)
+        except (neMESYS_errors.UnitConversionError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
     def SetVolumeUnit(self, request, context) -> pb2.SetVolumeUnit_Responses:
         """
@@ -129,7 +139,14 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.SetVolumeUnit(request, context)
+
+        try:
+            return self.implementation.SetVolumeUnit(request, context)
+        except (neMESYS_errors.UnitConversionError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
     def Subscribe_FlowUnit(self, request, context) -> pb2.Subscribe_FlowUnit_Responses:
         """
@@ -148,7 +165,14 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_FlowUnit(request, context)
+
+        try:
+            return self.implementation.Subscribe_FlowUnit(request, context)
+        except (neMESYS_errors.UnitConversionError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
 
     def Subscribe_VolumeUnit(self, request, context) -> pb2.Subscribe_VolumeUnit_Responses:
@@ -168,5 +192,12 @@ class PumpUnitController(pb2_grpc.PumpUnitControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_VolumeUnit(request, context)
+
+        try:
+            return self.implementation.Subscribe_VolumeUnit(request, context)
+        except (neMESYS_errors.UnitConversionError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 

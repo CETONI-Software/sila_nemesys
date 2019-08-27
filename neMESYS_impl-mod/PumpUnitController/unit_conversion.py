@@ -1,43 +1,9 @@
 import logging
 
+# import SiLA errors
+import neMESYS_errors
+
 from qmixsdk import qmixpump
-
-class UnitConversionError(Exception):
-    """Error-class for all unit-conversion errors.
-    """
-
-    def __init__(self, param, message):
-        """
-        Class initializer
-            :param param: the parameter of the unit that failed the conversion
-            :param message: a description of what went wrong
-        """
-        super().__init__(message)
-        logging.error(message)
-        self.param = param
-        self.message = message
-
-    @property
-    def param(self):
-        """
-        The parameter of the unit that failed the conversion
-        """
-        return self.__param
-
-    @param.setter
-    def param(self, param):
-        self.__param = param
-
-    @property
-    def message(self):
-        """
-        A description of what went wrong
-        """
-        return self.__message
-
-    @message.setter
-    def message(self, message):
-        self.__message = message
 
 
 def evaluate_units(requested_volume_unit, requested_time_unit=None):
@@ -50,20 +16,25 @@ def evaluate_units(requested_volume_unit, requested_time_unit=None):
     prefix_string = requested_volume_unit[0] if len(requested_volume_unit) > 1 else " "
     volume_unit_string = requested_volume_unit[-1]
 
-    prefix = evaluate_prefix(prefix_string)
-    volume_unit = evaluate_volume_unit(volume_unit_string)
+    # only FlowUnit has a time_unit field
+    param = "FlowUnit" if requested_time_unit else "VolumeUnit"
+
+    prefix = evaluate_prefix(prefix_string, param)
+    volume_unit = evaluate_volume_unit(volume_unit_string, param)
 
     if requested_time_unit:
-        time_unit = evaluate_time_unit(requested_time_unit)
-
+        time_unit = evaluate_time_unit(requested_time_unit, param)
         return (prefix, volume_unit, time_unit)
 
     return (prefix, volume_unit)
 
 
-def evaluate_prefix(prefix_string):
+def evaluate_prefix(prefix_string, param: str):
     """
     Converts the given prefix_string to a `qmixpump.UnitPrefix`
+    :param prefix_string: The string to convert
+    :param param: The command parameter that is currently converted
+                  (just for error-description purposes)
     """
     switcher = {
         " ": qmixpump.UnitPrefix.unit,
@@ -74,22 +45,34 @@ def evaluate_prefix(prefix_string):
     }
     prefix = switcher.get(prefix_string)
     if not prefix:
-        raise UnitConversionError("prefix", f"Wrong prefix: '{prefix_string}' not supported")
+        raise neMESYS_errors.UnitConversionError(
+            parameter=param,
+            msg=f"Wrong prefix: '{prefix_string}' not supported"
+        )
 
     return prefix
 
-def evaluate_volume_unit(volume_unit_string):
+def evaluate_volume_unit(volume_unit_string, param: str):
     """
     Converts a given volume_unit_string to a `qmixpump.VolumeUnit`
+    :param volume_unit_string: The string to convert
+    :param param: The command parameter that is currently converted
+                  (just for error-description purposes)
     """
     if volume_unit_string == "l":
         return qmixpump.VolumeUnit.litres
 
-    raise UnitConversionError("volume_unit", f"Wrong volume unit: '{volume_unit_string}' not supported")
+    raise neMESYS_errors.UnitConversionError(
+        parameter=param,
+        msg=f"Wrong volume unit: '{volume_unit_string}' not supported"
+    )
 
-def evaluate_time_unit(time_unit_string):
+def evaluate_time_unit(time_unit_string, param: str):
     """
     Converts a given time_unit_string into a `qmixpump.TimeUnit`
+    :param time_unit_string: The string to convert
+    :param param: The command parameter that is currently converted
+                  (just for error-description purposes)
     """
     switcher = {
         "s"  : qmixpump.TimeUnit.per_second,
@@ -99,7 +82,10 @@ def evaluate_time_unit(time_unit_string):
 
     time_unit = switcher.get(time_unit_string)
     if not time_unit:
-        raise UnitConversionError("time_unit", f"Wrong time_unit: '{time_unit_string}' not supported")
+        raise neMESYS_errors.UnitConversionError(
+            parameter=param,
+            msg=f"Wrong time_unit: '{time_unit_string}' not supported"
+        )
 
     return time_unit
 

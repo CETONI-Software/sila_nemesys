@@ -45,6 +45,9 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 from .gRPC import PumpDriveControlService_pb2 as pb2
 from .gRPC import PumpDriveControlService_pb2_grpc as pb2_grpc
 
+# import SiLA errors
+import neMESYS_errors
+
 # import simulation and real implementation
 from .PumpDriveControlService_simulation import PumpDriveControlServiceSimulation
 from .PumpDriveControlService_real import PumpDriveControlServiceReal
@@ -115,7 +118,12 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.InitializePumpDrive(request, context)
+
+        try:
+            return self.implementation.InitializePumpDrive(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
 
     def EnablePumpDrive(self, request, context) -> pb2.EnablePumpDrive_Responses:
         """
@@ -135,7 +143,12 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.EnablePumpDrive(request, context)
+
+        try:
+            return self.implementation.EnablePumpDrive(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
 
     def DisablePumpDrive(self, request, context) -> pb2.DisablePumpDrive_Responses:
         """
@@ -155,13 +168,18 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.DisablePumpDrive(request, context)
+
+        try:
+            return self.implementation.DisablePumpDrive(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
 
     def Subscribe_PumpDriveState(self, request, context) -> pb2.Subscribe_PumpDriveState_Responses:
         """
         Requests the observable property Pump Drive State
             The current state of the pump. This is either enabled (true) or disabled (false). Only if the sate is enabled, the pump can dose fluids.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
 
@@ -174,7 +192,12 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_PumpDriveState(request, context)
+
+        try:
+            return self.implementation.Subscribe_PumpDriveState(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
 
 
     def Subscribe_FaultState(self, request, context) -> pb2.Subscribe_FaultState_Responses:
@@ -194,5 +217,9 @@ class PumpDriveControlService(pb2_grpc.PumpDriveControlServiceServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_FaultState(request, context)
 
+        try:
+            return self.implementation.Subscribe_FaultState(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)

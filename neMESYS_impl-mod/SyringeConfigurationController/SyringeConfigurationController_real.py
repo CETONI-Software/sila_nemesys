@@ -35,11 +35,13 @@ import time
 
 # import SiLA2 library
 import sila2lib.SiLAFramework_pb2 as fwpb2
-import sila2lib.sila_error_handling as sila_error
 
 # import gRPC modules for this feature
 from .gRPC import SyringeConfigurationController_pb2 as pb2
 from .gRPC import SyringeConfigurationController_pb2_grpc as pb2_grpc
+
+# import SiLA errors
+import neMESYS_errors
 
 # import default arguments
 from .SyringeConfigurationController_default_arguments import default_dict
@@ -88,24 +90,19 @@ class SyringeConfigurationControllerReal:
                 :param param_str: A string description of the given param
             """
             if param < 0:
-                sila_error.raiseRPCError(context, sila_error.getValidationError(
-                    param_str,
-                    cause="The " + param_str + " cannot be less than 0",
-                    action="Adjust the " + param_str + " to be greater than 0."
-                ))
+                raise neMESYS_errors.SiLAValidationError(
+                    parameter=param_str,
+                    msg=f"The {param_str} cannot be less than 0",
+                )
 
         requested_inner_diameter = request.InnerDiameter.value
         check_less_than_zero(requested_inner_diameter, "InnerDiameter")
         requested_piston_stroke = request.MaxPistonStroke.value
         check_less_than_zero(requested_piston_stroke, "MaxPistonStroke")
 
-        try:
-            self.pump.set_syringe_param(requested_inner_diameter, requested_piston_stroke)
-        except qmixbus.DeviceError as err:
-            logging.error("QmixSDK error: %s", err)
-            # sila_error.raiseRPCError(context, sila_error.getStandardExecutionError())
-        else:
-            return pb2.SetSyringeParameters_Responses()
+        self.pump.set_syringe_param(requested_inner_diameter, requested_piston_stroke)
+
+        return pb2.SetSyringeParameters_Responses()
 
     def Subscribe_InnerDiameter(self, request, context) -> pb2.Subscribe_InnerDiameter_Responses:
         """

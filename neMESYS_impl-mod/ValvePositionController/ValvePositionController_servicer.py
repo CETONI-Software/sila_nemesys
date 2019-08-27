@@ -8,7 +8,7 @@ ________________________________________________________________________
 :details: ValvePositionController:
     Allows to specify a certain logical position for a valve. The Position property can be querried at any time to
     obtain the current valve position.
-           
+
 :file:    ValvePositionController_servicer.py
 :authors: Florian Meinicke
 
@@ -41,6 +41,9 @@ import sila2lib.SiLAFramework_pb2 as fwpb2
 # import gRPC modules for this feature
 from .gRPC import ValvePositionController_pb2 as pb2
 from .gRPC import ValvePositionController_pb2_grpc as pb2_grpc
+
+# import SiLA errors
+import neMESYS_errors
 
 # import simulation and real implementation
 from .ValvePositionController_simulation import ValvePositionControllerSimulation
@@ -110,7 +113,15 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.SwitchToPosition(request, context)
+
+        try:
+            return self.implementation.SwitchToPosition(request, context)
+        except (neMESYS_errors.ValvePositionOutOfRangeError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
+
 
     def TogglePosition(self, request, context) -> pb2.TogglePosition_Responses:
         """
@@ -130,7 +141,14 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.TogglePosition(request, context)
+
+        try:
+            return self.implementation.TogglePosition(request, context)
+        except (neMESYS_errors.ValveNotToggleableError, neMESYS_errors.DeviceError) as err:
+            if isinstance(err, neMESYS_errors.DeviceError):
+                err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
 
     def Get_NumberOfPositions(self, request, context) -> pb2.Get_NumberOfPositions_Responses:
         """
@@ -155,7 +173,7 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
         """
         Requests the observable property Position
             The current logical valve position. This is a value between 0 and NumberOfPositions - 1.
-    
+
         :param request: An empty gRPC request object (properties have no parameters)
         :param context: gRPC :class:`~grpc.ServicerContext` object providing gRPC-specific information
 
@@ -168,5 +186,9 @@ class ValvePositionController(pb2_grpc.ValvePositionControllerServicer):
                 current_mode=('simulation' if self.simulation_mode else 'real')
             )
         )
-        return self.implementation.Subscribe_Position(request, context)
-
+        try:
+            return self.implementation.Subscribe_Position(request, context)
+        except neMESYS_errors.DeviceError as err:
+            err = neMESYS_errors.QmixSDKError(err)
+            err.raise_rpc_error(context)
+            return None
