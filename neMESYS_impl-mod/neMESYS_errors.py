@@ -123,9 +123,10 @@ class ValveNotToggleableError(SiLAStandardExecutionError):
     """
 
     def __init__(self):
+        msg = "The current valve does not support toggling because it has more than only two possible positions."
         super().__init__(
             error_identifier="ValveNotToggleable",
-            msg="The current valve does not support toggling because it has more than only two possible positions.",
+            msg=msg,
             cause=msg, action="", parameters=None, feature_identifier=""
         )
 
