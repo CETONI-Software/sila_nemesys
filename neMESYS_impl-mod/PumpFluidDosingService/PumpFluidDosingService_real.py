@@ -54,6 +54,8 @@ from .PumpFluidDosingService_default_arguments import default_dict
 # import SiLA errors
 import neMESYS_errors
 
+import PumpUnitController.unit_conversion as uc
+
 # noinspection PyPep8Naming
 class PumpFluidDosingServiceReal:
     """
@@ -89,18 +91,24 @@ class PumpFluidDosingServiceReal:
             # wait for the currently running dosage to catch up
             time.sleep(0.1)
 
-        msg = "The requested {param} ({requested_val}) is not in the range bewteen 0 and {max_val} for this pump."
+        msg = """
+        The requested {param} ({requested_val} {unit}) is not in the range
+        bewteen 0 {unit} and {max_val} {unit} for this pump.
+        """
         if flow_rate < 0 or flow_rate > max_flow_rate:
+            unit = uc.flow_unit_to_string(self.pump.get_flow_unit())
             raise neMESYS_errors.FlowRateOutOfRangeError(
-                msg.format(param="flow rate", requested_val=flow_rate, max_val=max_flow_rate)
+                msg.format(param="flow rate", unit=unit, requested_val=flow_rate, max_val=max_flow_rate)
             )
         if fill_level is not None and (fill_level < 0 or fill_level > max_fill_level):
+            unit = uc.volume_unit_to_string(self.pump.get_volume_unit())
             raise neMESYS_errors.FillLevelOutOfRangeError(
-                msg.format(param="fill level", requested_val=fill_level, max_val=max_fill_level)
+                msg.format(param="fill level", unit=unit, requested_val=fill_level, max_val=max_fill_level)
             )
         if volume is not None and (volume < 0 or volume > max_fill_level):
+            unit = uc.volume_unit_to_string(self.pump.get_volume_unit())
             raise neMESYS_errors.VolumeOutOfRangeError(
-                msg.format(param="volume", requested_val=volume, max_val=max_fill_level)
+                msg.format(param="volume", unit=unit, requested_val=volume, max_val=max_fill_level)
             )
 
 

@@ -123,13 +123,8 @@ class PumpUnitControllerReal:
             request.FlowUnit (Flow Unit): The currently used flow unit.
         """
 
-        prefix, volume_unit, time_unit = self.pump.get_flow_unit()
-        prefix_string = uc.prefix_to_string(prefix)
-        volume_unit_string = "l"
-        time_unit_string = uc.time_unit_to_string(time_unit)
-
         yield pb2.Subscribe_FlowUnit_Responses(FlowUnit=fwpb2.String(
-            value=prefix_string + volume_unit_string + "/" + time_unit_string
+            value=uc.flow_unit_to_string(self.pump.get_flow_unit())
         ))
 
     def Subscribe_VolumeUnit(self, request, context) -> pb2.Subscribe_VolumeUnit_Responses:
@@ -145,13 +140,9 @@ class PumpUnitControllerReal:
         """
 
         while True:
-            prefix, volume_unit = self.pump.get_volume_unit()
-            prefix_string = uc.prefix_to_string(prefix)
-            volume_unit_string = "l"
-
-            yield pb2.Subscribe_VolumeUnit_Responses(
-                VolumeUnit=fwpb2.String(value=prefix_string + volume_unit_string)
-            )
+            yield pb2.Subscribe_VolumeUnit_Responses(VolumeUnit=fwpb2.String(
+                value=uc.volume_unit_to_string(self.pump.get_volume_unit())
+            ))
 
             # we add a small delay to give the client a chance to keep up.
             time.sleep(0.5)

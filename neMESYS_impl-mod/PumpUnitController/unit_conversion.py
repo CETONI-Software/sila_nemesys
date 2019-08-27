@@ -89,6 +89,29 @@ def evaluate_time_unit(time_unit_string, param: str):
 
     return time_unit
 
+
+def volume_unit_to_string(qmix_volume_unit):
+    """
+    Converts a volume unit given as a named tuple to a string
+        :param qmix_volume_unit: a named tuple consisting of a prefix and a volume_unit
+    """
+    prefix, volume_unit = qmix_volume_unit
+    prefix_string = prefix_to_string(prefix)
+    volume_unit_string = "l"
+
+    return f"{prefix_string}{volume_unit_string}"
+
+def flow_unit_to_string(flow_unit):
+    """
+    Converts a flow unit given as a named tuple to a string
+        :param flow_unit: a named tuple consisting of a prefix, a volume_unit and a time_unit
+    """
+    prefix, volume_unit, time_unit = flow_unit
+    prefix_string = prefix_to_string(prefix)
+    volume_unit_string = "l"
+    time_unit_string = time_unit_to_string(time_unit)
+    return f"{prefix_string}{volume_unit_string}/{time_unit_string}"
+
 def prefix_to_string(prefix):
     """
     Converts a given prefix to a human readable string
