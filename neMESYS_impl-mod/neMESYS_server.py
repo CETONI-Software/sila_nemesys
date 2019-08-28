@@ -29,10 +29,15 @@ ________________________________________________________________________
 __version__ = "0.0.1"
 
 import os
-import logging
-import coloredlogs
 import argparse
 from configparser import ConfigParser
+import logging
+try:
+    import coloredlogs
+except ModuleNotFoundError:
+    print("Cannot find coloredlogs! Please install coloredlogs, if you'd like to have nicer logging output:")
+    print("`pip install coloredlogs`")
+
 
 # import qmixsdk
 from qmixsdk import qmixbus
@@ -265,9 +270,11 @@ def parse_command_line():
 
 if __name__ == '__main__':
     # or use logging.ERROR for less output
-    coloredlogs.install(fmt='%(asctime)s %(levelname)s| %(module)s.%(funcName)s: %(message)s',
-                        level=logging.DEBUG)
-    # logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
+    try:
+        coloredlogs.install(fmt='%(asctime)s %(levelname)s| %(module)s.%(funcName)s: %(message)s',
+                            level=logging.DEBUG)
+    except NameError:
+        logging.basicConfig(format='%(levelname)s| %(module)s.%(funcName)s: %(message)s', level=logging.DEBUG)
 
     parsed_args = parse_command_line()
 
