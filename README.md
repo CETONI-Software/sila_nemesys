@@ -26,12 +26,8 @@ For instructions on how to install the QmixSDK for Python on your system and get
 > Note: The SiLA2 Python Repository is currently under rapid development since the SiLA2 standard itself is still not completely ready. There will definitely be some breaking changes in the near future, which might lead to equally big changes in this repository, as well.  
 > The installation procedure of the SiLA2 Python repository as described below should become a lot easier, once all of the changes of the current version v0.2 of the SiLA standard are completely implemented.
 
-It is highly recommend to use the improved version of the SiLA2 code generator. For this you need to use the corresponding branch `codegenerator-mod` instead of the `master` branch. To get the driver to work properly, you will also need to get the latest changes regarding SiLA's error handling. You can achieve all of this by executing the following commands after cloning the repo:
-```shell
-$ cd sila_python
-$ git checkout -t origin/codegenerator-mod
-$ git merge origin/patch-error-handling
-```
+It is highly recommend to use the improved version of the SiLA2 code generator. For this you need to use the corresponding branch `codegenerator-mod` instead of the `master` branch. To get the driver to work properly, you will also need to get the latest changes regarding SiLA's error handling. You can achieve all of this by executing the `get_sila_python.sh` script provided in this directory. This will automatically do all of the necessary changes for you.
+
 Then simply follow the instructions in the [README.md](https://gitlab.com/SiLA2/sila_python/blob/master/README.md) (*Tip: If you want to use python virtualenv, set up a virtualenv **before** you run the installation script and don't let the installer create one for you!*). This automatically installs the gRPC library and the protobuf compiler `protoc`. Now you are ready to use the driver in the `neMESYS_impl` directory and build it yourself, if you like to (See [Building the drivers](#building-the-drivers) for more details on how to build the drivers yourself).  
 Then change into the `sila_tools/SiLA2CodeGeneratorPackage/` directory and follow the installation instruction in this directory's [README.md](https://gitlab.com/SiLA2/sila_python/blob/codegenerator-mod/sila_tools/SiLA2CodeGeneratorPackage/README.md). To see if the installation is complete, run 
 ```shell
