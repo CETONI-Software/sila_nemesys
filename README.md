@@ -26,9 +26,14 @@ For instructions on how to install the QmixSDK for Python on your system and get
 > Note: The SiLA2 Python Repository is currently under rapid development since the SiLA2 standard itself is still not completely ready. There will definitely be some breaking changes in the near future, which might lead to equally big changes in this repository, as well.  
 > The installation procedure of the SiLA2 Python repository as described below should become a lot easier, once all of the changes of the current version v0.2 of the SiLA standard are completely implemented.
 
-It is highly recommend to use the improved version of the SiLA2 code generator. For this you need to use the corresponding branch `codegenerator-mod` instead of the `master` branch. To get the driver to work properly, you will also need to get the latest changes regarding SiLA's error handling (among other minor fixes). You can achieve all of this by executing the `get_sila_python.sh` script provided in this directory. This will automatically do all of the necessary changes for you (i.e. clone the `sila_python` repository, doing some merging of the changes this project relies on and fixing some files "by hand").
-
-Then change into the `sila_python` directory, create and activate a python virualenv, if you like and run the `sila2install.py` script:
+It is highly recommend to use the improved version of the SiLA2 code generator. For this you need to use the corresponding branch `codegenerator-mod` instead of the `master` branch. To get the driver to work properly, you will also need to get the latest changes regarding SiLA's error handling (among other minor fixes).  
+You can achieve all of this by executing the `get_sila_python.sh` script provided in this directory. This will automatically do all of the necessary changes for you (i.e. clone the `sila_python` repository, doing some merging of the changes this project relies on and fixing some files "by hand"):
+```shell
+$ git clone https://github.com/CETONI-Software/sila_nemesys.git
+$ cd sila_nemesys
+$ ./get_sila_python.sh
+```
+Then change into the `sila_python` directory (create and activate a python virualenv, if you like) and run the `sila2install.py` script:
 ```shell
 $ cd ../sila_python
 $ python3 sila2install.py
