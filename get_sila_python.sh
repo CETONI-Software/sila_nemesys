@@ -9,8 +9,8 @@
 #set -x
 
 # get sila_python
-git clone https://gitlab.com/SiLA2/sila_python
-cd sila_python
+cd ..
+git clone https://gitlab.com/SiLA2/sila_python && cd sila_python
 
 # get the new error handling
 git checkout -t origin/codegenerator-mod
