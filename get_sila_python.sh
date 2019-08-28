@@ -13,8 +13,10 @@ cd ..
 git clone https://gitlab.com/SiLA2/sila_python && cd sila_python
 
 # get the new error handling
-git checkout -t origin/codegenerator-mod
+git merge --no-edit -s recursive -X theirs origin/codegenerator-mod
 git merge --no-edit origin/patch-error-handling
+git rm sila_library/sila2lib/sila_error_handling.py
+git commit --no-edit
 
 # fix files affected by the error handling
 sed -i 's/import sila2lib.sila_error_handling as serh/import sila2lib.error_handling.sila_server as serh/' sila_library/sila2lib/std_features/SiLAService.py
