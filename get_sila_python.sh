@@ -24,3 +24,6 @@ sed -i ':a;N;$!ba;s/serh.validationError(.*Identifier")/raise serh.SiLAValidatio
 
 # fix installation files
 sed -i".bak" 's/}$/},/' sila_library/setup.py
+
+GREEN="\u001b[32m"
+echo -e $GREEN"All done! Now you can continue and install sila_python..."
