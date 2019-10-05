@@ -2,7 +2,7 @@
 import grpc
 
 from . import ShutdownController_pb2 as ShutdownController__pb2
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 class ShutdownControllerStub(object):

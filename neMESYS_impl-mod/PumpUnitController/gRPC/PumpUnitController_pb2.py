@@ -13,7 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x18PumpUnitController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1\x1a\x13SiLAFramework.proto\"J\n\x16SetFlowUnit_Parameters\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x17\n\x15SetFlowUnit_Responses\"N\n\x18SetVolumeUnit_Parameters\x12\x32\n\nVolumeUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x19\n\x17SetVolumeUnit_Responses\"\x1f\n\x1dSubscribe_FlowUnit_Parameters\"P\n\x1cSubscribe_FlowUnit_Responses\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"!\n\x1fSubscribe_VolumeUnit_Parameters\"T\n\x1eSubscribe_VolumeUnit_Responses\x12\x32\n\nVolumeUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String2\x9a\x06\n\x12PumpUnitController\x12\xb0\x01\n\x0bSetFlowUnit\x12P.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Parameters\x1aO.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Responses\x12\xb6\x01\n\rSetVolumeUnit\x12R.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Parameters\x1aQ.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Responses\x12\xc7\x01\n\x12Subscribe_FlowUnit\x12W.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Parameters\x1aV.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Responses0\x01\x12\xcd\x01\n\x14Subscribe_VolumeUnit\x12Y.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Parameters\x1aX.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x18PumpUnitController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1\x1a\x13SiLAFramework.proto\"J\n\x16SetFlowUnit_Parameters\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x17\n\x15SetFlowUnit_Responses\"N\n\x18SetVolumeUnit_Parameters\x12\x32\n\nVolumeUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"\x19\n\x17SetVolumeUnit_Responses\"\x1f\n\x1dSubscribe_FlowUnit_Parameters\"P\n\x1cSubscribe_FlowUnit_Responses\x12\x30\n\x08\x46lowUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String\"!\n\x1fSubscribe_VolumeUnit_Parameters\"T\n\x1eSubscribe_VolumeUnit_Responses\x12\x32\n\nVolumeUnit\x18\x01 \x01(\x0b\x32\x1e.sila2.org.silastandard.String2\xa2\x06\n\x12PumpUnitController\x12\xb2\x01\n\x0bSetFlowUnit\x12P.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Parameters\x1aO.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetFlowUnit_Responses\"\x00\x12\xb8\x01\n\rSetVolumeUnit\x12R.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Parameters\x1aQ.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.SetVolumeUnit_Responses\"\x00\x12\xc9\x01\n\x12Subscribe_FlowUnit\x12W.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Parameters\x1aV.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_FlowUnit_Responses\"\x00\x30\x01\x12\xcf\x01\n\x14Subscribe_VolumeUnit\x12Y.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Parameters\x1aX.sila2.de.cetoni.pumps.syringepumps.pumpunitcontroller.v1.Subscribe_VolumeUnit_Responses\"\x00\x30\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -326,7 +326,7 @@ _PUMPUNITCONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=552,
-  serialized_end=1346,
+  serialized_end=1354,
   methods=[
   _descriptor.MethodDescriptor(
     name='SetFlowUnit',

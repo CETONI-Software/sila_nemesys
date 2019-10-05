@@ -13,7 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n$SyringeConfigurationController.proto\x12\x44sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1\x1a\x13SiLAFramework.proto\"\x8d\x01\n\x1fSetSyringeParameters_Parameters\x12\x33\n\rInnerDiameter\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12\x35\n\x0fMaxPistonStroke\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\" \n\x1eSetSyringeParameters_Responses\"$\n\"Subscribe_InnerDiameter_Parameters\"X\n!Subscribe_InnerDiameter_Responses\x12\x33\n\rInnerDiameter\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"&\n$Subscribe_MaxPistonStroke_Parameters\"\\\n#Subscribe_MaxPistonStroke_Responses\x12\x35\n\x0fMaxPistonStroke\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real2\xee\x05\n\x1eSyringeConfigurationController\x12\xe3\x01\n\x14SetSyringeParameters\x12\x65.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.SetSyringeParameters_Parameters\x1a\x64.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.SetSyringeParameters_Responses\x12\xee\x01\n\x17Subscribe_InnerDiameter\x12h.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_InnerDiameter_Parameters\x1ag.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_InnerDiameter_Responses0\x01\x12\xf4\x01\n\x19Subscribe_MaxPistonStroke\x12j.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_MaxPistonStroke_Parameters\x1ai.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_MaxPistonStroke_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n$SyringeConfigurationController.proto\x12\x44sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1\x1a\x13SiLAFramework.proto\"\x8d\x01\n\x1fSetSyringeParameters_Parameters\x12\x33\n\rInnerDiameter\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\x12\x35\n\x0fMaxPistonStroke\x18\x02 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\" \n\x1eSetSyringeParameters_Responses\"$\n\"Subscribe_InnerDiameter_Parameters\"X\n!Subscribe_InnerDiameter_Responses\x12\x33\n\rInnerDiameter\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real\"&\n$Subscribe_MaxPistonStroke_Parameters\"\\\n#Subscribe_MaxPistonStroke_Responses\x12\x35\n\x0fMaxPistonStroke\x18\x01 \x01(\x0b\x32\x1c.sila2.org.silastandard.Real2\xf4\x05\n\x1eSyringeConfigurationController\x12\xe5\x01\n\x14SetSyringeParameters\x12\x65.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.SetSyringeParameters_Parameters\x1a\x64.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.SetSyringeParameters_Responses\"\x00\x12\xf0\x01\n\x17Subscribe_InnerDiameter\x12h.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_InnerDiameter_Parameters\x1ag.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_InnerDiameter_Responses\"\x00\x30\x01\x12\xf6\x01\n\x19Subscribe_MaxPistonStroke\x12j.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_MaxPistonStroke_Parameters\x1ai.sila2.de.cetoni.pumps.syringepumps.syringeconfigurationcontroller.v1.Subscribe_MaxPistonStroke_Responses\"\x00\x30\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -262,7 +262,7 @@ _SYRINGECONFIGURATIONCONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=572,
-  serialized_end=1322,
+  serialized_end=1328,
   methods=[
   _descriptor.MethodDescriptor(
     name='SetSyringeParameters',

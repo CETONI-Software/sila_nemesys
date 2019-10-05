@@ -5,7 +5,8 @@
 #   Or you continue using this file, supplying good defaults..
 
 # import the required packages
-import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.framework.SiLAFramework_pb2 as silaFW_pb2
+import sila2lib.framework.SiLABinaryTransfer_pb2 as silaBinary_pb2
 from .gRPC import PumpFluidDosingService_pb2 as pb2
 
 # initialise the default dictionary so we can add keys. 
@@ -15,8 +16,8 @@ default_dict = dict()
 
 
 default_dict['SetFillLevel_Parameters'] = {
-    'FillLevel': fwpb2.Real(value=0.0),
-    'FlowRate': fwpb2.Real(value=0.0)
+    'FillLevel': silaFW_pb2.Real(value=0.0),
+    'FlowRate': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['SetFillLevel_Responses'] = {
@@ -24,8 +25,8 @@ default_dict['SetFillLevel_Responses'] = {
 }
 
 default_dict['DoseVolume_Parameters'] = {
-    'Volume': fwpb2.Real(value=0.0),
-    'FlowRate': fwpb2.Real(value=0.0)
+    'Volume': silaFW_pb2.Real(value=0.0),
+    'FlowRate': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['DoseVolume_Responses'] = {
@@ -33,7 +34,7 @@ default_dict['DoseVolume_Responses'] = {
 }
 
 default_dict['GenerateFlow_Parameters'] = {
-    'FlowRate': fwpb2.Real(value=0.0)
+    'FlowRate': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['GenerateFlow_Responses'] = {
@@ -49,17 +50,17 @@ default_dict['StopDosage_Responses'] = {
 }
 
 default_dict['Subscribe_MaxSyringeFillLevel_Responses'] = {
-    'MaxSyringeFillLevel': fwpb2.Real(value=0.0)
+    'MaxSyringeFillLevel': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['Subscribe_SyringeFillLevel_Responses'] = {
-    'SyringeFillLevel': fwpb2.Real(value=0.0)
+    'SyringeFillLevel': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['Subscribe_MaxFlowRate_Responses'] = {
-    'MaxFlowRate': fwpb2.Real(value=0.0)
+    'MaxFlowRate': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['Subscribe_FlowRate_Responses'] = {
-    'FlowRate': fwpb2.Real(value=0.0)
+    'FlowRate': silaFW_pb2.Real(value=0.0)
 }

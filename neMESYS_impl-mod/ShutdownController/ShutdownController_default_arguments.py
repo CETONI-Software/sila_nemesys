@@ -5,7 +5,8 @@
 #   Or you continue using this file, supplying good defaults..
 
 # import the required packages
-import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.framework.SiLAFramework_pb2 as silaFW_pb2
+import sila2lib.framework.SiLABinaryTransfer_pb2 as silaBinary_pb2
 from .gRPC import ShutdownController_pb2 as pb2
 
 # initialise the default dictionary so we can add keys. 

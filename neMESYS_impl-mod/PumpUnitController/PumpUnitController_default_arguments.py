@@ -5,7 +5,8 @@
 #   Or you continue using this file, supplying good defaults..
 
 # import the required packages
-import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.framework.SiLAFramework_pb2 as silaFW_pb2
+import sila2lib.framework.SiLABinaryTransfer_pb2 as silaBinary_pb2
 from .gRPC import PumpUnitController_pb2 as pb2
 
 # initialise the default dictionary so we can add keys. 
@@ -15,7 +16,7 @@ default_dict = dict()
 
 
 default_dict['SetFlowUnit_Parameters'] = {
-    'FlowUnit': fwpb2.String(value='')
+    'FlowUnit': silaFW_pb2.String(value='')
 }
 
 default_dict['SetFlowUnit_Responses'] = {
@@ -23,7 +24,7 @@ default_dict['SetFlowUnit_Responses'] = {
 }
 
 default_dict['SetVolumeUnit_Parameters'] = {
-    'VolumeUnit': fwpb2.String(value='')
+    'VolumeUnit': silaFW_pb2.String(value='')
 }
 
 default_dict['SetVolumeUnit_Responses'] = {
@@ -31,9 +32,9 @@ default_dict['SetVolumeUnit_Responses'] = {
 }
 
 default_dict['Subscribe_FlowUnit_Responses'] = {
-    'FlowUnit': fwpb2.String(value='')
+    'FlowUnit': silaFW_pb2.String(value='')
 }
 
 default_dict['Subscribe_VolumeUnit_Responses'] = {
-    'VolumeUnit': fwpb2.String(value='')
+    'VolumeUnit': silaFW_pb2.String(value='')
 }

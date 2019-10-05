@@ -5,7 +5,8 @@
 #   Or you continue using this file, supplying good defaults..
 
 # import the required packages
-import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.framework.SiLAFramework_pb2 as silaFW_pb2
+import sila2lib.framework.SiLABinaryTransfer_pb2 as silaBinary_pb2
 from .gRPC import SyringeConfigurationController_pb2 as pb2
 
 # initialise the default dictionary so we can add keys. 
@@ -15,8 +16,8 @@ default_dict = dict()
 
 
 default_dict['SetSyringeParameters_Parameters'] = {
-    'InnerDiameter': fwpb2.Real(value=0.0),
-    'MaxPistonStroke': fwpb2.Real(value=0.0)
+    'InnerDiameter': silaFW_pb2.Real(value=0.0),
+    'MaxPistonStroke': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['SetSyringeParameters_Responses'] = {
@@ -24,9 +25,9 @@ default_dict['SetSyringeParameters_Responses'] = {
 }
 
 default_dict['Subscribe_InnerDiameter_Responses'] = {
-    'InnerDiameter': fwpb2.Real(value=0.0)
+    'InnerDiameter': silaFW_pb2.Real(value=0.0)
 }
 
 default_dict['Subscribe_MaxPistonStroke_Responses'] = {
-    'MaxPistonStroke': fwpb2.Real(value=0.0)
+    'MaxPistonStroke': silaFW_pb2.Real(value=0.0)
 }

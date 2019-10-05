@@ -13,7 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x18ShutdownController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1\x1a\x13SiLAFramework.proto\"\x15\n\x13Shutdown_Parameters\"\x14\n\x12Shutdown_Responses2\x95\x03\n\x12ShutdownController\x12\x86\x01\n\x08Shutdown\x12M.sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1.Shutdown_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\x12\x66\n\rShutdown_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo0\x01\x12\x8d\x01\n\x0fShutdown_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aL.sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1.Shutdown_Responsesb\x06proto3')
+  serialized_pb=_b('\n\x18ShutdownController.proto\x12\x38sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1\x1a\x13SiLAFramework.proto\"\x15\n\x13Shutdown_Parameters\"\x14\n\x12Shutdown_Responses2\x9b\x03\n\x12ShutdownController\x12\x88\x01\n\x08Shutdown\x12M.sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1.Shutdown_Parameters\x1a+.sila2.org.silastandard.CommandConfirmation\"\x00\x12h\n\rShutdown_Info\x12,.sila2.org.silastandard.CommandExecutionUUID\x1a%.sila2.org.silastandard.ExecutionInfo\"\x00\x30\x01\x12\x8f\x01\n\x0fShutdown_Result\x12,.sila2.org.silastandard.CommandExecutionUUID\x1aL.sila2.de.cetoni.pumps.syringepumps.shutdowncontroller.v1.Shutdown_Responses\"\x00\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -102,7 +102,7 @@ _SHUTDOWNCONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=153,
-  serialized_end=558,
+  serialized_end=564,
   methods=[
   _descriptor.MethodDescriptor(
     name='Shutdown',

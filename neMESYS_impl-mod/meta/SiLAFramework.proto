@@ -21,12 +21,11 @@ message Boolean {
     bool value = 1;
 }
 
-message SmallBinary {
-    bytes value = 1;
-}
-
-message LargeBinary {
-    string binaryIdentifier = 1;
+message Binary {
+    oneof union {
+        bytes value = 1;
+        string binaryTransferUUID = 2;
+    }
 }
 
 message Date {
@@ -58,55 +57,24 @@ message Timezone {
     uint32 minutes = 2;
 }
 
+// -------- SiLA AnyType Type --------
 message Any {
-    SiLAType type = 1;
+    string type = 1;
     bytes payload = 2;
 }
 
 // -------- Framework Types --------
-enum BasicType {
-    STRING = 0;
-    INTEGER = 1;
-    REAL = 2;
-    BOOLEAN = 3;
-    SMALL_BINARY = 4;
-    LARGE_BINARY = 5;
-    DATE = 6;
-    TIME = 7;
-    TIME_STAMP = 8;
-}
-
-message ListType {
-    SiLAType silaType = 1;
-}
-
-message StructureType {
-    message Element {
-        String identifier = 1;
-        SiLAType type = 2;
-    }
-    repeated Element elements = 1;
-}
-
-message SiLAType {
-    oneof dataType {
-        BasicType basicType = 1;
-        ListType listType = 2;
-        StructureType structureType = 3;
-    }
-}
-
 message Duration {
     int64 seconds = 1;
     int32 nanos = 2;
 }
 
 message CommandExecutionUUID {
-    string commandId = 1;
+    string value = 1;
 }
 
 message CommandConfirmation {
-    CommandExecutionUUID commandId = 1;
+    CommandExecutionUUID commandExecutionUUID = 1;
     Duration lifetimeOfExecution = 2;
 }
 
@@ -127,53 +95,34 @@ message ExecutionInfo {
 message SiLAError {
     oneof error {
         ValidationError validationError = 1;
-        ExecutionError executionError = 2;
-        ReadError readError = 3;
+        DefinedExecutionError definedExecutionError = 2;
+        UndefinedExecutionError undefinedExecutionError = 3;
         FrameworkError frameworkError = 4;
     }
 }
 
 message ValidationError {
     string parameter = 1;
-    string cause = 2;
-    string action = 3;
+    string message = 2;
 }
 
-message ExecutionError {
+message DefinedExecutionError {
     string errorIdentifier = 1;
-    string cause = 2;
-    string action = 3;
-    string featureIdentifier = 4;
-    Any parameters = 5;
+    string message = 2;
 }
 
-message ReadError {
-    string errorIdentifier = 1;
-    string cause = 2;
-    string featureIdentifier = 3;
+message UndefinedExecutionError {
+    string message = 1;
 }
 
 message FrameworkError {
     enum ErrorType {
-        INVALID_COMMAND_EXECUTION_UUID = 0;
-        COMMAND_EXECUTION_NOT_FINISHED = 1;
-        MISSING_METADATA = 2;
+        COMMAND_EXECUTION_NOT_ACCEPTED = 0;
+        INVALID_COMMAND_EXECUTION_UUID = 1;
+        COMMAND_EXECUTION_NOT_FINISHED = 2;
+        INVALID_METADATA = 3;
+        NO_METADATA_ALLOWED = 4;
     }
     ErrorType errorType = 1;
+    string message = 2;
 }
-
-/* TODO: Add ConstrainedType with all Constraints
-message ConstrainedType {
-    message Constraints {
-        int64 length = 1;
-        int64 minimalLength = 2;
-        int64 maximalLength = 3;
-    }
-
-    Constraints constraints = 1;
-    SiLAType type = 2;
-}
-*/
-
-
-

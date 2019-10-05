@@ -13,7 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x1dValvePositionController.proto\x12=sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1\x1a\x13SiLAFramework.proto\"P\n\x1bSwitchToPosition_Parameters\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1c\n\x1aSwitchToPosition_Responses\"\x1b\n\x19TogglePosition_Parameters\"\x1a\n\x18TogglePosition_Responses\"\"\n Get_NumberOfPositions_Parameters\"]\n\x1fGet_NumberOfPositions_Responses\x12:\n\x11NumberOfPositions\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1f\n\x1dSubscribe_Position_Parameters\"Q\n\x1cSubscribe_Position_Responses\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer2\xda\x06\n\x17ValvePositionController\x12\xc9\x01\n\x10SwitchToPosition\x12Z.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Responses\x12\xc3\x01\n\x0eTogglePosition\x12X.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Responses\x12\xd8\x01\n\x15Get_NumberOfPositions\x12_.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Responses\x12\xd1\x01\n\x12Subscribe_Position\x12\\.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Parameters\x1a[.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Responses0\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x1dValvePositionController.proto\x12=sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1\x1a\x13SiLAFramework.proto\"P\n\x1bSwitchToPosition_Parameters\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1c\n\x1aSwitchToPosition_Responses\"\x1b\n\x19TogglePosition_Parameters\"\x1a\n\x18TogglePosition_Responses\"\"\n Get_NumberOfPositions_Parameters\"]\n\x1fGet_NumberOfPositions_Responses\x12:\n\x11NumberOfPositions\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer\"\x1f\n\x1dSubscribe_Position_Parameters\"Q\n\x1cSubscribe_Position_Responses\x12\x31\n\x08Position\x18\x01 \x01(\x0b\x32\x1f.sila2.org.silastandard.Integer2\xe2\x06\n\x17ValvePositionController\x12\xcb\x01\n\x10SwitchToPosition\x12Z.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Parameters\x1aY.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.SwitchToPosition_Responses\"\x00\x12\xc5\x01\n\x0eTogglePosition\x12X.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Parameters\x1aW.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.TogglePosition_Responses\"\x00\x12\xda\x01\n\x15Get_NumberOfPositions\x12_.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Parameters\x1a^.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Get_NumberOfPositions_Responses\"\x00\x12\xd3\x01\n\x12Subscribe_Position\x12\\.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Parameters\x1a[.sila2.de.cetoni.pumps.syringepumps.valvepositioncontroller.v1.Subscribe_Position_Responses\"\x00\x30\x01\x62\x06proto3')
   ,
   dependencies=[SiLAFramework__pb2.DESCRIPTOR,])
 
@@ -318,7 +318,7 @@ _VALVEPOSITIONCONTROLLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   serialized_start=534,
-  serialized_end=1392,
+  serialized_end=1400,
   methods=[
   _descriptor.MethodDescriptor(
     name='SwitchToPosition',

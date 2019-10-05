@@ -2,7 +2,7 @@
 import grpc
 
 from . import PumpFluidDosingService_pb2 as PumpFluidDosingService__pb2
-import sila2lib.SiLAFramework_pb2 as SiLAFramework__pb2
+import sila2lib.framework.SiLAFramework_pb2 as SiLAFramework__pb2
 
 
 class PumpFluidDosingServiceStub(object):

@@ -5,7 +5,8 @@
 #   Or you continue using this file, supplying good defaults..
 
 # import the required packages
-import sila2lib.SiLAFramework_pb2 as fwpb2
+import sila2lib.framework.SiLAFramework_pb2 as silaFW_pb2
+import sila2lib.framework.SiLABinaryTransfer_pb2 as silaBinary_pb2
 from .gRPC import ValvePositionController_pb2 as pb2
 
 # initialise the default dictionary so we can add keys. 
@@ -15,7 +16,7 @@ default_dict = dict()
 
 
 default_dict['SwitchToPosition_Parameters'] = {
-    'Position': fwpb2.Integer(value=0)
+    'Position': silaFW_pb2.Integer(value=0)
 }
 
 default_dict['SwitchToPosition_Responses'] = {
@@ -31,9 +32,9 @@ default_dict['TogglePosition_Responses'] = {
 }
 
 default_dict['Get_NumberOfPositions_Responses'] = {
-    'NumberOfPositions': fwpb2.Integer(value=0)
+    'NumberOfPositions': silaFW_pb2.Integer(value=0)
 }
 
 default_dict['Subscribe_Position_Responses'] = {
-    'Position': fwpb2.Integer(value=0)
+    'Position': silaFW_pb2.Integer(value=0)
 }
