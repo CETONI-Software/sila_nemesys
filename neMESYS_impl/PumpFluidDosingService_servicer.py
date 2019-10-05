@@ -95,14 +95,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.SetFillLevel_Info(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -114,14 +114,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.SetFillLevel_Result(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ return pb2.SetFillLevel_Responses( Success=fwpb2.Boolean(value=False) )
 
     def DoseVolume(self, request, context):
@@ -146,14 +146,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Info - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.DoseVolume_Info(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -162,14 +162,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.DoseVolume_Result(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ return pb2.DoseVolume_Responses( Success=fwpb2.Boolean(value=False) )
 
     def GenerateFlow(self, request, context):
@@ -197,14 +197,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.GenerateFlow_Info(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
             #~ yield fwpb2.ExecutionInfo( commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -215,14 +215,14 @@ class PumpFluidDosingService(pb2_grpc.PumpFluidDosingServiceServicer):
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Result - Mode: simulation ")
 
         if self.implementation is not None:
             return self.implementation.GenerateFlow_Result(request, context)
         else:
-            pass #~ uuid = request.commandId
+            pass #~ uuid = request.value
             #~ return pb2.GenerateFlow_Responses( Success=fwpb2.Boolean(value=False) )
 
     def StopDosage(self, request, context):

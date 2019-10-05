@@ -10,7 +10,7 @@ ________________________________________________________________________
     Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump
     drive's current state (i.e. enabled/disabled).
     The initialization has to be successful in order for the pump to work correctly and dose fluids. If the
-    initialization fails, the StandardExecutionError InitializationFailed is thrown.
+    initialization fails, the DefinedExecutionError InitializationFailed is thrown.
 
 :file:    PumpDriveControlService_servicer.py
 :authors: Florian Meinicke

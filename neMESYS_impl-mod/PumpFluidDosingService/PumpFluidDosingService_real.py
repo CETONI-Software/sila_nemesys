@@ -173,14 +173,14 @@ class PumpFluidDosingServiceReal:
         self._check_pre_dosage(flow_rate=requested_flow_rate, fill_level=requested_fill_level)
 
         self.dosage_uuid = str(uuid.uuid4())
-        command_uuid = silaFW_pb2.CommandExecutionUUID(commandId=self.dosage_uuid)
+        command_uuid = silaFW_pb2.CommandExecutionUUID(value=self.dosage_uuid)
 
         self.pump.set_fill_level(requested_fill_level, requested_flow_rate)
         logging.info("Started dosing with flow rate of %5.2f until fill level of %5.2f is reached (UUID: %s)",
                      requested_flow_rate, requested_fill_level, self.dosage_uuid)
 
         # respond with UUID and lifetime of execution
-        return silaFW_pb2.CommandConfirmation(commandId=command_uuid)
+        return silaFW_pb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def SetFillLevel_Info(self, request, context: grpc.ServicerContext) \
             -> silaFW_pb2.ExecutionInfo:
@@ -198,7 +198,7 @@ class PumpFluidDosingServiceReal:
             updatedLifetimeOfExecution: An update on the execution lifetime
         """
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         logging.info("Requested SetFillLevel_Info for dosage (UUID: %s)", command_uuid)
         logging.info("Current dosage is UUID: %s", self.dosage_uuid)
@@ -225,7 +225,7 @@ class PumpFluidDosingServiceReal:
         """
 
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         # catch invalid CommandExecutionUUID:
         if not command_uuid and self.dosage_uuid != command_uuid:
@@ -287,12 +287,12 @@ class PumpFluidDosingServiceReal:
             )
 
         self.dosage_uuid = str(uuid.uuid4())
-        command_uuid = silaFW_pb2.CommandExecutionUUID(commandId=self.dosage_uuid)
+        command_uuid = silaFW_pb2.CommandExecutionUUID(value=self.dosage_uuid)
 
         self.pump.pump_volume(requested_volume, requested_flow_rate)
         logging.info("Started dosing a volume of %s with a flow rate of %5.2f (UUID: %s)",
                      requested_volume, requested_flow_rate, self.dosage_uuid)
-        return silaFW_pb2.CommandConfirmation(commandId=command_uuid)
+        return silaFW_pb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def DoseVolume_Info(self, request, context: grpc.ServicerContext) \
             -> silaFW_pb2.ExecutionInfo:
@@ -310,7 +310,7 @@ class PumpFluidDosingServiceReal:
             updatedLifetimeOfExecution: An update on the execution lifetime
         """
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         logging.info("Requested DoseVolume_Info for dosage (UUID: %s)", command_uuid)
         logging.info("Current dosage is UUID: %s", self.dosage_uuid)
@@ -337,7 +337,7 @@ class PumpFluidDosingServiceReal:
         """
 
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         # catch invalid CommandExecutionUUID:
         if not command_uuid and self.dosage_uuid != command_uuid:
@@ -392,12 +392,12 @@ class PumpFluidDosingServiceReal:
             )
 
         self.dosage_uuid = str(uuid.uuid4())
-        command_uuid = silaFW_pb2.CommandExecutionUUID(commandId=self.dosage_uuid)
+        command_uuid = silaFW_pb2.CommandExecutionUUID(value=self.dosage_uuid)
 
         self.pump.generate_flow(requested_flow_rate)
         logging.info("Started dosing with a flow rate of %5.2f (UUID: %s)",
                      requested_flow_rate, self.dosage_uuid)
-        return silaFW_pb2.CommandConfirmation(commandId=command_uuid)
+        return silaFW_pb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def GenerateFlow_Info(self, request, context: grpc.ServicerContext) \
             -> silaFW_pb2.ExecutionInfo:
@@ -415,7 +415,7 @@ class PumpFluidDosingServiceReal:
             updatedLifetimeOfExecution: An update on the execution lifetime
         """
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         # catch invalid CommandExecutionUUID:
         if not command_uuid or self.dosage_uuid != command_uuid:
@@ -439,7 +439,7 @@ class PumpFluidDosingServiceReal:
         """
 
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         # catch invalid CommandExecutionUUID:
         if not command_uuid and self.dosage_uuid != command_uuid:

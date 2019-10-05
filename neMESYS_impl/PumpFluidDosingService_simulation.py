@@ -124,7 +124,7 @@ class PumpFluidDosingServiceSimulation():
             self.flow_rate = requested_flow_rate # ml/s
             self.dosing = True
 
-            return fwpb2.CommandConfirmation(commandId=command_uuid)
+            return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def SetFillLevel_Info(self, request, context):
         """
@@ -133,17 +133,17 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: simulation ")
         logging.info(
-            f"Requested SetFillLevel_Info for dosage (UUID: {request.commandId})")
+            f"Requested SetFillLevel_Info for dosage (UUID: {request.value})")
         logging.info(f"Current dosage is UUID: {self.dosage_uuid}")
 
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
 
         # catch invalid CommandExecutionUUID:
-        if not request.commandId or self.dosage_uuid != request.commandId:
+        if not request.value or self.dosage_uuid != request.value:
             yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
                 errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
         else:
@@ -171,11 +171,11 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Result - Mode: simulation ")
 
-        if request.commandId and self.dosage_uuid == request.commandId:
+        if request.value and self.dosage_uuid == request.value:
             logging.info(f"Finished dosing! (UUID: {self.dosage_uuid})")
             self.dosage_uuid = ""
             self.flow_rate = 0.0
@@ -207,17 +207,17 @@ class PumpFluidDosingServiceSimulation():
                 request.Volume.value, request.FlowRate.value, self.dosage_uuid))
             command_uuid = fwpb2.CommandExecutionUUID(
                 commandId=self.dosage_uuid)
-            return fwpb2.CommandConfirmation(commandId=command_uuid)
+            return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def DoseVolume_Info(self, request, context):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Info - Mode: simulation ")
 
-        uuid = request.commandId
+        uuid = request.value
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.running)
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.finishedSuccessfully)
@@ -226,11 +226,11 @@ class PumpFluidDosingServiceSimulation():
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Result - Mode: simulation ")
 
-        uuid = request.commandId
+        uuid = request.value
         return pb2.DoseVolume_Responses(Success=fwpb2.Boolean(value=False))
 
     def GenerateFlow(self, request, context):
@@ -278,7 +278,7 @@ class PumpFluidDosingServiceSimulation():
             self.flow_rate = requested_flow_rate # ml/s
             self.dosing = True
 
-            return fwpb2.CommandConfirmation(commandId=command_uuid)
+            return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def GenerateFlow_Info(self, request, context):
         """
@@ -286,17 +286,17 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: simulation ")
         logging.info(
-            f"Requested GenerateFlow_Info for dosage (UUID: {request.commandId})")
+            f"Requested GenerateFlow_Info for dosage (UUID: {request.value})")
         logging.info(f"Current dosage is UUID: {self.dosage_uuid}")
 
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
 
         # catch invalid CommandExecutionUUID:
-        if not request.commandId or self.dosage_uuid != request.commandId:
+        if not request.value or self.dosage_uuid != request.value:
             yield fwpb2.SiLAError(frameworkError=fwpb2.FrameworkError(
                 errorType=fwpb2.FrameworkError.ErrorType.INVALID_COMMAND_EXECUTION_UUID))
         else:
@@ -318,15 +318,15 @@ class PumpFluidDosingServiceSimulation():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Result - Mode: simulation ")
 
-        logging.debug("request.commandId {}".format(request.commandId))
+        logging.debug("request.value {}".format(request.value))
 
         # if dosage was stopped by a call to StopDosage AND we get a valid UUID
         # OR if we get a valid UUID AND it is the current dosage -> stop dosing and return result
-        if (not self.dosing and request.commandId) or (request.commandId and self.dosage_uuid == request.commandId):
+        if (not self.dosing and request.value) or (request.value and self.dosage_uuid == request.value):
             logging.info(f"Finished dosing! (UUID: {self.dosage_uuid})")
             self.dosage_uuid = ""
             self.flow_rate = 0.0

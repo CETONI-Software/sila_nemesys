@@ -110,7 +110,7 @@ class ShutdownControllerReal:
         self.command_uuid = str(uuid.uuid4())
 
         return silaFW_pb2.CommandConfirmation(
-            commandId=silaFW_pb2.CommandExecutionUUID(commandId=self.command_uuid)
+            commandExecutionUUID=silaFW_pb2.CommandExecutionUUID(value=self.command_uuid)
         )
 
     def Shutdown_Info(self, request, context: grpc.ServicerContext) \
@@ -129,7 +129,7 @@ class ShutdownControllerReal:
             updatedLifetimeOfExecution: An update on the execution lifetime
         """
         # Get the UUID of the command
-        command_uuid = request.commandId
+        command_uuid = request.value
 
         if not command_uuid or command_uuid != self.command_uuid:
             raise neMESYS_errors.SiLAFrameworkError(

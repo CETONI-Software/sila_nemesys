@@ -165,7 +165,7 @@ class PumpFluidDosingServiceReal():
                          requested_flow_rate, requested_fill_level, self.dosage_uuid)
         except qmixbus.DeviceError as err:
             raiseQmixError(context, err)
-        return fwpb2.CommandConfirmation(commandId=command_uuid)
+        return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def SetFillLevel_Info(self, request, context):
         """
@@ -174,17 +174,17 @@ class PumpFluidDosingServiceReal():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Info - Mode: real ")
 
-        logging.info("Requested SetFillLevel_Info for dosage (UUID: %s)", request.commandId)
+        logging.info("Requested SetFillLevel_Info for dosage (UUID: %s)", request.value)
         logging.info("Current dosage is UUID: %s", self.dosage_uuid)
 
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
 
         # catch invalid CommandExecutionUUID:
-        if not request.commandId or self.dosage_uuid != request.commandId:
+        if not request.value or self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
@@ -198,11 +198,11 @@ class PumpFluidDosingServiceReal():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("SetFillLevel_Result - Mode: real ")
 
-        if not request.commandId and self.dosage_uuid != request.commandId:
+        if not request.value and self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
@@ -244,23 +244,23 @@ class PumpFluidDosingServiceReal():
                          requested_volume, requested_flow_rate, self.dosage_uuid)
         except qmixbus.DeviceError as err:
             raiseQmixError(context, err)
-        return fwpb2.CommandConfirmation(commandId=command_uuid)
+        return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def DoseVolume_Info(self, request, context):
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Info - Mode: real ")
 
-        logging.info("Requested DoseVolume_Info for dosage (UUID: %s)", request.commandId)
+        logging.info("Requested DoseVolume_Info for dosage (UUID: %s)", request.value)
         logging.info("Current dosage is UUID: %s", self.dosage_uuid)
 
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
 
         # catch invalid CommandExecutionUUID:
-        if not request.commandId or self.dosage_uuid != request.commandId:
+        if not request.value or self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
@@ -271,11 +271,11 @@ class PumpFluidDosingServiceReal():
         """Dose a certain amount of volume with the given flow rate.
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("DoseVolume_Result - Mode: real ")
 
-        if not request.commandId and self.dosage_uuid != request.commandId:
+        if not request.value and self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
@@ -311,7 +311,7 @@ class PumpFluidDosingServiceReal():
                          requested_flow_rate, self.dosage_uuid)
         except qmixbus.DeviceError as err:
             raiseQmixError(context, err)
-        return fwpb2.CommandConfirmation(commandId=command_uuid)
+        return fwpb2.CommandConfirmation(commandExecutionUUID=command_uuid)
 
     def GenerateFlow_Info(self, request, context):
         """
@@ -319,14 +319,14 @@ class PumpFluidDosingServiceReal():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Info - Mode: real ")
 
         yield fwpb2.ExecutionInfo(commandStatus=fwpb2.ExecutionInfo.CommandStatus.waiting)
 
         # catch invalid CommandExecutionUUID:
-        if not request.commandId or self.dosage_uuid != request.commandId:
+        if not request.value or self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
@@ -339,11 +339,11 @@ class PumpFluidDosingServiceReal():
 
             :param request: gRPC request
             :param context: gRPC context
-            :param request.commandId: identifies the command execution
+            :param request.value: identifies the command execution
         """
         logging.debug("GenerateFlow_Result - Mode: real ")
 
-        if not request.commandId and self.dosage_uuid != request.commandId:
+        if not request.value and self.dosage_uuid != request.value:
             sila_error.raiseRPCError(context, sila_error.getFrameworkError(
                 errorType=sila_error.FrameworkErrorType.INVALID_COMMAND_EXECUTION_UUID
             ))
