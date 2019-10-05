@@ -73,10 +73,9 @@ class PumpFluidDosingServiceReal:
 
         self.dosage_uuid = ""
 
-    def _check_pre_dosage(self, context, flow_rate, fill_level=None, volume=None):
+    def _check_pre_dosage(self, flow_rate, fill_level=None, volume=None):
         """
         Checks if the given flow rate and fill level or volume are in the correct ranges for this pump
-            :param context: gRPC context - used for issueing errors
             :param flow_rate: The flow rate to check, if it's in the bounds for this pump
             :param fill_level: The fill level to check, if it's in the bounds for this pump
             :param volume: The volume to check, if it's in the bounds for this pump
@@ -171,7 +170,7 @@ class PumpFluidDosingServiceReal:
         requested_fill_level = request.FillLevel.value
         requested_flow_rate = request.FlowRate.value
 
-        self._check_pre_dosage(context, requested_flow_rate, fill_level=requested_fill_level)
+        self._check_pre_dosage(flow_rate=requested_flow_rate, fill_level=requested_fill_level)
 
         self.dosage_uuid = str(uuid.uuid4())
         command_uuid = silaFW_pb2.CommandExecutionUUID(commandId=self.dosage_uuid)
@@ -270,7 +269,7 @@ class PumpFluidDosingServiceReal:
         # requested_volume is neagtive to indicate aspiration of fluid.
         # Since the pre dosage checks test against 0 and the max flow rate of
         # the pump, we pass the absolute value of the requested_flow_rate.
-        self._check_pre_dosage(context, requested_flow_rate, volume=abs(requested_volume))
+        self._check_pre_dosage(flow_rate=requested_flow_rate, volume=abs(requested_volume))
 
         # Give clearer error messages:
         # QmixSDK would just start and immediately stop dosing in case of dispense
@@ -378,7 +377,7 @@ class PumpFluidDosingServiceReal:
         # requested_flow_rate is neagtive to indicate aspiration of fluid.
         # Since the pre dosage checks test against 0 and the max flow rate of
         # the pump, we pass the absolute value of the requested_flow_rate.
-        self._check_pre_dosage(context, abs(requested_flow_rate))
+        self._check_pre_dosage(flow_rate=abs(requested_flow_rate))
 
         # Give clearer error messages:
         # QmixSDK would just start and immediately stop dosing in case of dispense
