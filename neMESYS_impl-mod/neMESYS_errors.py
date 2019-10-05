@@ -17,15 +17,13 @@ ________________________________________________________________________
 
 import logging
 
-# TODO: take SiLAStandardExecutionError out for v0.2
-from sila2lib.error_handling.sila_server import SiLAExecutionError, SiLAStandardExecutionError, \
+from sila2lib.error_handling.server_err import SiLAExecutionError, \
 SiLAValidationError, SiLAFrameworkError, SiLAFrameworkErrorType
 
 from qmixsdk.qmixbus import DeviceError
 
 
-# TODO: use SiLAExecutionError for v0.2
-class QmixSDKError(SiLAStandardExecutionError):
+class QmixSDKError(SiLAExecutionError):
     """
     An unexpected error that was thrown by the QmixSDK during the execution of a command.
     """
@@ -33,7 +31,7 @@ class QmixSDKError(SiLAStandardExecutionError):
     def __init__(self, qmixsdk_error: DeviceError = None):
         msg = f"The QmixSDK threw an unexpected error {qmixsdk_error}"
 
-        super().__init__(msg=msg, error_identifier=None, cause=msg, action="", parameters=None, feature_identifier="")
+        super().__init__(msg=msg, error_identifier=None)
 
         logging.error(str(self))
 
@@ -77,14 +75,13 @@ class VolumeOutOfRangeError(SiLAValidationError):
 
         logging.error(str(self))
 
-# TODO: use SiLAExecutionError for v0.2
-class DosageFinishedUnexpectedlyError(SiLAStandardExecutionError):
+class DosageFinishedUnexpectedlyError(SiLAExecutionError):
     """
     The dosage could not be finished properly due to an error.
     """
 
     def __init__(self, error_identifier: str = None, msg: str = None):
-        super().__init__(msg=msg, error_identifier=None, cause=msg, action="", parameters=None, feature_identifier="")
+        super().__init__(msg=msg, error_identifier=None)
 
         logging.error(str(self))
 
@@ -116,18 +113,13 @@ class ValvePositionOutOfRangeError(SiLAValidationError):
 
         logging.error(str(self))
 
-# TODO: use SiLAExecutionError for v0.2
-class ValveNotToggleableError(SiLAStandardExecutionError):
+class ValveNotToggleableError(SiLAExecutionError):
     """
     The current valve does not support toggling because it has more than only two possible positions.
     """
 
     def __init__(self):
         msg = "The current valve does not support toggling because it has more than only two possible positions."
-        super().__init__(
-            error_identifier="ValveNotToggleable",
-            msg=msg,
-            cause=msg, action="", parameters=None, feature_identifier=""
-        )
+        super().__init__(error_identifier="ValveNotToggleable", msg=msg)
 
         logging.error(str(self))
