@@ -84,9 +84,9 @@ class ValvePositionControllerReal:
         requested_valve_pos = request.Position.value
         if requested_valve_pos < 0 or requested_valve_pos >= self.num_of_valve_pos:
             raise neMESYS_errors.ValvePositionOutOfRangeError(
-                ("The given position is not in the range for this valve."
-                     "Adjust the valve position to fit in the range between 0 and "
-                     f"{self.num_of_valve_pos} (excluding)!"
+                ("The given position is not in the range for this valve. "
+                 "Adjust the valve position to fit in the range between 0 and "
+                 f"{self.num_of_valve_pos - 1}!"
                 )
             )
 
