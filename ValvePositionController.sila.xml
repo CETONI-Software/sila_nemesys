@@ -24,9 +24,9 @@
         <DisplayName>Toogle Position</DisplayName>
         <Description>This command only applies for 2-way valves to toggle between its two different positions. If the command is called for any other valve type a ValveNotToggleable error is thrown.</Description>
         <Observable>No</Observable>
-        <StandardExecutionErrors>
-            <StandardExecutionErrorIdentifier>ValveNotToggleable</StandardExecutionErrorIdentifier>
-        </StandardExecutionErrors>
+        <DefinedExecutionErrors>
+            <Identifier>ValveNotToggleable</Identifier>
+        </DefinedExecutionErrors>
     </Command>
 
     <!-- Properties -->
@@ -34,26 +34,26 @@
         <Identifier>NumberOfPositions</Identifier>
         <DisplayName>Number Of Positions</DisplayName>
         <Description>The number of the valve positions available.</Description>
+        <Observable>No</Observable>
         <DataType>
             <Basic>Integer</Basic>
         </DataType>
-        <Observable>No</Observable>
     </Property>
     <Property>
         <Identifier>Position</Identifier>
         <DisplayName>Position</DisplayName>
         <Description>The current logical valve position. This is a value between 0 and NumberOfPositions - 1.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Integer</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
 
     <!-- Errors -->
-    <StandardExecutionError>
+    <DefinedExecutionError>
         <Identifier>ValveNotToggleable</Identifier>
         <DisplayName>Valve Not Toggleable</DisplayName>
         <Description>The current valve does not support toggling because it has more than only two possible positions.</Description>
-    </StandardExecutionError>
+    </DefinedExecutionError>
 
 </Feature>

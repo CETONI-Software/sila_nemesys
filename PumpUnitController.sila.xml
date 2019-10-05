@@ -39,18 +39,18 @@
             <Identifier>FlowUnit</Identifier>
             <DisplayName>Flow Unit</DisplayName>
             <Description>The currently used flow unit.</Description>
+            <Observable>Yes</Observable>
             <DataType>
                 <Basic>String</Basic>
             </DataType>
-            <Observable>Yes</Observable>
         </Property>
         <Property>
             <Identifier>VolumeUnit</Identifier>
             <DisplayName>Volume Unit</DisplayName>
             <Description>The currently used volume unit.</Description>
+            <Observable>Yes</Observable>
             <DataType>
                 <Basic>String</Basic>
             </DataType>
-            <Observable>Yes</Observable>
         </Property>
 </Feature>

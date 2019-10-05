@@ -38,9 +38,9 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <StandardExecutionErrors>
-            <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
-        </StandardExecutionErrors>
+        <DefinedExecutionErrors>
+            <Identifier>DosageFinishedUnexpectedly</Identifier>
+        </DefinedExecutionErrors>
     </Command>
     <Command>
         <Identifier>DoseVolume</Identifier>
@@ -65,9 +65,9 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <StandardExecutionErrors>
-            <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
-        </StandardExecutionErrors>
+        <DefinedExecutionErrors>
+            <Identifier>DosageFinishedUnexpectedly</Identifier>
+        </DefinedExecutionErrors>
     </Command>
     <Command>
         <Identifier>GenerateFlow</Identifier>
@@ -86,9 +86,9 @@
                 <Basic>Real</Basic>
             </DataType>
         </Parameter>
-        <StandardExecutionErrors>
-            <StandardExecutionErrorIdentifier>DosageFinishedUnexpectedly</StandardExecutionErrorIdentifier>
-        </StandardExecutionErrors>
+        <DefinedExecutionErrors>
+            <Identifier>DosageFinishedUnexpectedly</Identifier>
+        </DefinedExecutionErrors>
     </Command>
     <Command>
         <Identifier>StopDosage</Identifier>
@@ -102,45 +102,45 @@
         <Identifier>MaxSyringeFillLevel</Identifier>
         <DisplayName>Maximum Syringe Fill Level</DisplayName>
         <Description>The maximum amount of fluid that the syringe can hold.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>SyringeFillLevel</Identifier>
         <DisplayName>Syringe Fill Level</DisplayName>
         <Description>The current amount of fluid left in the syringe.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>MaxFlowRate</Identifier>
         <DisplayName>Maximum Flow Rate</DisplayName>
         <Description>The maximum value of the flow rate at which this pump can dose a fluid.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>FlowRate</Identifier>
         <DisplayName>Flow Rate</DisplayName>
         <Description>The current value of the flow rate. It is 0 if the pump does not dose any fluid.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Real</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
 
     <!-- Errors -->
-    <StandardExecutionError>
+    <DefinedExecutionError>
         <Identifier>DosageFinishedUnexpectedly</Identifier>
         <DisplayName>Dosage Finished Unexpectedly</DisplayName>
         <Description>The dosage could not be finished properly due to an error.</Description>
-    </StandardExecutionError>
+    </DefinedExecutionError>
 
     <!-- Custom Data Types -->
     <!-- Possibility 1: Structure of a value (real) and a unit (string) -->

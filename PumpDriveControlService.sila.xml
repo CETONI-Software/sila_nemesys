@@ -5,7 +5,7 @@
     <Description>
         Functionality to control and maintain the drive that drives the pump.
         Allows to initialize a pump (e.g. by executing a reference move) and obtain status information about the pump drive's current state (i.e. enabled/disabled).
-        The initialization has to be successful in order for the pump to work correctly and dose fluids. If the initialization fails, the StandardExecutionError InitializationFailed is thrown.
+        The initialization has to be successful in order for the pump to work correctly and dose fluids. If the initialization fails, the DefinedExecutionError InitializationFailed is thrown.
     </Description>
 
     <!-- Commands -->
@@ -14,9 +14,9 @@
         <DisplayName>Initialize Pump Drive</DisplayName>
         <Description>Initialize the pump drive (e.g. by executing a reference move).</Description>
         <Observable>No</Observable>
-        <StandardExecutionErrors>
-            <StandardExecutionErrorIdentifier>InitializationFailed</StandardExecutionErrorIdentifier>
-        </StandardExecutionErrors>
+        <DefinedExecutionErrors>
+            <Identifier>InitializationFailed</Identifier>
+        </DefinedExecutionErrors>
     </Command>
     <Command>
         <Identifier>EnablePumpDrive</Identifier>
@@ -36,25 +36,25 @@
         <Identifier>PumpDriveState</Identifier>
         <DisplayName>Pump Drive State</DisplayName>
         <Description>The current state of the pump. This is either enabled (true) or disabled (false). Only if the sate is enabled, the pump can dose fluids.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Boolean</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
     <Property>
         <Identifier>FaultState</Identifier>
         <DisplayName>Fault State</DisplayName>
         <Description>Returns if the pump is in fault state. If the value is true (i.e. the pump is in fault state), it can be cleared by calling EnablePumpDrive.</Description>
+        <Observable>Yes</Observable>
         <DataType>
             <Basic>Boolean</Basic>
         </DataType>
-        <Observable>Yes</Observable>
     </Property>
 
     <!-- Errors -->
-    <StandardExecutionError>
+    <DefinedExecutionError>
         <Identifier>InitializationFailed</Identifier>
         <DisplayName>Initialization Failed</DisplayName>
         <Description>The initialization did not end properly.</Description>
-    </StandardExecutionError>
+    </DefinedExecutionError>
 </Feature>
