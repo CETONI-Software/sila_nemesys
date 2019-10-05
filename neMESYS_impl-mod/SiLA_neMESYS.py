@@ -149,9 +149,11 @@ if __name__ == '__main__':
             port=BASE_PORT + pumps.index(pump),
             server_name=pump.get_device_name().replace("_", " "),
             server_type="TestServer",
-            description="This is a test service for neMESYS syringe pumps via SiLA2"
+            description="This is a sample service for controlling neMESYS syringe pumps via SiLA2",
+            encryption_key=None,
+            encryption_cert=None
         )
-        server = neMESYSServer(args=args, qmix_pump=pump, simulation_mode=False)
+        server = neMESYSServer(cmd_args=args, qmix_pump=pump, simulation_mode=False)
         server.run(block=False)
         servers += [server]
 
