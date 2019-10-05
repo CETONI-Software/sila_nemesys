@@ -89,7 +89,7 @@ class PumpFluidDosingServiceReal:
         if self.dosage_uuid:
             self.StopDosage(0, 0)
             # wait for the currently running dosage to catch up
-            time.sleep(0.1)
+            time.sleep(0.25)
 
         msg = """
         The requested {param} ({requested_val} {unit}) is not in the range
