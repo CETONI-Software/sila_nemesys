@@ -29,7 +29,7 @@ $ python3 sila2install.py
 ```
 It is highly recommended to use a python virtual environment. You can let the installer create one for you or you can setup one yourself before running the installer.
 
-**Answer every question with "Yes" except for the first one (*"Install a virtual Python environment"*), if you already have your virtualenv activated!**
+**Answer every question with "Yes" except for the second one (*"Install a virtual Python environment"*), if you already have your virtualenv activated!**
 
 This automatically installs the gRPC library and the protobuf compiler `protoc`. Now you are ready to *use* the driver in the `impl` directory.  
 
