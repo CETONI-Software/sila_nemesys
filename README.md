@@ -18,30 +18,22 @@ The SiLA2 driver in this repository needs the following dependencies to work cor
 For instructions on how to install the QmixSDK for Python on your system and get a valid Qmix configuration for your pumps see the [QmixSDK Documentation](https://www.cetoni.de/fileadmin/user_upload/Documents/Manuals/QmixSDK/index.html).
 
 ### SiLA2 Python Library installation
-> ### Note: 
-> The SiLA2 Python Repository is currently still under rapid development to adapt all of the most recent changes in the SiLA2 standard since the official release at the beginning of October.  
-
-The latest version of the SiLA2 Python Repository bundles all necessary changes of the `v0.2` release in the `develop` branch. Therefore for this version of the SiLA2 neMESYS driver you need to clone the repository and checkout the `develop` branch. Follow the instructions in the [README](https://gitlab.com/SiLA2/sila_python/blob/develop/README.md) to install the SiLA2 Python library. It should suffice to run the [`sila2installer.py`](https://gitlab.com/SiLA2/sila_python/blob/develop/sila2install.py) script:
+Installing the SiLA 2 Python library is now as simple as running 
 ```shell
-$ git clone -b develop https://gitlab.com/SiLA2/sila_python.git
-$ cd sila_python
-$ python3 sila2install.py
+$ pip3 install sila2lib
 ```
-It is highly recommended to use a python virtual environment. You can let the installer create one for you or you can setup one yourself before running the installer.
+You can use a python virtual environment if you like. Be sure to activate the virtualenv *before* you install `sila2lib`.
 
-**Answer every question with "Yes" except for the second one (*"Install a virtual Python environment"*), if you already have your virtualenv activated!**
+This automatically installs the gRPC library and the protobuf compiler `protoc`. Now you are ready to *use* the driver in the `impl` directory.
+Skip ahead to the [Running SiLA2 neMESYS servers](#running-sila2-nemesys-servers) section if you just want to use the driver.
+Keep reading if you also want to modify or extend the driver and rebuild it yourself.  
 
-This automatically installs the gRPC library and the protobuf compiler `protoc`. Now you are ready to *use* the driver in the `impl` directory.  
-
-Then change into the `sila_tools/SiLA2CodeGeneratorPackage/` directory and install the improved version of the code generator:
+### SiLA2 Python code generator installation
+If you want to build the driver yourself, you need the SiLA 2 Python code generator, as well.
+Installing the code generator is similarly simple:
+Just run 
 ```shell
-$ cd sila_tools/SiLA2CodeGeneratorPackage
-$ pip install -r requirements.txt
-$ pip install .
-```
-To see if the installation is complete, run 
-```shell
-$ SiLA2CodeGenerator --help
+$ pip install sila2codegenerator
 ```
 Now you are also ready to build the driver in the `impl` directory yourself (See [Building the driver](#building-the-driver) for more details on how to build the driver yourself).
 
@@ -60,13 +52,9 @@ You can test and play around with the currently implemented SiLA2 Features by ru
 
 # Building the driver
 If, however, you want to change the implementation or if you want to add new SiLA Features, you can rebuild the driver yourself.
-
-> ### Note
-> This driver was developed using the `SiLA2CodeGenerator` by Timm Severin and not the original codegenerator since most of the recent features of SiLA2 only work with the `SiLA2CodeGenerator`.  
-
-To use the codegenerator you need to run the following command from the root directory of this repository:
+To use the code generator you need to run the following command from the root directory of this repository:
 ```shell
-$ SiLA2CodeGenerator -o build -b .
+$ silacodegenerator -o build --ignore-overwrite-warning -b .
 ```
 This generates the protobuf files and sample implementations for the server/client and puts them in the `build` directory. If you added a new SiLA2 Feature just copy the new files into the `impl` directory and add your own implementations.  
 If you just changed or added a property or a command to a Feature you only need to copy the corresponding lines that changed in the server/client implementations. This means, if you change something in the Feature Definition of the `PumpDriveControlService` you need to copy the modified lines of the following files:
