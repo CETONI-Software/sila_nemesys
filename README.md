@@ -18,7 +18,7 @@ The SiLA2 driver in this repository needs the following dependencies to work cor
 For instructions on how to install the QmixSDK for Python on your system and get a valid Qmix configuration for your pumps see the [QmixSDK Documentation](https://www.cetoni.de/fileadmin/user_upload/Documents/Manuals/QmixSDK/index.html).
 
 ### SiLA2 Python Library installation
-> #### Note
+> ### Note:
 > SiLA Python needs **Python 3.6 or greater** to run properly.  
 > See https://gitlab.com/SiLA2/sila_python for more information on this.
 
